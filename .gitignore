@@ -1,0 +1,6 @@
+.neon_token
+*.pyc
+__pycache__/
+*.tif
+*.laz
+*.las
