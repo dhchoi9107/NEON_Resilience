@@ -304,11 +304,38 @@ def process_tile(laz_path):
     epsg = None
     try:
         crs_obj = las.header.parse_crs()
-        epsg_str = str(crs_obj)
-        if "EPSG:" in epsg_str:
-            epsg = int(epsg_str.split("EPSG:")[1])
+        if crs_obj is not None:
+            epsg = crs_obj.to_epsg()
     except Exception:
         pass
+    # Fallback: infer UTM EPSG from coordinates (NEON sites are all in NAD83/WGS84 UTM)
+    if epsg is None:
+        try:
+            lon_approx = np.median(x)
+            lat_approx = np.median(y)
+            # UTM coordinates: easting ~100k-900k, northing ~0-10M
+            # If x looks like longitude (-180 to 180), compute UTM zone
+            if -180 <= lon_approx <= 180:
+                zone = int((lon_approx + 180) / 6) + 1
+                epsg = 32600 + zone if lat_approx >= 0 else 32700 + zone
+            elif 100_000 < lon_approx < 900_000:
+                # Already in UTM — try WKT from VLR records
+                for vlr in las.header.vlrs:
+                    try:
+                        txt = vlr.record_data.decode("ascii", errors="ignore")
+                        import re as _re
+                        m = _re.search(r'UTM\s+[Zz]one\s+(\d+)([NS])?', txt)
+                        if m:
+                            zone = int(m.group(1))
+                            hemisphere = m.group(2)
+                            epsg = 32600 + zone if hemisphere != 'S' else 32700 + zone
+                            break
+                    except Exception:
+                        continue
+        except Exception:
+            pass
+    if epsg is None:
+        print(f"    WARNING: Could not determine CRS for {laz_path.name}")
 
     # ── Classification filter: keep only valid classes (1-5) ──
     # 1=unclassified, 2=ground, 3=low veg, 4=med veg, 5=high veg
@@ -635,15 +662,21 @@ def process_site(site_key, laz_files, n_workers=1):
         c_end = min(col_off + w, total_cols)
         mosaic[:, row_off:r_end, col_off:c_end] = grid[:, :r_end-row_off, :c_end-col_off]
 
-    # Get EPSG from first valid result
+    # Get EPSG from valid results (use majority vote)
     epsg = None
+    epsg_counts = {}
     for _, ep, _ in valid:
         if ep:
-            epsg = ep
-            break
+            epsg_counts[ep] = epsg_counts.get(ep, 0) + 1
+    if epsg_counts:
+        epsg = max(epsg_counts, key=epsg_counts.get)
+        if len(epsg_counts) > 1:
+            print(f"  WARNING: Mixed CRS across tiles: {epsg_counts}. Using EPSG:{epsg}")
+    else:
+        print(f"  ERROR: No CRS found for any tile in {site_key}. Output will lack CRS!")
 
     transform = from_origin(global_xmin, global_ymax, CELL_SIZE, CELL_SIZE)
-    out_path = OUTPUT_DIR / f"{site_key}_FSD_10m.tif"
+    out_path = OUTPUT_DIR / f"{site_key}_FSD_{CELL_SIZE}m.tif"
 
     profile = {
         "driver": "GTiff",
@@ -682,7 +715,17 @@ def main():
     parser.add_argument("--year", type=str, default=None, help="Filter by year (e.g., 2022)")
     parser.add_argument("--workers", type=int, default=4, help="Parallel workers per site")
     parser.add_argument("--dry-run", action="store_true", help="List sites without processing")
+    parser.add_argument("--cell-size", type=int, default=None,
+                        help="Override cell size in meters (default 10). "
+                             "Results saved to structural_diversity_{N}m/")
     args = parser.parse_args()
+
+    # Allow overriding cell size (e.g., 1m for plot-level analysis)
+    global CELL_SIZE, SUBCELL_SIZE, OUTPUT_DIR
+    if args.cell_size is not None:
+        CELL_SIZE = args.cell_size
+        SUBCELL_SIZE = max(1, CELL_SIZE // 3) if CELL_SIZE >= 3 else 1
+        OUTPUT_DIR = Path(f"E:/neon_lidar/structural_diversity_{CELL_SIZE}m")
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -699,7 +742,8 @@ def main():
         print("No matching sites found.")
         return
 
-    existing = {f.stem.replace("_FSD_10m", "") for f in OUTPUT_DIR.glob("*_FSD_10m.tif")}
+    suffix = f"_FSD_{CELL_SIZE}m"
+    existing = {f.stem.replace(suffix, "") for f in OUTPUT_DIR.glob(f"*{suffix}.tif")}
     to_process = {k: v for k, v in sites.items() if k not in existing}
     skipped = len(sites) - len(to_process)
     if skipped > 0:
