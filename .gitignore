@@ -4,3 +4,21 @@ __pycache__/
 *.tif
 *.laz
 *.las
+
+# QA per-plot sheets (3.3GB of PNGs — keep local, do not commit)
+paper_workspace/qa_plot_sheets/*/
+paper_workspace/qa_plot_sheets/_QA_contact_flagged.png
+
+# Archived past/intermediate outputs (large)
+_ARCHIVE/
+_ARCHIVE_v1/
+
+NEON_FINAL/qa/plot_sheets/*/
+NEON_FINAL/qa/plot_year_sheets/*/
+
+# LiDAR intermediate (CSF cloth nodes, 264MB)
+cloth_nodes.txt
+
+# MTBS raw perimeters (re-downloadable; derived plot CSVs are tracked)
+NEON_v2/data/disturbance/mtbs_perims.zip
+NEON_v2/data/disturbance/mtbs_perims_DD.*
