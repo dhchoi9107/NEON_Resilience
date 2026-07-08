@@ -2,6 +2,7 @@
 *.pyc
 __pycache__/
 *.log
+.claude/scheduled_tasks.lock
 *.tif
 *.laz
 *.las
