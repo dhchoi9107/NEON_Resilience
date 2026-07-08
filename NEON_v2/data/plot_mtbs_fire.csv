@@ -1,0 +1,952 @@
+plotID,fire,fire_year,fire_type,n_fires
+ABBY_001,0,0,,0
+ABBY_002,0,0,,0
+ABBY_003,0,0,,0
+ABBY_004,0,0,,0
+ABBY_005,0,0,,0
+ABBY_006,0,0,,0
+ABBY_007,0,0,,0
+ABBY_008,0,0,,0
+ABBY_009,0,0,,0
+ABBY_010,0,0,,0
+ABBY_011,0,0,,0
+ABBY_012,0,0,,0
+ABBY_013,0,0,,0
+ABBY_014,0,0,,0
+ABBY_015,0,0,,0
+ABBY_016,0,0,,0
+ABBY_017,0,0,,0
+ABBY_018,0,0,,0
+ABBY_019,0,0,,0
+ABBY_023,0,0,,0
+ABBY_025,0,0,,0
+ABBY_061,0,0,,0
+ABBY_062,0,0,,0
+ABBY_063,0,0,,0
+ABBY_064,0,0,,0
+ABBY_065,0,0,,0
+ABBY_066,0,0,,0
+ABBY_067,0,0,,0
+ABBY_068,0,0,,0
+ABBY_069,0,0,,0
+ABBY_070,0,0,,0
+ABBY_073,0,0,,0
+ABBY_074,0,0,,0
+ABBY_075,0,0,,0
+ABBY_076,0,0,,0
+ABBY_077,0,0,,0
+BART_001,0,0,,0
+BART_002,0,0,,0
+BART_003,0,0,,0
+BART_004,0,0,,0
+BART_005,0,0,,0
+BART_006,0,0,,0
+BART_007,0,0,,0
+BART_010,0,0,,0
+BART_011,0,0,,0
+BART_012,0,0,,0
+BART_013,0,0,,0
+BART_015,0,0,,0
+BART_016,0,0,,0
+BART_018,0,0,,0
+BART_019,0,0,,0
+BART_023,0,0,,0
+BART_024,0,0,,0
+BART_025,0,0,,0
+BART_026,0,0,,0
+BART_027,0,0,,0
+BART_028,0,0,,0
+BART_032,0,0,,0
+BART_033,0,0,,0
+BART_034,0,0,,0
+BART_036,0,0,,0
+BART_037,0,0,,0
+BART_039,0,0,,0
+BART_040,0,0,,0
+BART_041,0,0,,0
+BART_042,0,0,,0
+BART_044,0,0,,0
+BART_046,0,0,,0
+BART_047,0,0,,0
+BART_050,0,0,,0
+BART_051,0,0,,0
+BART_070,0,0,,0
+BART_071,0,0,,0
+BART_072,0,0,,0
+BART_073,0,0,,0
+BART_074,0,0,,0
+BART_075,0,0,,0
+BLAN_001,0,0,,0
+BLAN_003,0,0,,0
+BLAN_004,0,0,,0
+BLAN_005,0,0,,0
+BLAN_006,0,0,,0
+BLAN_007,0,0,,0
+BLAN_008,0,0,,0
+BLAN_009,0,0,,0
+BLAN_010,0,0,,0
+BLAN_011,0,0,,0
+BLAN_012,0,0,,0
+BLAN_013,0,0,,0
+BLAN_014,0,0,,0
+BLAN_015,0,0,,0
+BLAN_016,0,0,,0
+BLAN_017,0,0,,0
+BLAN_018,0,0,,0
+BLAN_019,0,0,,0
+BLAN_020,0,0,,0
+BLAN_031,0,0,,0
+BLAN_032,0,0,,0
+BLAN_033,0,0,,0
+BLAN_034,0,0,,0
+BLAN_035,0,0,,0
+BLAN_036,0,0,,0
+BLAN_037,0,0,,0
+BLAN_038,0,0,,0
+BLAN_039,0,0,,0
+BLAN_040,0,0,,0
+BLAN_041,0,0,,0
+BLAN_042,0,0,,0
+BLAN_043,0,0,,0
+BLAN_044,0,0,,0
+BLAN_045,0,0,,0
+BLAN_046,0,0,,0
+BLAN_047,0,0,,0
+BLAN_048,0,0,,0
+BLAN_049,0,0,,0
+BLAN_050,0,0,,0
+BLAN_051,0,0,,0
+BLAN_052,0,0,,0
+BLAN_053,0,0,,0
+BLAN_054,0,0,,0
+BLAN_055,0,0,,0
+BLAN_056,0,0,,0
+BLAN_057,0,0,,0
+BLAN_059,0,0,,0
+BLAN_060,0,0,,0
+BLAN_063,0,0,,0
+BLAN_064,0,0,,0
+BLAN_068,0,0,,0
+GRSM_001,0,0,,0
+GRSM_002,0,0,,0
+GRSM_003,1,2016,Wildfire,1
+GRSM_004,0,0,,0
+GRSM_005,0,0,,0
+GRSM_006,0,0,,0
+GRSM_007,1,2016,Wildfire,1
+GRSM_008,1,2016,Wildfire,1
+GRSM_009,1,2016,Wildfire,1
+GRSM_010,0,0,,0
+GRSM_011,0,0,,0
+GRSM_012,1,2016,Wildfire,1
+GRSM_013,0,0,,0
+GRSM_014,0,0,,0
+GRSM_015,0,0,,0
+GRSM_016,0,0,,0
+GRSM_017,0,0,,0
+GRSM_018,0,0,,0
+GRSM_019,0,0,,0
+GRSM_025,0,0,,0
+GRSM_047,1,2016,Wildfire,1
+GRSM_048,1,2016,Wildfire,1
+GRSM_049,1,2016,Wildfire,1
+GRSM_050,1,2016,Wildfire,1
+GRSM_051,1,2016,Wildfire,1
+GRSM_052,1,2016,Wildfire,1
+GRSM_053,1,2016,Wildfire,1
+GRSM_054,1,2016,Wildfire,1
+GRSM_055,1,2016,Wildfire,1
+GRSM_056,1,2016,Wildfire,1
+GRSM_057,1,2016,Wildfire,1
+GRSM_058,1,2016,Wildfire,1
+GRSM_059,1,2016,Wildfire,1
+GRSM_060,1,2016,Wildfire,1
+GRSM_061,1,2016,Wildfire,1
+GRSM_062,1,2016,Wildfire,1
+GRSM_063,1,2016,Wildfire,1
+GRSM_064,1,2016,Wildfire,1
+GRSM_065,1,2016,Wildfire,1
+GRSM_066,1,2016,Wildfire,1
+HARV_001,0,0,,0
+HARV_002,0,0,,0
+HARV_004,0,0,,0
+HARV_005,0,0,,0
+HARV_006,0,0,,0
+HARV_008,0,0,,0
+HARV_010,0,0,,0
+HARV_011,0,0,,0
+HARV_012,0,0,,0
+HARV_013,0,0,,0
+HARV_014,0,0,,0
+HARV_015,0,0,,0
+HARV_016,0,0,,0
+HARV_017,0,0,,0
+HARV_020,0,0,,0
+HARV_021,0,0,,0
+HARV_022,0,0,,0
+HARV_023,0,0,,0
+HARV_024,0,0,,0
+HARV_025,0,0,,0
+HARV_026,0,0,,0
+HARV_027,0,0,,0
+HARV_033,0,0,,0
+HARV_034,0,0,,0
+HARV_035,0,0,,0
+HARV_036,0,0,,0
+HARV_037,0,0,,0
+HARV_038,0,0,,0
+HARV_039,0,0,,0
+HARV_040,0,0,,0
+HARV_041,0,0,,0
+HARV_042,0,0,,0
+HARV_043,0,0,,0
+HARV_044,0,0,,0
+HARV_045,0,0,,0
+HARV_046,0,0,,0
+HARV_047,0,0,,0
+HARV_048,0,0,,0
+HARV_049,0,0,,0
+HARV_050,0,0,,0
+HARV_051,0,0,,0
+HARV_052,0,0,,0
+JERC_001,0,0,,0
+JERC_002,0,0,,0
+JERC_003,0,0,,0
+JERC_004,0,0,,0
+JERC_005,0,0,,0
+JERC_006,0,0,,0
+JERC_007,0,0,,0
+JERC_008,0,0,,0
+JERC_009,0,0,,0
+JERC_010,0,0,,0
+JERC_011,0,0,,0
+JERC_012,0,0,,0
+JERC_013,0,0,,0
+JERC_014,0,0,,0
+JERC_015,0,0,,0
+JERC_016,0,0,,0
+JERC_019,0,0,,0
+JERC_021,0,0,,0
+JERC_022,0,0,,0
+JERC_028,0,0,,0
+JERC_029,0,0,,0
+JERC_030,0,0,,0
+JERC_031,0,0,,0
+JERC_033,0,0,,0
+JERC_034,0,0,,0
+JERC_035,0,0,,0
+JERC_036,0,0,,0
+JERC_038,0,0,,0
+JERC_040,0,0,,0
+JERC_041,0,0,,0
+JERC_042,0,0,,0
+JERC_044,0,0,,0
+JERC_047,0,0,,0
+JERC_048,0,0,,0
+JERC_049,0,0,,0
+JERC_050,0,0,,0
+JERC_051,0,0,,0
+JERC_052,0,0,,0
+JERC_053,0,0,,0
+JERC_054,0,0,,0
+JERC_055,0,0,,0
+JERC_056,0,0,,0
+JERC_057,0,0,,0
+JERC_058,0,0,,0
+JERC_059,0,0,,0
+JERC_060,0,0,,0
+JERC_061,0,0,,0
+JERC_062,0,0,,0
+JERC_063,0,0,,0
+JERC_064,0,0,,0
+JERC_065,0,0,,0
+JERC_066,0,0,,0
+MLBS_001,0,0,,0
+MLBS_002,0,0,,0
+MLBS_003,0,0,,0
+MLBS_004,0,0,,0
+MLBS_005,0,0,,0
+MLBS_006,0,0,,0
+MLBS_007,0,0,,0
+MLBS_008,0,0,,0
+MLBS_009,0,0,,0
+MLBS_010,0,0,,0
+MLBS_011,0,0,,0
+MLBS_012,0,0,,0
+MLBS_013,0,0,,0
+MLBS_014,0,0,,0
+MLBS_015,0,0,,0
+MLBS_016,0,0,,0
+MLBS_017,0,0,,0
+MLBS_018,0,0,,0
+MLBS_019,1,2017,Prescribed Fire,1
+MLBS_020,0,0,,0
+MLBS_061,0,0,,0
+MLBS_062,0,0,,0
+MLBS_063,0,0,,0
+MLBS_064,0,0,,0
+MLBS_065,0,0,,0
+MLBS_066,0,0,,0
+MLBS_067,0,0,,0
+MLBS_068,0,0,,0
+MLBS_069,0,0,,0
+MLBS_070,0,0,,0
+MLBS_071,0,0,,0
+MLBS_072,0,0,,0
+MLBS_073,0,0,,0
+MLBS_074,0,0,,0
+MLBS_075,0,0,,0
+MLBS_076,0,0,,0
+ORNL_001,0,0,,0
+ORNL_002,0,0,,0
+ORNL_003,0,0,,0
+ORNL_004,0,0,,0
+ORNL_006,0,0,,0
+ORNL_007,0,0,,0
+ORNL_008,0,0,,0
+ORNL_009,0,0,,0
+ORNL_010,0,0,,0
+ORNL_012,0,0,,0
+ORNL_014,0,0,,0
+ORNL_015,0,0,,0
+ORNL_017,0,0,,0
+ORNL_018,0,0,,0
+ORNL_019,0,0,,0
+ORNL_021,0,0,,0
+ORNL_027,0,0,,0
+ORNL_029,0,0,,0
+ORNL_031,0,0,,0
+ORNL_032,0,0,,0
+ORNL_033,0,0,,0
+ORNL_035,0,0,,0
+ORNL_036,0,0,,0
+ORNL_037,0,0,,0
+ORNL_043,0,0,,0
+ORNL_044,0,0,,0
+ORNL_045,0,0,,0
+ORNL_046,0,0,,0
+ORNL_049,0,0,,0
+ORNL_050,0,0,,0
+ORNL_051,0,0,,0
+ORNL_052,0,0,,0
+ORNL_053,0,0,,0
+ORNL_054,0,0,,0
+ORNL_055,0,0,,0
+ORNL_056,0,0,,0
+ORNL_057,0,0,,0
+ORNL_058,0,0,,0
+ORNL_059,0,0,,0
+ORNL_060,0,0,,0
+ORNL_061,0,0,,0
+ORNL_062,0,0,,0
+ORNL_063,0,0,,0
+ORNL_066,0,0,,0
+ORNL_067,0,0,,0
+ORNL_068,0,0,,0
+OSBS_001,0,0,,0
+OSBS_002,0,0,,0
+OSBS_003,0,0,,0
+OSBS_004,0,0,,0
+OSBS_005,0,0,,0
+OSBS_006,0,0,,0
+OSBS_007,0,0,,0
+OSBS_008,0,0,,0
+OSBS_009,0,0,,0
+OSBS_010,0,0,,0
+OSBS_011,0,0,,0
+OSBS_012,0,0,,0
+OSBS_013,0,0,,0
+OSBS_014,0,0,,0
+OSBS_015,0,0,,0
+OSBS_016,0,0,,0
+OSBS_017,0,0,,0
+OSBS_018,0,0,,0
+OSBS_020,0,0,,0
+OSBS_021,0,0,,0
+OSBS_022,0,0,,0
+OSBS_023,0,0,,0
+OSBS_024,0,0,,0
+OSBS_025,0,0,,0
+OSBS_026,0,0,,0
+OSBS_027,0,0,,0
+OSBS_028,0,0,,0
+OSBS_029,0,0,,0
+OSBS_030,0,0,,0
+OSBS_031,0,0,,0
+OSBS_032,0,0,,0
+OSBS_033,0,0,,0
+OSBS_034,0,0,,0
+OSBS_035,0,0,,0
+OSBS_036,0,0,,0
+OSBS_037,0,0,,0
+OSBS_038,0,0,,0
+OSBS_039,0,0,,0
+OSBS_040,0,0,,0
+OSBS_041,0,0,,0
+OSBS_042,0,0,,0
+OSBS_043,0,0,,0
+OSBS_044,0,0,,0
+OSBS_048,0,0,,0
+OSBS_049,0,0,,0
+OSBS_050,0,0,,0
+OSBS_051,0,0,,0
+OSBS_063,0,0,,0
+OSBS_066,0,0,,0
+OSBS_067,0,0,,0
+OSBS_068,0,0,,0
+OSBS_070,0,0,,0
+OSBS_073,0,0,,0
+RMNP_001,0,0,,0
+RMNP_002,0,0,,0
+RMNP_003,0,0,,0
+RMNP_004,0,0,,0
+RMNP_005,0,0,,0
+RMNP_006,0,0,,0
+RMNP_007,0,0,,0
+RMNP_008,0,0,,0
+RMNP_009,0,0,,0
+RMNP_010,0,0,,0
+RMNP_011,0,0,,0
+RMNP_012,0,0,,0
+RMNP_013,0,0,,0
+RMNP_014,0,0,,0
+RMNP_015,0,0,,0
+RMNP_016,0,0,,0
+RMNP_017,0,0,,0
+RMNP_018,0,0,,0
+RMNP_019,0,0,,0
+RMNP_020,0,0,,0
+RMNP_041,0,0,,0
+RMNP_042,0,0,,0
+RMNP_043,0,0,,0
+RMNP_044,0,0,,0
+RMNP_045,0,0,,0
+RMNP_046,0,0,,0
+RMNP_047,0,0,,0
+RMNP_048,0,0,,0
+RMNP_049,0,0,,0
+SCBI_002,0,0,,0
+SCBI_003,0,0,,0
+SCBI_004,0,0,,0
+SCBI_005,0,0,,0
+SCBI_006,0,0,,0
+SCBI_007,0,0,,0
+SCBI_008,0,0,,0
+SCBI_010,0,0,,0
+SCBI_011,0,0,,0
+SCBI_012,0,0,,0
+SCBI_013,0,0,,0
+SCBI_014,0,0,,0
+SCBI_015,0,0,,0
+SCBI_016,0,0,,0
+SCBI_017,0,0,,0
+SCBI_018,0,0,,0
+SCBI_019,0,0,,0
+SCBI_021,0,0,,0
+SCBI_022,0,0,,0
+SCBI_023,0,0,,0
+SCBI_033,0,0,,0
+SCBI_034,0,0,,0
+SCBI_035,0,0,,0
+SCBI_038,0,0,,0
+SCBI_045,0,0,,0
+SCBI_046,0,0,,0
+SCBI_047,0,0,,0
+SCBI_048,0,0,,0
+SCBI_049,0,0,,0
+SCBI_050,0,0,,0
+SCBI_051,0,0,,0
+SCBI_052,0,0,,0
+SCBI_053,0,0,,0
+SCBI_054,0,0,,0
+SCBI_055,0,0,,0
+SCBI_056,0,0,,0
+SCBI_057,0,0,,0
+SCBI_058,0,0,,0
+SCBI_061,0,0,,0
+SCBI_062,0,0,,0
+SCBI_063,0,0,,0
+SCBI_064,0,0,,0
+SCBI_066,0,0,,0
+SCBI_067,0,0,,0
+SCBI_071,0,0,,0
+SERC_001,0,0,,0
+SERC_002,0,0,,0
+SERC_003,0,0,,0
+SERC_004,0,0,,0
+SERC_005,0,0,,0
+SERC_006,0,0,,0
+SERC_007,0,0,,0
+SERC_008,0,0,,0
+SERC_009,0,0,,0
+SERC_010,0,0,,0
+SERC_011,0,0,,0
+SERC_012,0,0,,0
+SERC_013,0,0,,0
+SERC_014,0,0,,0
+SERC_016,0,0,,0
+SERC_017,0,0,,0
+SERC_018,0,0,,0
+SERC_019,0,0,,0
+SERC_021,0,0,,0
+SERC_022,0,0,,0
+SERC_043,0,0,,0
+SERC_044,0,0,,0
+SERC_045,0,0,,0
+SERC_046,0,0,,0
+SERC_047,0,0,,0
+SERC_048,0,0,,0
+SERC_049,0,0,,0
+SERC_050,0,0,,0
+SERC_051,0,0,,0
+SERC_052,0,0,,0
+SERC_053,0,0,,0
+SERC_054,0,0,,0
+SERC_055,0,0,,0
+SERC_056,0,0,,0
+SERC_057,0,0,,0
+SERC_058,0,0,,0
+SERC_059,0,0,,0
+SERC_060,0,0,,0
+SERC_061,0,0,,0
+SERC_062,0,0,,0
+SERC_067,0,0,,0
+SERC_073,0,0,,0
+SOAP_001,0,0,,0
+SOAP_002,1,2020,Wildfire,1
+SOAP_003,0,0,,0
+SOAP_004,0,0,,0
+SOAP_006,1,2020,Wildfire,1
+SOAP_007,0,0,,0
+SOAP_008,1,2020,Wildfire,1
+SOAP_009,0,0,,0
+SOAP_010,0,0,,0
+SOAP_011,0,0,,0
+SOAP_012,1,2020,Wildfire,1
+SOAP_013,1,2020,Wildfire,1
+SOAP_015,0,0,,0
+SOAP_016,0,0,,0
+SOAP_017,0,0,,0
+SOAP_018,0,0,,0
+SOAP_019,0,0,,0
+SOAP_020,0,0,,0
+SOAP_021,0,0,,0
+SOAP_022,0,0,,0
+SOAP_024,1,2020,Wildfire,1
+SOAP_031,0,0,,0
+SOAP_043,1,2020,Wildfire,1
+SOAP_044,1,2020,Wildfire,1
+SOAP_045,0,0,,0
+SOAP_046,1,2020,Wildfire,1
+SOAP_047,0,0,,0
+SOAP_048,0,0,,0
+SOAP_049,0,0,,0
+SOAP_050,1,2020,Wildfire,1
+SOAP_051,1,2020,Wildfire,1
+SOAP_052,1,2020,Wildfire,1
+SOAP_053,0,0,,0
+SOAP_054,0,0,,0
+SOAP_055,1,2020,Wildfire,1
+SOAP_056,0,0,,0
+SOAP_057,0,0,,0
+SOAP_058,1,2020,Wildfire,1
+SOAP_059,1,2020,Wildfire,1
+SOAP_060,1,2020,Wildfire,1
+SOAP_061,0,0,,0
+STEI_001,0,0,,0
+STEI_002,0,0,,0
+STEI_003,0,0,,0
+STEI_004,0,0,,0
+STEI_005,0,0,,0
+STEI_006,0,0,,0
+STEI_007,0,0,,0
+STEI_008,0,0,,0
+STEI_009,0,0,,0
+STEI_010,0,0,,0
+STEI_011,0,0,,0
+STEI_012,0,0,,0
+STEI_013,0,0,,0
+STEI_014,0,0,,0
+STEI_015,0,0,,0
+STEI_016,0,0,,0
+STEI_017,0,0,,0
+STEI_019,0,0,,0
+STEI_021,1,1987,Wildfire,1
+STEI_022,0,0,,0
+STEI_023,0,0,,0
+STEI_046,0,0,,0
+STEI_047,0,0,,0
+STEI_048,0,0,,0
+STEI_049,0,0,,0
+STEI_050,0,0,,0
+STEI_051,0,0,,0
+STEI_052,0,0,,0
+STEI_053,0,0,,0
+STEI_054,0,0,,0
+STEI_055,0,0,,0
+STEI_056,0,0,,0
+STEI_057,0,0,,0
+STEI_058,0,0,,0
+STEI_059,0,0,,0
+STEI_060,0,0,,0
+STEI_061,0,0,,0
+STEI_062,0,0,,0
+TALL_001,1,2023,"2534    Prescribed Fire
+2534    Prescribed Fire
+2534    Prescribed Fire
+2534    Prescribed Fire
+Name: incid_type, dtype: object",4
+TALL_002,1,2021,"2526    Prescribed Fire
+2526    Prescribed Fire
+Name: incid_type, dtype: object",2
+TALL_003,1,2024,"2519    Prescribed Fire
+2519    Prescribed Fire
+2519    Prescribed Fire
+2519    Prescribed Fire
+2519    Prescribed Fire
+2519    Prescribed Fire
+Name: incid_type, dtype: object",6
+TALL_004,1,2023,"2523    Prescribed Fire
+2523    Prescribed Fire
+2523    Prescribed Fire
+2523    Prescribed Fire
+Name: incid_type, dtype: object",4
+TALL_005,1,2024,"2520    Prescribed Fire
+2520    Prescribed Fire
+2520    Prescribed Fire
+2520    Prescribed Fire
+2520    Prescribed Fire
+2520    Prescribed Fire
+Name: incid_type, dtype: object",6
+TALL_006,1,2024,"2532    Prescribed Fire
+2532    Prescribed Fire
+2532    Prescribed Fire
+2532    Prescribed Fire
+Name: incid_type, dtype: object",4
+TALL_007,1,2023,"2525    Prescribed Fire
+2525    Prescribed Fire
+2525    Prescribed Fire
+2525    Prescribed Fire
+Name: incid_type, dtype: object",4
+TALL_008,1,2021,"2537    Prescribed Fire
+2537    Prescribed Fire
+Name: incid_type, dtype: object",2
+TALL_009,1,2024,"2521    Prescribed Fire
+2521    Prescribed Fire
+2521    Prescribed Fire
+2521    Prescribed Fire
+Name: incid_type, dtype: object",4
+TALL_010,1,2023,"2524    Prescribed Fire
+2524    Prescribed Fire
+2524    Prescribed Fire
+2524    Prescribed Fire
+Name: incid_type, dtype: object",4
+TALL_011,1,2021,"2530    Prescribed Fire
+2530    Prescribed Fire
+Name: incid_type, dtype: object",2
+TALL_012,1,2024,"2522    Prescribed Fire
+2522    Prescribed Fire
+Name: incid_type, dtype: object",2
+TALL_013,1,2024,"2533              Other
+2533    Prescribed Fire
+2533    Prescribed Fire
+2533    Prescribed Fire
+Name: incid_type, dtype: object",4
+TALL_015,1,2021,"2528    Prescribed Fire
+2528    Prescribed Fire
+Name: incid_type, dtype: object",2
+TALL_016,1,2023,"2529    Prescribed Fire
+2529    Prescribed Fire
+2529    Prescribed Fire
+2529    Prescribed Fire
+2529    Prescribed Fire
+Name: incid_type, dtype: object",5
+TALL_017,1,2024,"2535    Prescribed Fire
+2535    Prescribed Fire
+Name: incid_type, dtype: object",2
+TALL_018,1,2024,"2531    Prescribed Fire
+2531    Prescribed Fire
+2531    Prescribed Fire
+Name: incid_type, dtype: object",3
+TALL_020,1,2021,"2536    Prescribed Fire
+2536    Prescribed Fire
+2536    Prescribed Fire
+Name: incid_type, dtype: object",3
+TALL_022,1,2024,"2527    Prescribed Fire
+2527    Prescribed Fire
+2527    Prescribed Fire
+2527    Prescribed Fire
+2527    Prescribed Fire
+Name: incid_type, dtype: object",5
+TALL_025,1,2024,"2678    Prescribed Fire
+2678    Prescribed Fire
+2678    Prescribed Fire
+2678    Prescribed Fire
+2678    Prescribed Fire
+2678    Prescribed Fire
+Name: incid_type, dtype: object",6
+TALL_042,1,2024,"2556    Prescribed Fire
+2556    Prescribed Fire
+2556    Prescribed Fire
+2556    Prescribed Fire
+Name: incid_type, dtype: object",4
+TALL_043,1,2024,"2538    Prescribed Fire
+2538    Prescribed Fire
+2538    Prescribed Fire
+2538    Prescribed Fire
+Name: incid_type, dtype: object",4
+TALL_044,1,2024,"2553    Prescribed Fire
+2553    Prescribed Fire
+2553    Prescribed Fire
+2553    Prescribed Fire
+Name: incid_type, dtype: object",4
+TALL_045,1,2024,"2549    Prescribed Fire
+2549    Prescribed Fire
+2549    Prescribed Fire
+2549    Prescribed Fire
+Name: incid_type, dtype: object",4
+TALL_046,1,2024,"2540    Prescribed Fire
+2540    Prescribed Fire
+2540    Prescribed Fire
+2540    Prescribed Fire
+Name: incid_type, dtype: object",4
+TALL_047,1,2024,"2554    Prescribed Fire
+2554    Prescribed Fire
+2554    Prescribed Fire
+2554    Prescribed Fire
+Name: incid_type, dtype: object",4
+TALL_048,1,2024,"2555    Prescribed Fire
+2555    Prescribed Fire
+2555    Prescribed Fire
+2555    Prescribed Fire
+Name: incid_type, dtype: object",4
+TALL_049,1,2024,"2539    Prescribed Fire
+2539    Prescribed Fire
+2539    Prescribed Fire
+2539    Prescribed Fire
+Name: incid_type, dtype: object",4
+TALL_050,1,2024,"2543    Prescribed Fire
+2543    Prescribed Fire
+2543    Prescribed Fire
+2543    Prescribed Fire
+Name: incid_type, dtype: object",4
+TALL_051,1,2024,"2544    Prescribed Fire
+2544    Prescribed Fire
+2544    Prescribed Fire
+2544    Prescribed Fire
+Name: incid_type, dtype: object",4
+TALL_052,1,2024,"2542    Prescribed Fire
+2542    Prescribed Fire
+2542    Prescribed Fire
+2542    Prescribed Fire
+Name: incid_type, dtype: object",4
+TALL_053,1,2024,"2558    Prescribed Fire
+2558    Prescribed Fire
+2558    Prescribed Fire
+2558    Prescribed Fire
+Name: incid_type, dtype: object",4
+TALL_054,1,2024,"2551    Prescribed Fire
+2551    Prescribed Fire
+2551    Prescribed Fire
+2551    Prescribed Fire
+Name: incid_type, dtype: object",4
+TALL_055,1,2024,"2547    Prescribed Fire
+2547    Prescribed Fire
+2547    Prescribed Fire
+2547    Prescribed Fire
+Name: incid_type, dtype: object",4
+TALL_056,1,2024,"2552    Prescribed Fire
+2552    Prescribed Fire
+2552    Prescribed Fire
+2552    Prescribed Fire
+Name: incid_type, dtype: object",4
+TALL_057,1,2024,"2545    Prescribed Fire
+2545    Prescribed Fire
+2545    Prescribed Fire
+Name: incid_type, dtype: object",3
+TALL_058,1,2024,"2548    Prescribed Fire
+2548    Prescribed Fire
+2548    Prescribed Fire
+Name: incid_type, dtype: object",3
+TALL_059,1,2024,"2550    Prescribed Fire
+2550    Prescribed Fire
+2550    Prescribed Fire
+2550    Prescribed Fire
+Name: incid_type, dtype: object",4
+TALL_060,1,2024,"2546    Prescribed Fire
+2546    Prescribed Fire
+2546    Prescribed Fire
+2546    Prescribed Fire
+Name: incid_type, dtype: object",4
+TALL_061,1,2024,"2541    Prescribed Fire
+2541    Prescribed Fire
+2541    Prescribed Fire
+2541    Prescribed Fire
+Name: incid_type, dtype: object",4
+TALL_064,1,2021,"2573    Prescribed Fire
+2573    Prescribed Fire
+Name: incid_type, dtype: object",2
+TEAK_001,0,0,,0
+TEAK_002,0,0,,0
+TEAK_003,0,0,,0
+TEAK_004,0,0,,0
+TEAK_005,0,0,,0
+TEAK_006,0,0,,0
+TEAK_007,0,0,,0
+TEAK_010,0,0,,0
+TEAK_011,0,0,,0
+TEAK_012,0,0,,0
+TEAK_013,0,0,,0
+TEAK_014,0,0,,0
+TEAK_015,0,0,,0
+TEAK_016,0,0,,0
+TEAK_017,0,0,,0
+TEAK_018,0,0,,0
+TEAK_019,0,0,,0
+TEAK_020,0,0,,0
+TEAK_024,0,0,,0
+TEAK_025,0,0,,0
+TEAK_043,0,0,,0
+TEAK_044,0,0,,0
+TEAK_045,0,0,,0
+TEAK_046,0,0,,0
+TEAK_047,0,0,,0
+TEAK_048,0,0,,0
+TEAK_049,0,0,,0
+TEAK_050,0,0,,0
+TEAK_051,0,0,,0
+TEAK_052,0,0,,0
+TEAK_053,0,0,,0
+TEAK_054,0,0,,0
+TEAK_055,0,0,,0
+TEAK_056,0,0,,0
+TEAK_057,0,0,,0
+TEAK_058,0,0,,0
+TEAK_059,0,0,,0
+TEAK_060,0,0,,0
+TEAK_061,0,0,,0
+TEAK_062,0,0,,0
+TREE_001,0,0,,0
+TREE_002,0,0,,0
+TREE_003,0,0,,0
+TREE_004,0,0,,0
+TREE_005,0,0,,0
+TREE_006,0,0,,0
+TREE_007,0,0,,0
+TREE_008,0,0,,0
+TREE_009,0,0,,0
+TREE_010,0,0,,0
+TREE_011,0,0,,0
+TREE_012,0,0,,0
+TREE_014,0,0,,0
+TREE_015,0,0,,0
+TREE_016,0,0,,0
+TREE_017,0,0,,0
+TREE_018,0,0,,0
+TREE_019,0,0,,0
+TREE_022,0,0,,0
+TREE_023,0,0,,0
+TREE_025,0,0,,0
+TREE_039,0,0,,0
+TREE_040,0,0,,0
+TREE_041,0,0,,0
+TREE_042,0,0,,0
+TREE_043,0,0,,0
+TREE_044,0,0,,0
+TREE_045,0,0,,0
+TREE_046,0,0,,0
+TREE_047,0,0,,0
+TREE_048,0,0,,0
+TREE_049,0,0,,0
+TREE_050,0,0,,0
+TREE_051,0,0,,0
+TREE_052,0,0,,0
+TREE_053,0,0,,0
+TREE_054,0,0,,0
+TREE_055,0,0,,0
+TREE_056,0,0,,0
+TREE_057,0,0,,0
+TREE_060,0,0,,0
+TREE_062,0,0,,0
+TREE_063,0,0,,0
+TREE_064,0,0,,0
+UNDE_001,0,0,,0
+UNDE_002,0,0,,0
+UNDE_003,0,0,,0
+UNDE_006,0,0,,0
+UNDE_007,0,0,,0
+UNDE_008,0,0,,0
+UNDE_010,0,0,,0
+UNDE_011,0,0,,0
+UNDE_012,0,0,,0
+UNDE_013,0,0,,0
+UNDE_014,0,0,,0
+UNDE_015,0,0,,0
+UNDE_016,0,0,,0
+UNDE_018,0,0,,0
+UNDE_019,0,0,,0
+UNDE_020,0,0,,0
+UNDE_021,0,0,,0
+UNDE_022,0,0,,0
+UNDE_023,0,0,,0
+UNDE_027,0,0,,0
+UNDE_037,0,0,,0
+UNDE_038,0,0,,0
+UNDE_043,0,0,,0
+UNDE_044,0,0,,0
+UNDE_045,0,0,,0
+UNDE_047,0,0,,0
+UNDE_048,0,0,,0
+UNDE_049,0,0,,0
+UNDE_050,0,0,,0
+UNDE_052,0,0,,0
+UNDE_054,0,0,,0
+UNDE_055,0,0,,0
+UNDE_056,0,0,,0
+UNDE_057,0,0,,0
+UNDE_058,0,0,,0
+UNDE_059,0,0,,0
+UNDE_060,0,0,,0
+UNDE_061,0,0,,0
+UNDE_065,0,0,,0
+UNDE_078,0,0,,0
+WREF_001,0,0,,0
+WREF_002,0,0,,0
+WREF_003,0,0,,0
+WREF_004,0,0,,0
+WREF_005,0,0,,0
+WREF_006,0,0,,0
+WREF_007,0,0,,0
+WREF_008,0,0,,0
+WREF_009,0,0,,0
+WREF_010,0,0,,0
+WREF_011,0,0,,0
+WREF_012,0,0,,0
+WREF_013,0,0,,0
+WREF_014,0,0,,0
+WREF_015,0,0,,0
+WREF_016,0,0,,0
+WREF_017,0,0,,0
+WREF_018,0,0,,0
+WREF_019,0,0,,0
+WREF_020,0,0,,0
+WREF_070,0,0,,0
+WREF_071,0,0,,0
+WREF_072,0,0,,0
+WREF_073,0,0,,0
+WREF_074,0,0,,0
+WREF_075,0,0,,0
+WREF_076,0,0,,0
+WREF_077,0,0,,0
+WREF_078,0,0,,0
+WREF_079,0,0,,0
+WREF_080,0,0,,0
+WREF_081,0,0,,0
+WREF_082,0,0,,0
+WREF_083,0,0,,0
+WREF_084,0,0,,0
+WREF_085,0,0,,0
+WREF_086,0,0,,0
+WREF_087,0,0,,0
+WREF_088,0,0,,0
+WREF_089,0,0,,0
