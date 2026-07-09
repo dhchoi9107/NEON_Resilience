@@ -6,8 +6,10 @@ Bivariate (raw) scatter; domain-controlled mixed models are in 140_stand_age.py.
 Outputs: figures/N02_age_crossval.png, N03_age_vs_structural_change.png, results/stand_age_crossval.csv
 """
 import os, pandas as pd, numpy as np, scipy.stats as st
+import statsmodels.formula.api as smf
 import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
 plt.rcParams['font.family']='Malgun Gothic'; plt.rcParams['axes.unicode_minus']=False
+def z(s): return (s-s.mean())/s.std()
 ROOT=r"C:\Users\star1\Documents\GitHub\NEON_Resilience\NEON_v2"
 D,F,R=os.path.join(ROOT,"data"),os.path.join(ROOT,"figures"),os.path.join(ROOT,"results")
 
@@ -59,3 +61,36 @@ fig.legend(handles=handles,loc='lower center',ncol=10,fontsize=9,frameon=False,
 fig.suptitle("N03. 임분연령 vs 구조적 복잡도 변화속도(trend) — 점 색=site, 젊을수록 축적 빠름(VCI/LAI −), 노령=갭동태(Deep_Gap +)",fontsize=13)
 fig.tight_layout(rect=[0,0.05,1,0.97]); fig.savefig(f"{F}/N03_age_vs_structural_change.png",dpi=120,bbox_inches='tight'); plt.close()
 print("saved N03 (colored by site)")
+
+# ===== N04: PARTIAL regression — pure age effect controlling for domain + site random =====
+# Mixed model  z(trend) ~ z(age) + C(domain) + (1|site).  Partial residual for age:
+#   pr = y - [C(domain) fit + site random effect]  (= beta_age*z_age + residual)
+# Plotting pr vs age isolates the age effect net of domain & between-site differences.
+fig,axes=plt.subplots(2,4,figsize=(20,9.5))
+for ax,(col,lab) in zip(axes.ravel(),METR):
+    d=df[[A,col,'siteID','domain']].dropna().copy()
+    d['za']=z(d[A]); d['zt']=z(d[col])
+    try:
+        m=smf.mixedlm("zt ~ za + C(domain)",d,groups=d['siteID']).fit(reml=True,method='lbfgs')
+    except Exception:
+        ax.set_title(f"{lab}\n(fit 실패)"); continue
+    beta=m.fe_params['za']; p=m.pvalues['za']
+    fe_pred=m.predict(d)                                   # X*beta (fixed: za + domain)
+    try:
+        remap={s:float(v.iloc[0]) for s,v in m.random_effects.items()}
+        re=d['siteID'].map(remap).fillna(0.0).values
+    except Exception:
+        re=np.zeros(len(d))                                # singular site variance -> no RE
+    pr=(d['zt'].values-(fe_pred.values+re))+beta*d['za'].values   # partial resid for age
+    ax.scatter(d[A],pr,s=16,alpha=.6,c=[scol[s] for s in d.siteID],edgecolors='none')
+    xx=np.linspace(d[A].min(),d[A].max(),50)
+    ax.plot(xx, beta*(xx-d[A].mean())/d[A].std(),'-',color='k',lw=2.6)   # partial slope
+    ax.axhline(0,color='k',ls=':',lw=1)
+    star='***' if p<0.001 else '**' if p<0.01 else '*' if p<0.05 else 'ns'
+    ax.set_title(f"{lab}\nβ_age|(domain+site)={beta:+.3f}{star}  p={p:.2g}",fontsize=10.5,color=('#1a237e' if p<0.05 else '#616161'))
+    ax.set_xlabel("stand age (GAMI, yr)"); ax.set_ylabel(f"{col} partial resid"); ax.grid(alpha=.25)
+fig.legend(handles=handles,loc='lower center',ncol=10,fontsize=9,frameon=False,
+           title="site (색)  ·  검은선=부분 임령효과(β_age)",bbox_to_anchor=(0.5,-0.02))
+fig.suptitle("N04. 순수 임령효과 (부분회귀) — 도메인·site 랜덤효과 통제 후 임령 partial residual",fontsize=13)
+fig.tight_layout(rect=[0,0.05,1,0.97]); fig.savefig(f"{F}/N04_age_partial_regression.png",dpi=120,bbox_inches='tight'); plt.close()
+print("saved N04 (partial regression)")
