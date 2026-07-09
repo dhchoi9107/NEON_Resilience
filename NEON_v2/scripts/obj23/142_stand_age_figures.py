@@ -94,3 +94,51 @@ fig.legend(handles=handles,loc='lower center',ncol=10,fontsize=9,frameon=False,
 fig.suptitle("N04. 순수 임령효과 (부분회귀) — 도메인·site 랜덤효과 통제 후 임령 partial residual",fontsize=13)
 fig.tight_layout(rect=[0,0.05,1,0.97]); fig.savefig(f"{F}/N04_age_partial_regression.png",dpi=120,bbox_inches='tight'); plt.close()
 print("saved N04 (partial regression)")
+
+# ===== N05: N03 vs N04 side-by-side, points grouped by DOMAIN (convex hull) =====
+from scipy.spatial import ConvexHull
+from matplotlib.patches import Polygon
+KEY=[('FHD_trend','FHD (교란→소멸)'),('VCI_trend','VCI (견고 −)'),
+     ('Canopy_Ht_trend','Canopy_Ht (부호반전)'),('Deep_Gap_trend','Deep_Gap (견고 +)')]
+doms=sorted(df.domain.unique()); dc={d:plt.get_cmap('tab10')(i%10) for i,d in enumerate(doms)}
+def hulls(ax,x,y,dom):
+    for dm in doms:
+        mask=(dom==dm).values; pts=np.column_stack([x[mask],y[mask]])
+        if len(pts)<3: continue
+        try: h=ConvexHull(pts)
+        except Exception: continue
+        ax.add_patch(Polygon(pts[h.vertices],closed=True,facecolor=dc[dm],alpha=.12,edgecolor=dc[dm],lw=1.0))
+def partial_resid(d,col):
+    d=d.copy(); d['za']=z(d[A]); d['zt']=z(d[col])
+    m=smf.mixedlm("zt ~ za + C(domain)",d,groups=d['siteID']).fit(reml=True,method='lbfgs')
+    fe=m.predict(d)
+    try:
+        rmap={s:float(v.iloc[0]) for s,v in m.random_effects.items()}; re=d['siteID'].map(rmap).fillna(0).values
+    except Exception: re=np.zeros(len(d))
+    pr=(d['zt'].values-(fe.values+re))+m.fe_params['za']*d['za'].values
+    return pr,m.fe_params['za'],m.pvalues['za'],d
+
+fig,axes=plt.subplots(2,4,figsize=(21,10.5))
+for j,(col,lab) in enumerate(KEY):
+    # row0 bivariate
+    ax=axes[0,j]; d=df[[A,col,'domain']].dropna(); x=d[A].values; y=d[col].values
+    ax.scatter(x,y,s=15,alpha=.55,c=[dc[q] for q in d.domain],edgecolors='none')
+    hulls(ax,x,y,d.domain)
+    sl,ic,r,p,se=st.linregress(x,y); xx=np.linspace(x.min(),x.max(),50); ax.plot(xx,ic+sl*xx,'k-',lw=2.6)
+    ax.axhline(0,color='k',ls=':',lw=1); star='***' if p<0.001 else '**' if p<0.01 else '*' if p<0.05 else 'ns'
+    ax.set_title(f"{lab}\n[bivariate] r={r:+.2f}{star}",fontsize=11)
+    ax.set_ylabel(col if j==0 else ""); ax.set_xlabel(""); ax.grid(alpha=.2)
+    # row1 partial
+    ax=axes[1,j]; d2=df[[A,col,'domain','siteID']].dropna(); pr,beta,pp,_=partial_resid(d2,col)
+    ax.scatter(d2[A],pr,s=15,alpha=.55,c=[dc[q] for q in d2.domain],edgecolors='none')
+    hulls(ax,d2[A].values,pr,d2.domain)
+    xx=np.linspace(d2[A].min(),d2[A].max(),50); ax.plot(xx,beta*(xx-d2[A].mean())/d2[A].std(),'k-',lw=2.6)
+    ax.axhline(0,color='k',ls=':',lw=1); star='***' if pp<0.001 else '**' if pp<0.01 else '*' if pp<0.05 else 'ns'
+    ax.set_title(f"[부분회귀 domain+site] β={beta:+.2f}{star}",fontsize=11,color=('#1a237e' if pp<0.05 else '#b71c1c'))
+    ax.set_ylabel("partial resid" if j==0 else ""); ax.set_xlabel("stand age (GAMI, yr)"); ax.grid(alpha=.2)
+from matplotlib.patches import Patch
+fig.legend(handles=[Patch(color=dc[d],alpha=.5,label=d) for d in doms],loc='lower center',ncol=9,fontsize=10,
+           frameon=False,title="domain (색·묶음)",bbox_to_anchor=(0.5,-0.01))
+fig.suptitle("N05. bivariate(위) vs 부분회귀(아래) — 도메인 묶음(hull). 통제 후 FHD 소멸·Canopy_Ht 반전, VCI/Deep_Gap 견고",fontsize=13)
+fig.tight_layout(rect=[0,0.05,1,0.96]); fig.savefig(f"{F}/N05_bivar_vs_partial_bydomain.png",dpi=120,bbox_inches='tight'); plt.close()
+print("saved N05 (compare + domain hulls)")
