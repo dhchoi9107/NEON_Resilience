@@ -5,16 +5,18 @@
 
 ---
 ## Obj 1 — RS 다양성 ↔ 종다양성 (다중스케일) ✅
-**RS-유래 다양성(구조+분광) ↔ 종다양성(알파 Hill + 베타 LCBD)**, domain>site>plot.
+**RS 예측변수(구조 LiDAR + 분광 개별 VI) ↔ 종다양성(알파 Hill + 베타 LCBD)**, domain>site>plot.
+> 분광 = 개별 VI(NDVI·EVI·ARVI·SAVI) 직접 사용. 합친 분광다양성(Rao Q·FEve·FDiv)은 Obj1에서 제외(script 100·obj1_specdiv.csv는 보관용). PRI·fPAR 제외 유지.
 
-| 응답 | 주요 예측변수 |
+| 응답 | 주요 예측변수 (mean, p<0.05) |
 |---|---|
-| Hill q1/q2 (알파) | 구조: VCI +0.31, Rumple −0.30, Gini, FHD / 분광: **Rao Q +0.11** |
-| LCBD turnover (베타) | 구조: VCI, Rumple, Gini / 분광: **FEve −0.08** |
-| LCBD nestedness (베타) | 구조: Gini −0.31, VCI −0.26 |
+| Hill q1/q2 (알파) | 분광: **SAVI +0.38, EVI +0.38**, NDVI +0.28, ARVI +0.27 / 구조: LAI +0.36, VCI +0.31, Deep_Gap −0.39, Rumple −0.30, Gini +0.17 |
+| LCBD turnover (베타) | 구조: VCI +0.14, Gini +0.12, Deep_Gap −0.15, Rumple −0.14 / **분광 VI 전부 비유의** |
+| LCBD nestedness (베타) | 구조: Gini −0.31, Vert_CV −0.30, VCI −0.26, Canopy_Ht +0.24 / **분광 VI 전부 비유의** |
 
-- **구조다양성 > 분광다양성** (구조가 주 predictor, 분광이 독립적 보조 신호)
-- 그림 **K01** / 스크립트 03·04·100 / 결과 obj1_specdiv.csv
+- **알파: 분광 개별 VI(SAVI/EVI)가 최상위 예측변수**(구조 LAI/VCI와 동급·상회), **베타: 구조 전용**(분광 VI 비유의)
+- → 분광 VI = 알파(엽록소·생산성 신호), 구조 = 알파+베타(공간 조성 전환) 담당. 상호 보완.
+- 그림 **K01** / 스크립트 03·110 / 결과 v2_coeff.csv
 
 ## Obj 2 — 교란 + 토지이용 이질성 (시간) ✅
 상세: `02_OBJ2_SYNTHESIS.md`. 핵심:
@@ -36,7 +38,7 @@
 | 코드 | 내용 | 목적 |
 |---|---|---|
 | F01–F09 | 종다양성~RS(forest/scatter/분산분해/시계열/커플링) | Obj1 |
-| **K01** | 종다양성~RS유래다양성(분광+구조) | Obj1 |
+| **K01** | 종다양성~RS예측변수(분광 개별 VI + 구조) | Obj1 |
 | G01–G02 | 다양성~Sentinel DHI (선형) | Obj3 |
 | **L03** | ★ 생산성–다양성 **혹형**(GAM) | Obj3 |
 | L01–L02 | 비선형(다항식·GAM) 전체 검정 | Obj1–3 |

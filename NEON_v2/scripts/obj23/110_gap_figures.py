@@ -12,19 +12,24 @@ ROOT=r"C:\Users\star1\Documents\GitHub\NEON_Resilience\NEON_v2"
 D,F,R=os.path.join(ROOT,"data"),os.path.join(ROOT,"figures"),os.path.join(ROOT,"results")
 def save(fig,n): fig.savefig(os.path.join(F,n),dpi=120,bbox_inches='tight'); plt.close(fig); print(" saved",n)
 
-# ===== K01: Obj1 forest — spectral vs structural diversity =====
-o1=pd.read_csv(os.path.join(R,"obj1_specdiv.csv"))
-resps=['Hill q1(alpha)','Hill q2(alpha)','LCBD turnover(beta)','LCBD nestedness(beta)']
-catc={'spectral_div':'#2e7d32','structural_div':'#c62828'}
+# ===== K01: Obj1 forest — individual spectral VIs vs structural LiDAR =====
+# Spectral = individual NEON .002 BRDF VIs (NDVI/EVI/ARVI/SAVI), NOT combined spectral diversity.
+# Uses the main mixed-model coefficients (v2_coeff.csv), mean temporal feature.
+o1=pd.read_csv(os.path.join(R,"v2_coeff.csv")); o1=o1[o1.feature=='mean']
+resps=['Hill q1','Hill q2','Turnover(rare)','Nestedness(rare)']
+titles={'Hill q1':'Hill q1 (알파)','Hill q2':'Hill q2 (알파)',
+        'Turnover(rare)':'LCBD turnover (베타)','Nestedness(rare)':'LCBD nestedness (베타)'}
+catc={'VI':'#2e7d32','Structural':'#c62828'}
 fig,axes=plt.subplots(1,4,figsize=(20,6),sharex=True)
 for ax,rl in zip(axes,resps):
     d=o1[o1.response==rl].sort_values('beta')
     for i,(_,x) in enumerate(d.iterrows()):
-        ax.scatter(x['beta'],i,c=catc[x['kind']],s=70,alpha=1 if x['p']<0.05 else .3)
-    ax.set_yticks(range(len(d))); ax.set_yticklabels(d['predictor'],fontsize=9)
-    ax.axvline(0,color='k',ls='--'); ax.set_title(rl,fontsize=11); ax.set_xlabel("beta (z)"); ax.grid(axis='x',alpha=.3)
-axes[-1].legend(handles=[Patch(color=v,label={'spectral_div':'분광다양성','structural_div':'구조다양성'}[k]) for k,v in catc.items()],loc='lower right')
-fig.suptitle("K01 (Obj1). 종다양성(알파 Hill + 베타 LCBD) ~ RS-유래 다양성 (분광 + 구조)",fontsize=13)
+        ax.scatter(x['beta'],i,c=catc[x['category']],s=70,alpha=1 if x['p']<0.05 else .25)
+    ax.set_yticks(range(len(d))); ax.set_yticklabels(d['predictor'],fontsize=8)
+    ax.axvline(0,color='k',ls='--'); ax.set_title(titles[rl],fontsize=11); ax.set_xlabel("beta (z)"); ax.grid(axis='x',alpha=.3)
+axes[-1].legend(handles=[Patch(color=catc['VI'],label='분광 개별 VI'),
+                         Patch(color=catc['Structural'],label='구조 (LiDAR)')],loc='lower right')
+fig.suptitle("K01 (Obj1). 종다양성(알파 Hill + 베타 LCBD) ~ RS 예측변수 (분광 개별 VI + 구조)",fontsize=13)
 fig.tight_layout(); save(fig,"K01_obj1_rs_diversity.png")
 
 # ===== K02: Obj2 diversity ~ land-use heterogeneity =====
