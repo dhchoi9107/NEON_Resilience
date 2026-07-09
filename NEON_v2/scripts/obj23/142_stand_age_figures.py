@@ -37,19 +37,25 @@ fig.tight_layout(); fig.savefig(f"{F}/N02_age_crossval.png",dpi=120,bbox_inches=
 df=pd.read_csv(f"{D}/FINAL_v2_pooled.csv").merge(
    pd.read_csv(f"{D}/plot_stand_age_gami.csv")[['plotID','stand_age_gami']],on='plotID',how='left')
 df=df[(df.sample_coverage>=0.9)&df.stand_age_gami.notna()].copy(); A='stand_age_gami'
+sites=sorted(df.siteID.unique())
+cmap=plt.get_cmap('tab20'); scol={s:cmap(i%20) for i,s in enumerate(sites)}
 METR=[('VCI_trend','VCI (수직복잡도)'),('FHD_trend','FHD (엽층다양성)'),('LAI_trend','LAI (엽면적)'),
       ('Rugosity_trend','Rugosity (표면거칠기)'),('Gini_trend','Gini (구조불평등)'),
       ('Deep_Gap_trend','Deep_Gap (갭비율)'),('Max_Ht_trend','Max_Ht (최고수고)'),('Canopy_Ht_trend','Canopy_Ht (평균수고)')]
 fig,axes=plt.subplots(2,4,figsize=(20,9.5))
 for ax,(col,lab) in zip(axes.ravel(),METR):
-    dd=df[[A,col]].dropna(); x=dd[A].values; y=dd[col].values
+    dd=df[[A,col,'siteID']].dropna(); x=dd[A].values; y=dd[col].values
+    ax.scatter(x,y,s=16,alpha=.6,c=[scol[s] for s in dd.siteID],edgecolors='none')
     sl,ic,r,p,se=st.linregress(x,y); sig=p<0.05
-    ax.scatter(x,y,s=14,alpha=.35,color=('#6a1b9a' if sig else '#9e9e9e'))
-    xx=np.linspace(x.min(),x.max(),50); ax.plot(xx,ic+sl*xx,'-',color=('#c62828' if sig else '#616161'),lw=2.4)
+    xx=np.linspace(x.min(),x.max(),50); ax.plot(xx,ic+sl*xx,'-',color='k',lw=2.6)  # overall fit
     ax.axhline(0,color='k',ls=':',lw=1)
     star='***' if p<0.001 else '**' if p<0.01 else '*' if p<0.05 else 'ns'
     ax.set_title(f"{lab}\nr={r:+.2f}{star}  (기울기 {sl:+.2e}/yr)",fontsize=10.5,color=('#4a148c' if sig else '#616161'))
     ax.set_xlabel("stand age (GAMI, yr)"); ax.set_ylabel(col); ax.grid(alpha=.25)
-fig.suptitle("N03. 임분연령 vs 구조적 복잡도 변화속도(trend) — 젊을수록 축적 빠름(VCI/LAI −), 노령=갭동태(Deep_Gap +)",fontsize=13)
-fig.tight_layout(rect=[0,0,1,0.97]); fig.savefig(f"{F}/N03_age_vs_structural_change.png",dpi=120,bbox_inches='tight'); plt.close()
-print("saved N03")
+from matplotlib.lines import Line2D
+handles=[Line2D([0],[0],marker='o',ls='',mfc=scol[s],mec='none',ms=8,label=s) for s in sites]
+fig.legend(handles=handles,loc='lower center',ncol=10,fontsize=9,frameon=False,
+           title="site (색)  ·  검은선=전체 회귀",bbox_to_anchor=(0.5,-0.02))
+fig.suptitle("N03. 임분연령 vs 구조적 복잡도 변화속도(trend) — 점 색=site, 젊을수록 축적 빠름(VCI/LAI −), 노령=갭동태(Deep_Gap +)",fontsize=13)
+fig.tight_layout(rect=[0,0.05,1,0.97]); fig.savefig(f"{F}/N03_age_vs_structural_change.png",dpi=120,bbox_inches='tight'); plt.close()
+print("saved N03 (colored by site)")
