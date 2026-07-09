@@ -18,12 +18,18 @@
 - → 분광 VI = 알파(엽록소·생산성 신호), 구조 = 알파+베타(공간 조성 전환) 담당. 상호 보완.
 - 그림 **K01** / 스크립트 03·110 / 결과 v2_coeff.csv
 
+**시간·천이 차원** (신규, 상세 `04_SUCCESSION_STANDAGE.md`):
+- **(A) 시간 trend 증분**: RS 시간변화(trend)가 mean 대비 예측력 더하는 19/60쌍 **전부 구조(분광 VI 0)**, 베타 다양성 집중 → 구조 생장궤적이 mean 못 담는 조성 정보 추가.
+- **(B) 임령(stand age) 조절**: **RS–다양성 커플링을 임령이 조절 — 11/19 유의 전부 음**(SAVI·EVI·LAI·VCI × age). 젊은 임분서 커플링 강, 성숙할수록 캐노피 포화·디커플링. 임령 자체의 직접효과는 없음.
+- → **RS로 종다양성 추론 시 천이단계가 조절자.** 임령=GAMI 100m(진짜 임령)·Global 30m(≤40 recency proxy) 교차검증. 그림 M01·N01·N02.
+
 ## Obj 2 — 교란 + 토지이용 이질성 (시간) ✅
 상세: `02_OBJ2_SYNTHESIS.md`. 핵심:
 - **교란**: NEON 자체 기록(이벤트+plantStatus) 필수(원격은 곤충 0/10 누락). BACI로 시간분해 →
   **희귀종 ~1종 손실, 우점구조 회복력**. Choi2023 press/pulse. RTM 통제 후 **Deep_Gap·Gini만 진짜 완충**.
 - **토지이용 이질성**: **파편화 → 다양성 −0.35**, 산림비율 +0.28. **이질성이 RS–종 관계 조절**(SAVI×het +0.21).
 - **핵심**: 구조적 회복력 ≠ 조성적 회복력 + 경관 파편화가 다양성·관계를 좌우.
+- **천이·recency 축**(신규, `04_SUCCESSION_STANDAGE.md`): 임령이 RS–다양성 관계를 조절(젊을수록 강)하는 것은 Obj2의 **recency×RS 조절**(=교란 후 경과년; 갓 교란서 커플링 강→회복하며 약화)과 **동일 현상의 장기 버전**. Global 30m 임령은 40년 포화(Landsat 상한)라 사실상 recency proxy → Obj2 severity/recency 결과와 정합.
 - 그림 G03·I01·I02·I03·J01·J05·J06·**K02·K03** / 스크립트 50·70~72·80~82·90~92·101
 
 ## Obj 3 — RS 다양성 ↔ 생산성 (DHI) ✅
@@ -47,8 +53,11 @@
 | J01 | press/pulse 구조변화 | Obj2 |
 | J05–J06 | 복잡도 완충·RTM 통제·계산법 | Obj2 |
 | **K02–K03** | 토지이용 이질성 직접·조절효과 | Obj2 |
+| **M01** | 시간 trend 증분 예측력(구조만) | Obj1 |
+| **N01** | 임령~다양성·복잡화 속도 | Obj1 |
+| **N02** | 임령 교차검증(GAMI vs 30m 포화) | Obj1 |
 
 ## 핵심 데이터·스크립트
-- 통합: `data/FINAL_v2_full.csv`
+- 통합: `data/FINAL_v2_full.csv` / 임령: `plot_stand_age_{gami,30m}.csv`
 - 분광 단일 BRDF 출처: 01·02 (docs/00_DATA_SOURCES.md)
-- 스크립트: `scripts/` (Obj1 핵심), `scripts/obj23/` (Obj2·3, 50~110)
+- 스크립트: `scripts/` (Obj1 핵심), `scripts/obj23/` (Obj2·3, 50~110; 천이 130·140·141)
