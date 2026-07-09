@@ -142,3 +142,41 @@ fig.legend(handles=[Patch(color=dc[d],alpha=.5,label=d) for d in doms],loc='lowe
 fig.suptitle("N05. bivariate(위) vs 부분회귀(아래) — 도메인 묶음(hull). 통제 후 FHD 소멸·Canopy_Ht 반전, VCI/Deep_Gap 견고",fontsize=13)
 fig.tight_layout(rect=[0,0.05,1,0.96]); fig.savefig(f"{F}/N05_bivar_vs_partial_bydomain.png",dpi=120,bbox_inches='tight'); plt.close()
 print("saved N05 (compare + domain hulls)")
+
+# ===== N06: Simpson's paradox for Canopy_Ht_trend — per-site regression lines =====
+C='Canopy_Ht_trend'; d=df[[A,C,'siteID']].dropna().copy()
+fig,axes=plt.subplots(1,3,figsize=(19,5.8))
+# panel1: per-site within regression lines overlaid on pooled
+ax=axes[0]
+ax.scatter(d[A],d[C],s=13,alpha=.30,c=[scol[s] for s in d.siteID],edgecolors='none')
+for s in sites:
+    ds=d[d.siteID==s]
+    if len(ds)<6 or (ds[A].max()-ds[A].min())<15: continue          # 나이 폭 있는 사이트만
+    sl,ic,r,p,se=st.linregress(ds[A],ds[C]); xx=np.array([ds[A].min(),ds[A].max()])
+    ax.plot(xx,ic+sl*xx,'-',color=scol[s],lw=2.0,alpha=.9)
+sl,ic,r,p,se=st.linregress(d[A],d[C]); xx=np.linspace(d[A].min(),d[A].max(),50)
+ax.plot(xx,ic+sl*xx,'k--',lw=2.8,label=f'전체(pooled) r={r:+.2f}')
+ax.axhline(0,color='gray',ls=':',lw=1); ax.legend(loc='upper right',fontsize=9)
+ax.set_title("① 사이트별 회귀선(색) vs 전체(검은 점선)\n사이트 내 기울기는 대체로 평평/양, 전체는 음",fontsize=11)
+ax.set_xlabel("stand age (GAMI, yr)"); ax.set_ylabel(C); ax.grid(alpha=.2)
+# panel2: between-site (site means)
+ax=axes[1]; g=d.groupby('siteID').agg(age=(A,'mean'),tr=(C,'mean'),n=(C,'size'))
+ax.scatter(g.age,g.tr,s=np.clip(g.n*4,40,300),c=[scol[s] for s in g.index],edgecolors='k',lw=.5,zorder=3)
+for s,r_ in g.iterrows(): ax.annotate(s,(r_.age,r_.tr),fontsize=7.5,alpha=.8)
+sl,ic,rb,pb,se=st.linregress(g.age,g.tr); xx=np.linspace(g.age.min(),g.age.max(),50)
+ax.plot(xx,ic+sl*xx,'-',color='#b71c1c',lw=2.8)
+ax.axhline(0,color='gray',ls=':',lw=1)
+ax.set_title(f"② 사이트 간(between): 평균끼리\nr={rb:+.2f} — 젊은 ABBY 급성장, 노령 정체 = 음",fontsize=11)
+ax.set_xlabel("사이트 평균 임령"); ax.set_ylabel(f"사이트 평균 {C}"); ax.grid(alpha=.2)
+# panel3: within-site (demeaned)
+ax=axes[2]; d['aw']=d[A]-d.groupby('siteID')[A].transform('mean'); d['tw']=d[C]-d.groupby('siteID')[C].transform('mean')
+ax.scatter(d.aw,d.tw,s=13,alpha=.35,c=[scol[s] for s in d.siteID],edgecolors='none')
+sl,ic,rw,pw,se=st.linregress(d.aw,d.tw); xx=np.linspace(d.aw.min(),d.aw.max(),50)
+ax.plot(xx,ic+sl*xx,'-',color='#1a237e',lw=2.8)
+ax.axhline(0,color='gray',ls=':',lw=1); ax.axvline(0,color='gray',ls=':',lw=1)
+ax.set_title(f"③ 사이트 내(within, 평균제거)\nr={rw:+.2f} (p={pw:.1g}) — 성숙 patch 우점목 성장 = 양",fontsize=11)
+ax.set_xlabel("임령 − 사이트평균"); ax.set_ylabel(f"{C} − 사이트평균"); ax.grid(alpha=.2)
+fig.legend(handles=handles,loc='lower center',ncol=10,fontsize=8.5,frameon=False,title="site",bbox_to_anchor=(0.5,-0.03))
+fig.suptitle("N06. Canopy_Ht_trend 부호반전(Simpson's paradox) — between(음) vs within(양)",fontsize=13)
+fig.tight_layout(rect=[0,0.06,1,0.95]); fig.savefig(f"{F}/N06_canopyht_simpson.png",dpi=120,bbox_inches='tight'); plt.close()
+print("saved N06 (Simpson per-site)")
