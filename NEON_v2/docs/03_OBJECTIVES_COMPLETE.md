@@ -60,8 +60,9 @@
 Sentinel-2 **DHI**(누적/최소/계절변동, GEE 서버사이드) ~ 종다양성.
 - ★ **생산성–다양성 혹형(hump)**: Hill q1·q2 ~ DHI누적 = **inverted-U**(다항식 p<0.001, GAM EDF 3.2 p<0.001). 중간 생산성에서 다양성 최대.
 - **선형 +0.12는 착시**(혹형 상승부만). 평균·선형 모델은 혹형을 놓침 → 다항식/GAM 필수.
+- ★ **혹형 견고성 검증**(`L04`, `dhi_hump_confound.csv`): **forest type 통제해도 생존**(Hill q1 p=9.4e-6, turnover 4.8e-14), 상록성 통제도 생존, **evergreen·deciduous biome 내부에도 혹형 존재** → **생물지리 아티팩트 아님**. ↔ **임령–다양성 혹형은 forest type 통제 시 즉사(p=0.98)**로 근본적으로 다름. 단 between-site 거시생태 스케일(site 랜덤 통제 시 소멸=이 관계의 고유 스케일).
 - 교란강도·구조·분광다양성은 선형/단조(중간교란가설 미지지).
-- 맵핑 — 스크립트 `10·20·60·61`(DHI/Sentinel)·`120·121·122`(비선형/GAM/혹형)·`50`(obj23모델) / 그림 `G01·G02`·`L01·L02`·**L03**(혹형 headline) / 결과 `obj23_dhi_coeff`·`nonlinear`·`gam`
+- 맵핑 — 스크립트 `10·20·60·61`(DHI/Sentinel)·`120·121·122`(비선형/GAM/혹형)·`147`(혹형 검증)·`50`(obj23모델) / 그림 `G01·G02`·`L01·L02`·**L03**(혹형 headline)·**L04**(견고성) / 결과 `obj23_dhi_coeff`·`nonlinear`·`gam`·`dhi_hump_confound`
 
 ---
 ## 전체 그림 인덱스
