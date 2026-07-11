@@ -30,6 +30,7 @@ Journal of Ecology / Forest Ecology and Management / Remote Sensing of Environme
 - Discussion: aggradation→gap-phase, RTM 방법론 교훈, RS가 구조 동태 포착
 
 ## 한계 (정직)
+- **GAMI 정확도**: v2.1 독립검증 미보고(Besnard 2021 상속 NSE 0.60, **RMSE~48년**, 젊음과대·노령과소 편향). 제작자 권고 = **20년 binning**. → **20년 구간 재실행(N11)에서 결과 견고**(구조변화 4지표·조절 10/11 유지). 절대 임령 아닌 구간으로 해석.
 - **임령 사이트단위(ICC=0.75)**, GAMI 100m 아티팩트(ABBY 내부SD 70년) → 유효 N≈19, 사이트 수준 해석
 - FHD_trend 등은 통제 시 소멸(생물지리) → 순수 임령효과는 VCI/LAI/Deep_Gap/Canopy_Ht 4개
 - LiDAR 관측창 ~8–10년(단기), 30m 임령은 recency proxy(≤40 포화)
