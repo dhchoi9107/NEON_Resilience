@@ -24,3 +24,7 @@ cloth_nodes.txt
 # MTBS raw perimeters (re-downloadable; derived plot CSVs are tracked)
 NEON_v2/data/disturbance/mtbs_perims.zip
 NEON_v2/data/disturbance/mtbs_perims_DD.*
+
+# AmeriFlux raw tower data (keep README only)
+NEON_v2/data/ameriflux/*
+!NEON_v2/data/ameriflux/README.md
