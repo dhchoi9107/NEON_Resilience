@@ -37,17 +37,19 @@ for ax,(dv,dl) in zip(axes.ravel(),DIV):
     g=d.groupby('siteID').agg(age=(A,'median'),div=(dv,'mean'),n=(dv,'size')).reset_index()
     ax.scatter(g['age'].values,g['div'].values,s=np.clip(g['n'].values*5,50,320),
                c=[scol[s] for s in g['siteID'].values],edgecolors='k',lw=.8,zorder=4)
-    # bivariate quadratic curve (plot-level)
+    # plot-level quadratic (black dashed)
     xx=np.linspace(d[A].min(),d[A].max(),100); cf=np.polyfit(d[A],d[dv],2); ax.plot(xx,np.polyval(cf,xx),'k--',lw=1.6,alpha=.7)
-    # between-site line (through site means) = meaningful level
-    slb,icb,rb,pb,_=st.linregress(g['age'],g['div']); ax.plot(xx,icb+slb*xx,'-',color='#b71c1c',lw=2.4,alpha=.9)
-    r_all=st.pearsonr(d[A],d[dv])[0]
+    # between-site QUADRATIC through site means (red curve) = meaningful level
+    cfb=np.polyfit(g['age'],g['div'],2); ax.plot(xx,np.polyval(cfb,xx),'-',color='#b71c1c',lw=2.6,alpha=.9)
+    gg=g.rename(columns={'div':'yy'}).copy(); gg['za']=(gg['age']-gg['age'].mean())/gg['age'].std()
+    ob=smf.ols("yy ~ za + I(za**2)",gg).fit(); sq=ob.pvalues['I(za ** 2)']; sqb=ob.params['I(za ** 2)']
     pl,pq=mixed_lin_quad(df,dv)
-    ax.set_title(f"{dl}\nplot r={r_all:+.2f} / 사이트평균 r={rb:+.2f}  · 혼합모델 lin p={pl:.2g}, quad p={pq:.2g}",fontsize=10.5)
+    shape='혹형∩' if sqb<0 else 'U자∪'
+    ax.set_title(f"{dl}\n사이트평균 2차 {shape} p={sq:.2g} · 혼합모델(domain통제) quad p={pq:.2g}",fontsize=10.5)
     ax.set_xlabel("stand age (GAMI, yr)"); ax.set_ylabel(dv); ax.grid(alpha=.2)
 sh=[Line2D([0],[0],marker='o',ls='',mfc=scol[s],mec='none',ms=8,label=s) for s in sites]
 fig.legend(handles=sh,loc='lower center',ncol=10,fontsize=8.5,frameon=False,
-           title="site (작은점=plot, 큰점=사이트평균) · 빨강선=사이트평균 회귀 · 검은점선=plot 2차",bbox_to_anchor=(0.5,-0.02))
-fig.suptitle("N09. 임령 vs 종다양성 4지수 — 직접효과 미미(임령은 사이트단위, ICC=0.75). 큰점=사이트평균이 유효 층",fontsize=13)
+           title="site (작은점=plot, 큰점=사이트평균) · 빨강곡선=사이트평균 2차 · 검은점선=plot 2차",bbox_to_anchor=(0.5,-0.02))
+fig.suptitle("N09. 임령 vs 종다양성 4지수 — 사이트평균(빨강곡선) 혹형∩(nestedness만 U∪), 단 domain통제시 소멸=생물지리 교란",fontsize=13)
 fig.tight_layout(rect=[0,0.04,1,0.97]); fig.savefig(f"{F}/N09_age_vs_diversity.png",dpi=120,bbox_inches='tight'); plt.close()
 print("saved N09_age_vs_diversity.png")
