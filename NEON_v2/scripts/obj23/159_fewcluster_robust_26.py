@@ -1,5 +1,5 @@
 """
-Reviewer statistical hardening (19 clusters):
+Reviewer statistical hardening (26 clusters):
  (A) WILD CLUSTER BOOTSTRAP (Rademacher, restricted) for the dynamics & function block joint tests
      -> few-cluster-valid p-values vs the asymptotic cluster-robust Wald.
  (B) turnover GPP suppression diagnostics: MODIS-only, PML-only, joint coefs, r, VIF.

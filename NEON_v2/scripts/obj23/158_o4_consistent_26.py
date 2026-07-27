@@ -62,7 +62,7 @@ imp=neon[neon.disturbed==1][["plotID","dist_year","neon_dist_type"]].dropna(subs
 PRESS={"insect","mortality","natural"}; PULSE={"fire","wind","flood","harvest"}
 imp["regime"]=imp.neon_dist_type.map(lambda t:"press" if t in PRESS else ("pulse" if t in PULSE else "other"))
 splity=imp.set_index("plotID")["dist_year"].to_dict()
-py=pd.read_csv(os.path.join(D,"per_year_v2.csv")); rows2=[]
+py=pd.read_csv(os.path.join(D,"per_year_v2_26.csv")); rows2=[]
 for pid,g in py.groupby("plotID"):
     if pid not in splity: continue
     sy=splity[pid]; b=g[g.year<sy]; a=g[g.year>=sy]
