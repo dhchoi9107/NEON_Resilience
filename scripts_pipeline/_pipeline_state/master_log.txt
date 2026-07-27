@@ -1,0 +1,168 @@
+[2026-07-22 12:59:12] ===== EXTRACTION ORCHESTRATOR START (7 new sites) =====
+[2026-07-22 12:59:12] WAIT: LiDAR download (polling markers, stable-for-15min = complete)
+[2026-07-22 12:59:12]   LiDAR markers (new sites): 1/52
+[2026-07-22 13:11:12]   LiDAR markers (new sites): 2/52
+[2026-07-22 13:23:12]   LiDAR markers (new sites): 3/52
+[2026-07-22 13:39:12]   marker count stable at 3 for 15min -> proceeding (partial ok)
+[2026-07-22 13:39:12] START fsd_DELA: "C:/Users/star1/anaconda3/python.exe" compute/compute_plot_fsd_1m.py --site DELA
+[2026-07-22 13:59:10] ===== ORCHESTRATOR v2 START (per-site gating) =====
+[2026-07-22 13:59:10] WAIT download: DELA (expect 8 years)
+[2026-07-22 15:57:11]   DELA complete (8/8 markers)
+[2026-07-22 15:57:11] START fsd_DELA: "C:/Users/star1/anaconda3/python.exe" compute/compute_plot_fsd_1m.py --site DELA
+[2026-07-22 16:39:48] OK fsd_DELA
+    2017: 44/44 plots (33s)
+    2018: 44/44 plots (480s)
+    2019: 44/44 plots (377s)
+    2021: 44/44 plots (529s)
+    2023: 44/44 plots (625s)
+    2024: 44/44 plots (496s)
+
+Done. Output: E:\neon_lidar\structural_diversity_1m_plots
+[2026-07-22 16:39:48] WAIT download: LENO (expect 9 years)
+[2026-07-22 21:01:49]   LENO complete (9/9 markers)
+[2026-07-22 21:01:49] START fsd_LENO: "C:/Users/star1/anaconda3/python.exe" compute/compute_plot_fsd_1m.py --site LENO
+[2026-07-22 21:58:27] OK fsd_LENO
+    2018: 31/31 plots (380s)
+    2019: 31/31 plots (259s)
+    2021: 31/31 plots (464s)
+    2023: 31/31 plots (500s)
+    2024: 31/31 plots (448s)
+    2026: 31/31 plots (553s)
+
+Done. Output: E:\neon_lidar\structural_diversity_1m_plots
+[2026-07-22 21:58:27] WAIT download: UKFS (expect 8 years)
+[2026-07-23 00:24:27]   UKFS complete (8/8 markers)
+[2026-07-23 00:24:27] START fsd_UKFS: "C:/Users/star1/anaconda3/python.exe" compute/compute_plot_fsd_1m.py --site UKFS
+[2026-07-23 01:27:09] OK fsd_UKFS
+    2018: 40/40 plots (369s)
+    2019: 40/40 plots (605s)
+    2020: 40/40 plots (484s)
+    2022: 40/40 plots (583s)
+    2023: 40/40 plots (537s)
+    2024: 40/40 plots (516s)
+
+Done. Output: E:\neon_lidar\structural_diversity_1m_plots
+[2026-07-23 01:27:09] WAIT download: YELL (expect 6 years)
+[2026-07-23 06:43:10]   YELL complete (6/6 markers)
+[2026-07-23 06:43:10] START fsd_YELL: "C:/Users/star1/anaconda3/python.exe" compute/compute_plot_fsd_1m.py --site YELL
+[2026-07-23 07:13:34] OK fsd_YELL
+    2018: 41/41 plots (312s)
+    2019: 41/41 plots (156s)
+    2020: 41/41 plots (171s)
+    2022: 41/41 plots (363s)
+    2023: 41/41 plots (515s)
+    2025: 41/41 plots (289s)
+
+Done. Output: E:\neon_lidar\structural_diversity_1m_plots
+[2026-07-23 07:13:34] WAIT download: BONA (expect 7 years)
+[2026-07-23 15:03:35]   BONA complete (7/7 markers)
+[2026-07-23 15:03:35] START fsd_BONA: "C:/Users/star1/anaconda3/python.exe" compute/compute_plot_fsd_1m.py --site BONA
+[2026-07-23 15:50:04] OK fsd_BONA
+    2018: 41/41 plots (190s)
+    2019: 41/41 plots (192s)
+    2021: 41/41 plots (419s)
+    2023: 34/41 plots (311s)
+    2024: 41/41 plots (876s)
+    2025: 41/41 plots (574s)
+
+Done. Output: E:\neon_lidar\structural_diversity_1m_plots
+[2026-07-23 15:50:04] WAIT download: DEJU (expect 7 years)
+[2026-07-23 18:56:04]   DEJU complete (7/7 markers)
+[2026-07-23 18:56:04] START fsd_DEJU: "C:/Users/star1/anaconda3/python.exe" compute/compute_plot_fsd_1m.py --site DEJU
+[2026-07-23 19:33:24] OK fsd_DEJU
+    2018: 40/40 plots (120s)
+    2019: 40/40 plots (142s)
+    2021: 40/40 plots (239s)
+    2023: 40/40 plots (356s)
+    2024: 40/40 plots (853s)
+    2025: 39/40 plots (401s)
+
+Done. Output: E:\neon_lidar\structural_diversity_1m_plots
+[2026-07-23 19:33:24] WAIT download: HEAL (expect 7 years)
+[2026-07-23 22:21:25]   HEAL complete (7/7 markers)
+[2026-07-23 22:21:25] START fsd_HEAL: "C:/Users/star1/anaconda3/python.exe" compute/compute_plot_fsd_1m.py --site HEAL
+[2026-07-23 22:56:46] OK fsd_HEAL
+    2018: 51/51 plots (77s)
+    2019: 51/51 plots (76s)
+    2021: 51/51 plots (156s)
+    2023: 51/51 plots (355s)
+    2024: 51/51 plots (1054s)
+    2025: 51/51 plots (322s)
+
+Done. Output: E:\neon_lidar\structural_diversity_1m_plots
+[2026-07-23 22:56:46] ----- all LiDAR compute done -----
+[2026-07-23 22:56:46] START vi_download: SITES_ENV="DELA,LENO,UKFS,YELL,BONA,DEJU,HEAL" "C:/Users/star1/anaconda3/python.exe" download/neon_veg_indices_batch.py download
+[2026-07-23 23:02:14] ===== ORCHESTRATOR v2 START (per-site gating) =====
+[2026-07-23 23:02:14] SKIP fsd_DELA
+[2026-07-23 23:02:14] SKIP fsd_LENO
+[2026-07-23 23:02:14] SKIP fsd_UKFS
+[2026-07-23 23:02:14] SKIP fsd_YELL
+[2026-07-23 23:02:14] SKIP fsd_BONA
+[2026-07-23 23:02:14] SKIP fsd_DEJU
+[2026-07-23 23:02:14] SKIP fsd_HEAL
+[2026-07-23 23:02:14] ----- all LiDAR compute done -----
+[2026-07-23 23:02:14] START vi_download: SITES_ENV="DELA,LENO,UKFS,YELL,BONA,DEJU,HEAL" "C:/Users/star1/anaconda3/python.exe" download/neon_veg_indices_batch.py download
+[2026-07-23 23:02:14] FAIL vi_download (rc=1)
+'SITES_ENV'��(��) ���� �Ǵ� �ܺ� ����, ������ �� �ִ� ���α׷�, �Ǵ�
+��ġ ������ �ƴմϴ�.
+[2026-07-23 23:02:14] HALT at VI download
+[2026-07-23 23:03:49] ===== ORCHESTRATOR v2 START (per-site gating) =====
+[2026-07-23 23:03:49] SKIP fsd_DELA
+[2026-07-23 23:03:49] SKIP fsd_LENO
+[2026-07-23 23:03:49] SKIP fsd_UKFS
+[2026-07-23 23:03:49] SKIP fsd_YELL
+[2026-07-23 23:03:49] SKIP fsd_BONA
+[2026-07-23 23:03:49] SKIP fsd_DEJU
+[2026-07-23 23:03:49] SKIP fsd_HEAL
+[2026-07-23 23:03:49] ----- all LiDAR compute done -----
+[2026-07-23 23:03:49] START vi_download: "C:/Users/star1/anaconda3/python.exe" download/neon_veg_indices_batch.py download
+[2026-07-24 07:39:48] ===== ORCHESTRATOR v2 START (per-site gating) =====
+[2026-07-24 07:39:48] SKIP fsd_DELA
+[2026-07-24 07:39:48] SKIP fsd_LENO
+[2026-07-24 07:39:48] SKIP fsd_UKFS
+[2026-07-24 07:39:48] SKIP fsd_YELL
+[2026-07-24 07:39:48] SKIP fsd_BONA
+[2026-07-24 07:39:48] SKIP fsd_DEJU
+[2026-07-24 07:39:48] SKIP fsd_HEAL
+[2026-07-24 07:39:48] ----- all LiDAR compute done -----
+[2026-07-24 07:39:48] START vi_download: "C:/Users/star1/anaconda3/python.exe" download/neon_veg_indices_batch.py download --product VI
+[2026-07-24 07:39:50] FAIL vi_download (rc=1)
+    ~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\star1\Documents\GitHub\NEON_Resilience\download\neon_veg_indices_batch.py", line 154, in download
+    L(f"\nAll downloads completed: {time.strftime('%Y-%m-%d %H:%M:%S')}")
+    ~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\star1\Documents\GitHub\NEON_Resilience\download\neon_veg_indices_batch.py", line 121, in L
+    print(m); log.write(m + "\n"); log.flush()
+              ~~~~~~~~~^^^^^^^^^^
+ValueError: I/O operation on closed file.
+[2026-07-24 07:39:50] HALT at VI download
+[2026-07-24 07:41:59] ===== ORCHESTRATOR v2 START (per-site gating) =====
+[2026-07-24 07:41:59] SKIP fsd_DELA
+[2026-07-24 07:41:59] SKIP fsd_LENO
+[2026-07-24 07:41:59] SKIP fsd_UKFS
+[2026-07-24 07:41:59] SKIP fsd_YELL
+[2026-07-24 07:41:59] SKIP fsd_BONA
+[2026-07-24 07:41:59] SKIP fsd_DEJU
+[2026-07-24 07:41:59] SKIP fsd_HEAL
+[2026-07-24 07:41:59] ----- all LiDAR compute done -----
+[2026-07-24 07:41:59] START vi_download: "C:/Users/star1/anaconda3/python.exe" download/neon_veg_indices_batch.py download --product VI
+[2026-07-24 07:42:00] OK vi_download
+[skip] VI/DEJU/2023 (already done)
+[skip] VI/DEJU/2024 (already done)
+[skip] VI/DEJU/2025 (already done)
+[skip] VI/HEAL/2023 (already done)
+[skip] VI/HEAL/2024 (already done)
+[skip] VI/HEAL/2025 (already done)
+
+All downloads completed: 2026-07-24 07:42:00
+[2026-07-24 07:42:00] START vi_compute: "C:/Users/star1/anaconda3/python.exe" NEON_v2/scripts/01_extract_vi_neon_brdf.py
+[2026-07-24 07:49:06] FAIL vi_compute (rc=1)
+  File "C:\Users\star1\Documents\GitHub\NEON_Resilience\NEON_v2\scripts\01_extract_vi_neon_brdf.py", line 69, in <module>
+    print(f"rows: {len(out)} | years: {sorted(out['year'].unique())} | plots: {out['plotID'].nunique()}", flush=True)
+                                              ~~~^^^^^^^^
+  File "C:\Users\star1\anaconda3\Lib\site-packages\pandas\core\frame.py", line 4113, in __getitem__
+    indexer = self.columns.get_loc(key)
+  File "C:\Users\star1\anaconda3\Lib\site-packages\pandas\core\indexes\range.py", line 417, in get_loc
+    raise KeyError(key)
+KeyError: 'year'
+[2026-07-24 07:49:06] HALT at VI compute
