@@ -1,0 +1,69 @@
+family,response,term,p,p_fdr,sig_fdr
+disturbance_moderation,Hill q1,SAVI_mean,0.3634255231655748,0.4752487610626748,False
+disturbance_moderation,Hill q1,SAVI_mean,0.0102779438339479,0.042993467383574,True
+disturbance_moderation,Hill q1,EVI_mean,0.5030000468191322,0.5700667197283499,False
+disturbance_moderation,Hill q1,EVI_mean,0.0045074256508258,0.0293299159094684,True
+disturbance_moderation,Hill q1,FHD_mean,0.192323247565687,0.35345894147207346,False
+disturbance_moderation,Hill q1,LAI_mean,0.3228937288822087,0.43921158297506163,False
+disturbance_moderation,Hill q1,Deep_Gap_mean,0.000868807059251,0.0118157760058136,True
+disturbance_moderation,Hill q2,SAVI_mean,0.2447066057958259,0.4023533358632299,False
+disturbance_moderation,Hill q2,SAVI_mean,0.0065302525954912,0.03415824434564628,True
+disturbance_moderation,Hill q2,EVI_mean,0.3329545358698679,0.44393938115982384,False
+disturbance_moderation,Hill q2,EVI_mean,0.0024721656758495,0.0238245238145947,True
+disturbance_moderation,Hill q2,FHD_mean,0.2453581454407649,0.4023533358632299,False
+disturbance_moderation,Hill q2,LAI_mean,0.2662632369683139,0.4023533358632299,False
+disturbance_moderation,Hill q2,Deep_Gap_mean,0.0061504670631256,0.03415824434564628,True
+disturbance_moderation,Turnover,SAVI_mean,0.0763483703823531,0.16857035466047182,False
+disturbance_moderation,Turnover,EVI_mean,0.0713408065779021,0.16728189128611526,False
+disturbance_moderation,Turnover,FHD_mean,0.0261413307674612,0.08080047691760733,False
+disturbance_moderation,Turnover,LAI_mean,0.043674337460423,0.12374395613786515,False
+disturbance_moderation,Turnover,Deep_Gap_mean,0.0005333973586713,0.009067755097412101,True
+disturbance_moderation,Nestedness,SAVI_mean,0.7225308060671118,0.7558783817317477,False
+disturbance_moderation,Nestedness,EVI_mean,0.7390608305939308,0.7614566133392014,False
+disturbance_moderation,Nestedness,FHD_mean,0.0146683852498033,0.04987250984933122,True
+disturbance_moderation,Nestedness,LAI_mean,0.2624388986051097,0.4023533358632299,False
+disturbance_moderation,Nestedness,LAI_mean,0.0004205091085493,0.009067755097412101,True
+disturbance_moderation,Nestedness,Deep_Gap_mean,0.4004859921151311,0.48630441899694493,False
+standage_moderation,Hill q1,SAVI_mean,0.0047445452206493,0.0293299159094684,True
+standage_moderation,Hill q1,EVI_mean,0.0080523363278704,0.036503924686345814,True
+standage_moderation,Hill q1,NDVI_mean,0.0486578522720834,0.12817616736058735,False
+standage_moderation,Hill q1,Deep_Gap_mean,0.2580741180752874,0.4023533358632299,False
+standage_moderation,Hill q1,VCI_mean,0.0028028851546582,0.0238245238145947,True
+standage_moderation,Hill q1,Gini_mean,0.5381233846445388,0.5901998412230426,False
+standage_moderation,Hill q1,LAI_mean,0.0017116135326865,0.019398286703780333,True
+standage_moderation,Hill q1,FHD_mean,0.0529956374364477,0.13347049428438681,False
+standage_moderation,Hill q2,SAVI_mean,0.0107483668458935,0.042993467383574,True
+standage_moderation,Hill q2,EVI_mean,0.0074766246474928,0.036315034002107886,True
+standage_moderation,Hill q2,NDVI_mean,0.0831188243770377,0.17127515326177464,False
+standage_moderation,Hill q2,Deep_Gap_mean,0.3829145421542856,0.48218868271280413,False
+standage_moderation,Hill q2,VCI_mean,0.0123938780908326,0.04435703737771667,True
+standage_moderation,Hill q2,Gini_mean,0.5345440220743074,0.5901998412230426,False
+standage_moderation,Hill q2,LAI_mean,0.0039346054196136,0.0293299159094684,True
+standage_moderation,Hill q2,FHD_mean,0.0490085345790481,0.12817616736058735,False
+standage_moderation,Turnover,EVI_mean,0.0114710581249554,0.043335108472053734,True
+standage_moderation,Turnover,LAI_mean,0.0768482499187445,0.16857035466047182,False
+standage_moderation,Nestedness,Gini_mean,0.2961252873381985,0.42843658593611694,False
+landuse_moderation,Hill q1,SAVI_mean×lc_shannon,0.265043802965628,0.4023533358632299,False
+landuse_moderation,Hill q1,SAVI_mean×lc_edge,0.1461248504891946,0.29066546294045925,False
+landuse_moderation,Hill q1,FHD_mean×lc_shannon,0.3716631716228191,0.476850861704749,False
+landuse_moderation,Hill q1,FHD_mean×lc_edge,0.6162800522506762,0.6651911675086664,False
+landuse_moderation,Hill q1,specdiv_rao_q×lc_shannon,0.1496072235722952,0.29066546294045925,False
+landuse_moderation,Hill q1,specdiv_rao_q×lc_edge,0.1577048237670625,0.2978868893377847,False
+landuse_moderation,Hill q2,SAVI_mean×lc_shannon,0.415273758685871,0.4916733199881019,False
+landuse_moderation,Hill q2,SAVI_mean×lc_edge,0.0295737165253573,0.08743533581409983,False
+landuse_moderation,Hill q2,FHD_mean×lc_shannon,0.3988326136999662,0.48630441899694493,False
+landuse_moderation,Hill q2,FHD_mean×lc_edge,0.9785825463755446,0.9785825463755446,False
+landuse_moderation,Hill q2,specdiv_rao_q×lc_shannon,0.2773465289101159,0.4099905209975626,False
+landuse_moderation,Hill q2,specdiv_rao_q×lc_edge,0.2348769827895331,0.4023533358632299,False
+landuse_moderation,Turnover,SAVI_mean×lc_shannon,3.7234897913751136e-06,0.00025319730581350775,True
+landuse_moderation,Turnover,SAVI_mean×lc_edge,7.309378063741521e-05,0.002485188541672117,True
+landuse_moderation,Turnover,FHD_mean×lc_shannon,0.3229496933640159,0.43921158297506163,False
+landuse_moderation,Turnover,FHD_mean×lc_edge,0.309325033429816,0.4382104640255726,False
+landuse_moderation,Turnover,specdiv_rao_q×lc_shannon,0.9313587998653456,0.9452596774752762,False
+landuse_moderation,Turnover,specdiv_rao_q×lc_edge,0.7035793801171577,0.7475530913744801,False
+landuse_moderation,Nestedness,SAVI_mean×lc_shannon,0.0241294402412705,0.0781334255431616,False
+landuse_moderation,Nestedness,SAVI_mean×lc_edge,0.0556538170498608,0.13515926997823338,False
+landuse_moderation,Nestedness,FHD_mean×lc_shannon,0.2112859914436159,0.3780907215306811,False
+landuse_moderation,Nestedness,FHD_mean×lc_edge,0.0800506715449159,0.17010767703294627,False
+landuse_moderation,Nestedness,specdiv_rao_q×lc_shannon,0.4312705174410738,0.4970575455253054,False
+landuse_moderation,Nestedness,specdiv_rao_q×lc_edge,0.4193684199898516,0.4916733199881019,False

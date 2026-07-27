@@ -116,17 +116,21 @@ def estimate():
 # ── DOWNLOAD (resumable) ─────────────────────────────────────
 def download():
     import neonutilities as nu
-    # ── Laz(미분류 flightline) 제외 패치 ──────────────────────────
-    # get_file_urls 결과에서 .../DiscreteLidar/Laz/ 파일을 빼버려
-    # ClassifiedPointCloud(분류·타일) + Metadata 만 받음 → 용량/시간 ~49% 절약.
-    # 나머지 로직(체크섬 재개·provisional 처리)은 그대로 유지.
-    if os.environ.get("EXCLUDE_LAZ", "1") == "1":
+    # ── 불필요 산출물 제외 패치 ─────────────────────────────────
+    #  Laz          = 미분류 flightline 점군 (ClassifiedPointCloud로 충분)
+    #  Uncertainty  = 오차 래스터 메타데이터 (구조계산에 미사용, 대형 provisional서 100GB급)
+    # get_file_urls 결과에서 해당 경로 파일을 제외 → 용량/시간 대폭 절감. 나머지 로직 유지.
+    _excl = []
+    if os.environ.get("EXCLUDE_LAZ", "1") == "1": _excl.append("/Laz/")
+    if os.environ.get("EXCLUDE_UNCERTAINTY", "0") == "1": _excl.append("/Uncertainty/")
+    if _excl:
         from neonutilities import aop_download as _aop
         _orig_gfu = _aop.get_file_urls
+        _pat = "|".join(_excl)
         def _no_laz(urls, token=None):
             df, rel = _orig_gfu(urls, token=token)
             if len(df):
-                df = df[~df["url"].str.contains("/Laz/", na=False)].reset_index(drop=True)
+                df = df[~df["url"].str.contains(_pat, na=False, regex=True)].reset_index(drop=True)
             return df, rel
         _aop.get_file_urls = _no_laz
     os.makedirs(SAVEPATH, exist_ok=True)

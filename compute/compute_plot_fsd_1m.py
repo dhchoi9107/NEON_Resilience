@@ -50,6 +50,12 @@ WINDOW_SIZE = WINDOW_HALF * 2     # 140m total
 CELL_SIZE_1M = 1
 OUTPUT_DIR = Path("E:/neon_lidar/structural_diversity_1m_plots")
 
+# Some NEON sites share an AOP flight box, so their airborne LiDAR is published
+# under a different site code. TREE (Treehaven) is flown as part of STEI's box, so
+# its .laz tiles are named/filed under STEI. Plot coordinates stay TREE; only the
+# LAZ *discovery* is redirected to the flight-box site code.
+FLIGHT_BOX = {"TREE": "STEI"}
+
 
 def load_plot_coords():
     """Load plot UTM coordinates."""
@@ -77,10 +83,11 @@ def find_laz_files_for_plot(site, plot_x, plot_y):
     tile_ymin = int(ymin // 1000) * 1000
     tile_ymax = int(ymax // 1000) * 1000
 
+    laz_site = FLIGHT_BOX.get(site, site)   # redirect to flight-box code (e.g. TREE->STEI)
     laz_files = []
     for pattern_base in [NEON_BASE / "neon-aop-products",
                          NEON_BASE / "neon-aop-provisional-products"]:
-        for laz in pattern_base.rglob(f"*{site}*/ClassifiedPointCloud/*.laz"):
+        for laz in pattern_base.rglob(f"*{laz_site}*/ClassifiedPointCloud/*.laz"):
             # Parse tile coords from filename
             import re
             m = re.search(r'_(\d{6})_(\d{7})_', laz.name)
@@ -329,10 +336,11 @@ def process_site(site, plot_coords):
         print(f"  SKIP {site}: no plot coordinates")
         return
 
-    # Discover available years for this site
+    # Discover available years for this site (redirect to flight-box code, e.g. TREE->STEI)
     import re
+    laz_site = FLIGHT_BOX.get(site, site)
     year_laz = {}  # {year: [laz_paths]}
-    for laz in NEON_BASE.rglob(f"*{site}*classified*.laz"):
+    for laz in NEON_BASE.rglob(f"*{laz_site}*classified*.laz"):
         if laz.name.startswith("._"):
             continue
         m = re.search(r'[/\\](\d{4})[/\\]FullSite[/\\]', str(laz))

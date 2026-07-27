@@ -49,7 +49,7 @@ for site in SITES:
             stack = extract_plot_1m(entry, x, y)   # (n_bands, H, W), bands = VI_BANDS+[LAI,fPAR]
             if stack is None:
                 continue
-            cells = aggregate_to_grain(stack, GRAIN)   # (n_cells, n_bands)
+            cells = aggregate_to_grain(stack[:len(VI_BANDS)], GRAIN)   # VI bands only; LAI/fPAR not required (unused, avoids needing those tiles)
             if len(cells) == 0:
                 continue
             rec = {"siteID": site, "plotID": pr.plotID, "year": year,
@@ -63,6 +63,9 @@ for site in SITES:
         print(f"  {site} {year}: {sum(1 for r in rows if r['siteID']==site and r['year']==year)} plots", flush=True)
 
 out = pd.DataFrame(rows)
+if out.empty or "year" not in out.columns:
+    print(f"WARNING: 0 VI rows extracted for SITES={SITES} — NOT overwriting {OUT}.", flush=True)
+    sys.exit(2)
 os.makedirs(os.path.dirname(OUT), exist_ok=True)
 out.to_csv(OUT, index=False)
 print(f"\nDONE -> {OUT}", flush=True)

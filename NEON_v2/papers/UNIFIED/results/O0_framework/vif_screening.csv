@@ -1,0 +1,16 @@
+predictor,block,VIF
+Rugosity_mean,structure,1.87
+Vert_CV_mean,structure,2.64
+VCI_mean,structure,1.87
+LAI_mean,structure,4.9
+EVI_mean,spectral,4.09
+ARVI_mean,spectral,4.0
+Canopy_Ht_trend,dynamics,4.85
+Rumple_trend,dynamics,2.2
+Vert_SD_trend,dynamics,3.12
+Vert_CV_trend,dynamics,4.04
+VCI_trend,dynamics,1.65
+FHD_trend,dynamics,3.11
+LAI_trend,dynamics,2.8
+Ht_Ratio_trend,dynamics,3.04
+pml_gpp,productivity,2.0

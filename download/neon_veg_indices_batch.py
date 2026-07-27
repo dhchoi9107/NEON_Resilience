@@ -84,7 +84,7 @@ def target_months(dpid, site):
 
 # ── ESTIMATE ─────────────────────────────────────────────────
 def estimate(product_filter=None):
-    products = PRODUCTS if not product_filter else {k: v for k, v in PRODUCTS.items() if k == product_filter}
+    products = PRODUCTS if not product_filter else {k: v for k, v in PRODUCTS.items() if k in product_filter.split(",")}
 
     for key, (dpid, desc) in products.items():
         print(f"\n{'='*60}")
@@ -113,7 +113,7 @@ def estimate(product_filter=None):
 def download(product_filter=None):
     import neonutilities as nu
 
-    products = PRODUCTS if not product_filter else {k: v for k, v in PRODUCTS.items() if k == product_filter}
+    products = PRODUCTS if not product_filter else {k: v for k, v in PRODUCTS.items() if k in product_filter.split(",")}
     os.makedirs(SAVEPATH, exist_ok=True)
     log = open(os.path.join(SAVEPATH, "download_log.txt"), "a")
 
@@ -150,8 +150,8 @@ def download(product_filter=None):
                     L(f"[done] {key}/{site}/{yr}")
                 except Exception as e:
                     L(f"[ERR ] {key}/{site}/{yr}: {type(e).__name__}: {e}")
-    log.close()
     L(f"\nAll downloads completed: {time.strftime('%Y-%m-%d %H:%M:%S')}")
+    log.close()
 
 
 # ── Main ─────────────────────────────────────────────────────
