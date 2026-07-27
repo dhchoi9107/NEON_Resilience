@@ -57,7 +57,7 @@ for fam in FAM:
     print(s[["context","response","rs","beta_int","p","q"]].round(4).to_string(index=False) if len(s) else "  (none)")
 
 # ---------- (B) press vs pulse at SITE level ----------
-neon=pd.read_csv(os.path.join(D,"plot_disturbance_neon.csv"))
+neon=pd.read_csv(os.path.join(D,"plot_disturbance_neon_26.csv"))
 imp=neon[neon.disturbed==1][["plotID","dist_year","neon_dist_type"]].dropna(subset=["dist_year"])
 PRESS={"insect","mortality","natural"}; PULSE={"fire","wind","flood","harvest"}
 imp["regime"]=imp.neon_dist_type.map(lambda t:"press" if t in PRESS else ("pulse" if t in PULSE else "other"))
