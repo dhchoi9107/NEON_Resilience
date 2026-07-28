@@ -23,7 +23,7 @@ DOM = {"DELA": "D08", "LENO": "D08", "UKFS": "D06", "YELL": "D12",
        "BONA": "D19", "DEJU": "D19", "HEAL": "D19"}
 STRUCT = ['Canopy_Ht','Max_Ht','Rumple','Rugosity','Deep_Gap','Vert_SD','Vert_CV',
           'Gini','VCI','FHD','LAI','Q95','Ht_Ratio']
-RARE_N = 10; N_DRAWS = 30; RNG = np.random.RandomState(11)
+RARE_N = 10; N_DRAWS = 999; RNG = np.random.RandomState(11)
 
 # ── 1. pooled SAD (DBH>=10, live, valid taxon), identical filters ──
 mt = pd.read_csv(f"{VST}/vst_mappingandtagging.csv", usecols=['individualID','plotID','taxonID','siteID'], low_memory=False)
