@@ -62,7 +62,7 @@ for col, lab, c in blocks:
     vals = [vp.loc[r, col] for r in RESP]
     ax.bar(x, vals, w, bottom=bottom, label=lab, color=c); bottom += np.array(vals)
 ax.set_xticks(x); ax.set_xticklabels(LAB); ax.set_ylabel("R² beyond domain (partitioned)")
-ax.set_title("(B) Unique contribution of each dimension\n(structure→alpha, dynamics→nestedness, productivity→turnover)", fontweight="bold", fontsize=11)
+ax.set_title("(B) Unique contribution of each dimension\n(structure→alpha; dynamics→nestedness; turnover carries little unique signal)", fontweight="bold", fontsize=11)
 ax.legend(fontsize=8.5, loc="upper right")
 
 # ---------- (C) coefficient heatmap ----------
