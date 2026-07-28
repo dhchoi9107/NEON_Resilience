@@ -1,0 +1,5 @@
+response,R2_domain,R2_RS,unique_structure,unique_spectral,unique_dynamics,shared_RS
+Hill q1,0.4904,0.1528,0.0811,0.0111,0.0416,0.019
+Hill q2,0.4499,0.1409,0.0734,0.0131,0.0391,0.0153
+LCBD turnover,0.5846,0.024,0.006,0.0011,0.0133,0.0035
+LCBD nestedness,0.3331,0.0921,0.025,0.0003,0.0555,0.0112
