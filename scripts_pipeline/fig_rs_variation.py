@@ -1,5 +1,6 @@
 import pandas as pd, numpy as np
 from scipy.spatial.distance import pdist, squareform
+from scipy.stats import rankdata
 import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
 VS="E:/neon_lidar/vegetation_structure"; D="NEON_v2/data/"; FIG="NEON_v2/papers/UNIFIED/figures/"
 mt=pd.read_csv(f"{VS}/vst_mappingandtagging.csv",usecols=['individualID','plotID','taxonID','siteID'],low_memory=False)
@@ -19,17 +20,16 @@ for s,g in f.groupby('siteID'):
     Y.append(pdist(sad.loc[common].values,metric='braycurtis'))
     XSt.append(pdist(gg[['z_'+c for c in Scols]].values)); XSe.append(pdist(gg[['z_'+c for c in Pcols]].values))
 y=np.concatenate(Y); xst=np.concatenate(XSt); xse=np.concatenate(XSe)
-rst=np.corrcoef(xst,y)[0,1]; rse=np.corrcoef(xse,y)[0,1]
+rst=np.corrcoef(rankdata(xst),rankdata(y))[0,1]; rse=np.corrcoef(rankdata(xse),rankdata(y))[0,1]  # Spearman
 fig,ax=plt.subplots(1,2,figsize=(13,5.8))
 for a,(xx,r,lab,col) in zip(ax,[(xst,rst,"Structural distance (Euclidean, LiDAR metrics)","#08519c"),(xse,rse,"Spectral distance (Euclidean, VIs)","#00695c")]):
     a.scatter(xx,y,s=5,alpha=0.06,color=col,edgecolor="none")
-    b1,b0=np.polyfit(xx,y,1); xr=np.linspace(xx.min(),xx.max(),50); a.plot(xr,b0+b1*xr,color="black",lw=2.5)
     # binned means for readability
-    bins=np.linspace(xx.min(),xx.max(),9); idx=np.digitize(xx,bins)
-    bx=[xx[idx==k].mean() for k in range(1,9) if (idx==k).sum()>20]; by=[y[idx==k].mean() for k in range(1,9) if (idx==k).sum()>20]
-    a.plot(bx,by,'o-',color="#c62828",ms=7,lw=1.5,zorder=4,label="binned mean")
+    bins=np.quantile(xx,np.linspace(0,1,11)); idx=np.digitize(xx,bins)
+    bx=[xx[idx==k].mean() for k in range(1,11) if (idx==k).sum()>=50]; by=[y[idx==k].mean() for k in range(1,11) if (idx==k).sum()>=50]
+    a.plot(bx,by,'o-',color="#c62828",ms=8,lw=2.5,zorder=4,label="binned mean (decile bins)")
     a.set_xlabel(lab,fontsize=11); a.set_ylabel("Compositional dissimilarity (Bray–Curtis)",fontsize=11)
-    a.set_title(f"{'(A) Structural' if col=='#08519c' else '(B) Spectral'} variation hypothesis\nwithin-site Mantel r = {r:+.2f}, p = 0.001 (999 perms, 23 sites)",fontweight="bold",fontsize=11)
+    a.set_title(f"{'(A) Structural' if col=='#08519c' else '(B) Spectral'} variation hypothesis\nwithin-site Mantel (Spearman) r = {r:+.2f}, p = 0.001",fontweight="bold",fontsize=11)
     a.legend(fontsize=9,loc="lower right")
-fig.suptitle("Plots that differ more structurally / spectrally also differ more in species composition\n(within-site plot pairs; biogeography controlled by restricted permutation)",fontweight="bold",fontsize=12.5)
+fig.suptitle("Plots that differ more structurally / spectrally also differ more in species composition\n(within-site plot pairs; rank-based Mantel, biogeography controlled; 9% of pairs share no species)",fontweight="bold",fontsize=12.5)
 fig.tight_layout(rect=[0,0,1,0.93]); fig.savefig(FIG+"F3_rs_variation_beta.png",dpi=200,bbox_inches="tight"); print("saved F3, pairs n=",len(y))

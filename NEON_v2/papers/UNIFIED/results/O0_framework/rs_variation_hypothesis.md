@@ -4,10 +4,11 @@ Question: do plots more dissimilar in remote-sensing (structural/spectral) space
 differ more in species composition? Tested two ways, within-site, biogeography controlled.
 
 ## Within-site restricted-permutation Mantel (999 perms, 23 sites, 8,813 plot pairs)
+Note: 9% of within-site pairs share no species (Bray-Curtis=1, ceiling) -> rank-based (Spearman) Mantel used.
 | RS dissimilarity | vs compositional (Bray–Curtis) | p |
 |---|---|---|
-| Structural distance (Euclidean, LiDAR metrics) | Mantel r = +0.26 | 0.001 |
-| Spectral distance (Euclidean, VIs) | Mantel r = +0.29 | 0.001 |
+| Structural distance (Euclidean, LiDAR metrics) | Spearman Mantel r = +0.32 (Pearson +0.26) | 0.001 |
+| Spectral distance (Euclidean, VIs) | Spearman Mantel r = +0.30 (Pearson +0.29) | 0.001 |
 
 ## LCBD (plot uniqueness) correlations
 | RS LCBD | vs turnover LCBD | vs nestedness LCBD |
