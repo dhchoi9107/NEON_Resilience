@@ -21,3 +21,15 @@ Conclusion: remote-sensing heterogeneity DOES track compositional turnover (mode
 appears only when RS is analysed as dissimilarity, not as plot-level predictor levels —
 the plot-level framework (§3.1) understates the beta signal because it asks a different
 question. Scripts: rs_beta_mantel.py, fig_rs_variation.py -> figures/F3_rs_variation_beta.png
+
+## Saturation model (GDM-family): logit-link GLM, structure + spectral jointly
+Handles the Bray-Curtis [0,1] ceiling via logit link; structure & spectral controlled together;
+within-site restricted permutation (999) for p.
+| predictor (joint) | coefficient | within-site perm p |
+|---|---|---|
+| structural distance | +0.23 | 0.001 |
+| spectral distance   | +0.30 | 0.001 |
+| pseudo-R² | 0.114 | |
+Both remain independently significant with the ceiling modeled and mutual control — structure
+and spectral heterogeneity make non-redundant contributions to compositional turnover.
+Script: rs_beta_gdm.py
