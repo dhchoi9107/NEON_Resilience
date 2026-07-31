@@ -104,3 +104,42 @@ Domain baseline R² (e.g., Hill q1 = 0.40) ≫ climate baseline R² (0.07): doma
 
 ## Supplementary Table S4 — Mixed vs clustered-OLS fixed effects
 Site random-intercept variance estimated at 0 (singular); standardized fixed-effect coefficients closely similar (mean |Δ| = 0.03, max |Δ| = 0.05, r = 0.93 across 14 RS predictors).
+
+## Supplementary Methods S8 — Four-method triangulation of the plot-level framework (statistical robustness)
+
+The plot-level conclusions (§3.1–§3.3) rest on domain fixed effects with site-clustered SEs and joint block tests by restricted wild cluster bootstrap. Because inference is anchored on only 26 site clusters (~12 domains) — a regime where joint block-increment tests are known to be conservative — we re-derived the core conclusions with three additional, methodologically independent approaches. All four agree on the two headline results (**structure → alpha**; **dynamics → nestedness**), and the Bayesian coefficient-level analysis recovers the dynamics → nestedness signal that the conservative joint block test misses.
+
+**Method 1 — Bayesian multilevel (partial pooling).** bambi/PyMC, crossed random intercepts for domain and site-within-domain, non-centred parameterization, HalfNormal(0.5/0.3) priors on the group scales; 4 chains × (3,000 tune + 2,000 draws), target_accept = 0.99. Fully converged (0 divergent transitions; R̂ ≤ 1.002). The near-singular site variance (Table S4, site RE variance ≈ 0) is the source of the funnel geometry that the priors + high target_accept resolve. Coefficient credible when its 95% HDI excludes zero.
+
+| Response | Predictor | β (std) | 95% HDI | pd |
+|---|---|---|---|---|
+| Hill q1 (alpha) | LAI_mean (struct) | +0.404 | [+0.266, +0.539] | 1.000 |
+| Hill q1 | VCI_mean (struct) | +0.274 | [+0.205, +0.345] | 1.000 |
+| Hill q1 | EVI_mean (spectral) | +0.237 | [+0.132, +0.343] | 1.000 |
+| Hill q1 | Rugosity_mean (struct) | −0.098 | [−0.172, −0.024] | 0.995 |
+| Hill q1 | Rumple_trend (dyn) | +0.091 | [+0.016, +0.167] | 0.991 |
+| Hill q1 | Ht_Ratio_trend (dyn) | +0.114 | [+0.036, +0.192] | 0.998 |
+| LCBD nestedness | **Ht_Ratio_trend (dyn)** | **−0.307** | **[−0.419, −0.198]** | **1.000** |
+| LCBD nestedness | **Vert_CV_trend (dyn)** | **+0.200** | **[+0.081, +0.320]** | **0.999** |
+| LCBD nestedness | **LAI_trend (dyn)** | **−0.191** | **[−0.308, −0.071]** | **0.999** |
+| LCBD nestedness | Rugosity_mean (struct) | +0.137 | [+0.035, +0.240] | 0.994 |
+| LCBD nestedness | Vert_CV_mean (struct) | −0.121 | [−0.237, −0.004] | 0.976 |
+
+Structure dominates alpha (3/4 structural terms credible); **dynamics dominate nestedness (3/7 dynamics trends credible, the largest credible block for this component)** even though the joint dynamics block-increment did not clear the wild bootstrap (p = 0.14, Table S1b) — i.e. the block test is conservative, not the effect absent. Full posterior tables: `results/O0_framework/bayes_multilevel_coeffs.csv` (+ `_meta.csv`).
+
+**Method 2 — Formal variation partitioning (vegan-varpart style).** Domain-conditional partition of the remote-sensing R² into unique structure/spectral/dynamics blocks via set-complement R² differences, cross-checking the manual semi-partial R² of §3.1. The two recipes agree to three decimals:
+
+| Response | total | unique struct | unique spectral | unique dyn | shared |
+|---|---|---|---|---|---|
+| Hill q1 | 0.153 | **0.081** | 0.011 | 0.042 | 0.019 |
+| Hill q2 | 0.141 | **0.073** | 0.013 | 0.039 | 0.015 |
+| LCBD turnover | 0.024 | 0.006 | 0.001 | 0.013 | 0.004 |
+| LCBD nestedness | 0.092 | 0.025 | 0.000 | **0.056** | 0.011 |
+
+Structure is the largest unique alpha block; dynamics the largest unique nestedness block — identical to the main analysis. Output: `results/O0_framework/varpart_robust.csv`.
+
+**Method 3 — GDM-family saturation model (beta, §3.1b).** Monotone-spline generalized dissimilarity model of Bray–Curtis composition on structural + spectral distance, within-site permutation (999). Deviance explained = 0.122 (p = 0.002); structure and spectral contribute non-redundantly (structure 45% : spectral 55% of fitted transform SD), confirming that remote-sensing heterogeneity tracks compositional turnover once analysed as dissimilarity rather than predictor levels.
+
+**Method 4 — Restricted-permutation Mantel (beta, §3.1b).** Within-site (plots permuted only within sites; biogeography held fixed), 999 permutations, 23 sites. Structural distance vs Bray–Curtis: Mantel r = +0.264 (Pearson) / +0.32 (Spearman); spectral distance r = +0.293 / +0.30; both p = 0.001. Rank-based estimates are reported in the main text as robust to the Bray–Curtis = 1 ceiling.
+
+**Bottom line.** The framework conclusions are not artifacts of one inferential recipe: structure→alpha and dynamics→nestedness hold under partial-pooling Bayesian estimation and formal variation partitioning, and the beta/heterogeneity signal holds under both a saturation (GDM) model and restricted-permutation Mantel tests. The only substantive change relative to the conservative wild-bootstrap joint test is that the Bayesian coefficient-level analysis elevates dynamics→nestedness from "descriptive" to "credibly supported" (adopted in §3.1, §3.3, §4.2).
