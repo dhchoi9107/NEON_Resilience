@@ -1,0 +1,5 @@
+response,unique_structure,unique_spectral,unique_dynamics
+Hill q1,0.001,0.009,0.014
+Hill q2,0.001,0.008,0.007
+LCBD turnover,0.852,0.622,0.767
+LCBD nestedness,0.103,0.703,0.143
