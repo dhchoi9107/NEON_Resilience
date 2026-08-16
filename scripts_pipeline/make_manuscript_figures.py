@@ -1,13 +1,17 @@
 """
-Manuscript figures, numbered in order of first citation in MANUSCRIPT_v2_full_26site.md.
-  Figure_1.png  (§3.1) plot-level framework: (a) sequential R2 beyond domain,
+Manuscript figures, numbered in order of first citation in MANUSCRIPT_v2_full_26site.md
+(following the author's convention: Fig 1 = conceptual figure cited in the Introduction,
+Fig 2 = study area in Methods, results figures thereafter).
+  Figure_1.png  (Intro) conceptual framework: three RS dimensions -> diversity components.
+  Figure_2.png  (§2.1) study area: (a) 26 NEON sites map, (b) climate space (MAT vs MAP).
+  Figure_3.png  (§3.1) plot-level framework: (a) sequential R2 beyond domain,
                 (b) semi-partial variance partition, (c,d) Bayesian forests.
-  Figure_2.png  (§3.2) RS dissimilarity vs compositional dissimilarity (variation hypothesis).
-  Figure_3.png  (§3.5) site-level species-energy: (a) tower GPP, (b) PML-V2 (all sites).
-  Figure_4.png  (§3.6) context moderation simple slopes: (a) MODIS GPP x stand age,
+  Figure_4.png  (§3.2) RS dissimilarity vs compositional dissimilarity (variation hypothesis).
+  Figure_5.png  (§3.5) site-level species-energy: (a) tower GPP, (b) PML-V2 (all sites).
+  Figure_6.png  (§3.6) context moderation simple slopes: (a) MODIS GPP x stand age,
                 (b) VCI x disturbance severity.
-All panels are drawn from the verified 26-site outputs; a VERIFY line is printed for each
-figure so the numbers can be checked against the manuscript text.
+All data panels are drawn from the verified 26-site outputs; a VERIFY line is printed for
+each so the numbers can be checked against the manuscript text.
 """
 import os, warnings, numpy as np, pandas as pd, scipy.stats as st; warnings.filterwarnings("ignore")
 import statsmodels.formula.api as smf
@@ -37,10 +41,72 @@ def blk(c): return "structure" if c in S else "spectral" if c in P else "dynamic
 def star(p): return "***" if p<1e-3 else "**" if p<1e-2 else "*" if p<5e-2 else "n.s."
 BAYES_RESP={"Hill q1":"Hill_q1","LCBD nestedness":"LCBD_nestedness_rare"}
 
-# ================= FIGURE 1 =================
+# ================= FIGURE 1 (conceptual framework) =================
+from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
+fig,ax=plt.subplots(figsize=(12.5,7.2)); ax.set_xlim(0,10); ax.set_ylim(0,10); ax.axis("off")
+fig.suptitle("Figure 1. Conceptual framework: remote-sensing dimensions map onto the processes generating each diversity component",
+             fontsize=12.5,fontweight="bold",y=0.98)
+def box(x,y,w,h,text,fc,ec,fs=9.5,tc="black",bold=False):
+    ax.add_patch(FancyBboxPatch((x,y),w,h,boxstyle="round,pad=0.12",fc=fc,ec=ec,lw=1.6))
+    ax.text(x+w/2,y+h/2,text,ha="center",va="center",fontsize=fs,color=tc,fontweight="bold" if bold else "normal")
+def arrow(x1,y1,x2,y2,color,lw,label=None,ls="-",lab_dy=0.16,lab_fs=8,lab_t=0.5):
+    ax.add_patch(FancyArrowPatch((x1,y1),(x2,y2),arrowstyle="-|>",mutation_scale=16,color=color,lw=lw,linestyle=ls,shrinkA=2,shrinkB=2))
+    if label:
+        lx,ly=x1+lab_t*(x2-x1),y1+lab_t*(y2-y1)
+        ax.text(lx,ly+lab_dy,label,ha="center",fontsize=lab_fs,color=color,fontstyle="italic")
+# left: RS dimensions
+box(0.3,7.4,3.1,1.5,"STATIC CANOPY STATE\nLiDAR structure (VCI, LAI,\nrugosity, vertical CV)","#dbe9f6","#08519c",bold=True)
+box(0.3,5.6,3.1,1.1,"Spectral greenness\n(EVI; weakest dimension)","#eef5fb","#9ecae1")
+box(0.3,3.4,3.1,1.5,"STRUCTURAL DYNAMICS\nrepeat-LiDAR interannual\ntrends (state -> trajectory)","#e2f2e5","#41ab5d",bold=True)
+box(0.3,1.0,3.1,1.5,"ECOSYSTEM PRODUCTIVITY\nindependent GPP (MODIS,\nPML-V2, flux towers)","#fdeadd","#b35806",bold=True)
+# right: diversity components
+box(6.6,7.6,3.1,1.3,"ALPHA DIVERSITY\nHill q1 / q2 (local richness)","#f2f2f2","#333333",bold=True)
+box(6.6,5.4,3.1,1.4,"BETA: TURNOVER\nspecies replacement\n(lateral, spatial contrast)","#f2f2f2","#333333",bold=True)
+box(6.6,3.2,3.1,1.4,"BETA: NESTEDNESS\nrichness difference\n(directional loss / gain)","#f2f2f2","#333333",bold=True)
+box(6.6,1.0,3.1,1.3,"SPECIES-ENERGY\nsite-mean diversity vs GPP\n(monotonic, no hump)","#f2f2f2","#333333",bold=True)
+# arrows (mapping)
+arrow(3.5,8.2,6.5,8.3,"#08519c",3.0,"predictor levels (strongest)")
+arrow(3.5,6.1,6.5,8.0,"#9ecae1",1.4,"alpha only",lab_dy=-0.34,lab_t=0.82)
+arrow(3.5,7.6,6.5,6.2,"#2c7fb8",2.2,"as between-plot dissimilarity",lab_dy=-0.40,lab_t=0.30)
+arrow(3.5,4.2,6.5,3.9,"#41ab5d",3.0,"temporal trends (Bayesian-credible)")
+arrow(3.5,1.7,6.5,1.6,"#b35806",2.6,"site scale (ICC = 0.92)")
+ax.text(5.0,0.25,"Process mapping: lateral replacement is read from static contrast; directional richness change from the temporal trajectory.",
+        ha="center",fontsize=9,color="#444444",fontstyle="italic")
+fig.savefig(FIG+"/Figure_1.png",dpi=200,bbox_inches="tight"); plt.close(fig)
+print("VERIFY Fig1: conceptual diagram (no data)")
+
+# ================= FIGURE 2 (study area) =================
+import geopandas as gpd
+NE=os.path.join(r"C:\Users\star1\Documents\GitHub\NEON_Resilience","scripts_pipeline","_pipeline_state","ne_states.gpkg")
+if not os.path.exists(NE):
+    gpd.read_file("https://naturalearth.s3.amazonaws.com/110m_cultural/ne_110m_admin_1_states_provinces.zip").to_file(NE)
+states=gpd.read_file(NE)
+ll=pd.read_csv(D+"/plot_lonlat_26.csv").groupby("siteID")[["lon","lat"]].mean().reset_index()
+cl=pd.read_csv(D+"/site_climate_neon.csv")
+hq=f.groupby("siteID").Hill_q1.mean().reset_index()
+sm=ll.merge(cl,on="siteID").merge(hq,on="siteID")
+dom=f[["siteID","domain"]].drop_duplicates()
+sm=sm.merge(dom,on="siteID",how="left")
+fig,ax=plt.subplots(1,2,figsize=(14.5,6.2),gridspec_kw={"width_ratios":[1.45,1]})
+states.boundary.plot(ax=ax[0],color="#bbbbbb",lw=0.6)
+sc=ax[0].scatter(sm.lon,sm.lat,c=sm.MAT_C,cmap="coolwarm",s=110,edgecolor="black",linewidth=0.8,zorder=3)
+for _,r in sm.iterrows(): ax[0].annotate(r.siteID,(r.lon,r.lat),fontsize=6.5,xytext=(4,3),textcoords="offset points")
+ax[0].set_xlim(-170,-62); ax[0].set_ylim(17,72); ax[0].set_xlabel("Longitude"); ax[0].set_ylabel("Latitude")
+ax[0].set_title(f"(a) 26 NEON forested sites, 12 eco-climatic domains\n(conterminous US to interior Alaska)",fontweight="bold",fontsize=11)
+fig.colorbar(sc,ax=ax[0],fraction=0.03,pad=0.02,label="MAT (°C)")
+s2=ax[1].scatter(sm.MAT_C,sm.MAP_mm,c=sm.Hill_q1,cmap="viridis",s=120,edgecolor="black",linewidth=0.8)
+for _,r in sm.iterrows(): ax[1].annotate(r.siteID,(r.MAT_C,r.MAP_mm),fontsize=6.5,xytext=(4,3),textcoords="offset points")
+ax[1].set_xlabel("Mean annual temperature (°C)"); ax[1].set_ylabel("Mean annual precipitation (mm)")
+ax[1].set_title("(b) Climate space of the 26 sites\ncolour = site-mean tree diversity (Hill q1)",fontweight="bold",fontsize=11)
+fig.colorbar(s2,ax=ax[1],fraction=0.04,pad=0.02,label="Hill q1")
+fig.suptitle("Figure 2. Study area spans broad climate, productivity, and diversity gradients",fontsize=12.5,fontweight="bold",y=1.00)
+fig.tight_layout(rect=[0,0,1,0.95]); fig.savefig(FIG+"/Figure_2.png",dpi=200,bbox_inches="tight"); plt.close(fig)
+print(f"VERIFY Fig2: sites={len(sm)} (26), MAT range {sm.MAT_C.min():.1f}~{sm.MAT_C.max():.1f}C, MAP {sm.MAP_mm.min():.0f}~{sm.MAP_mm.max():.0f}mm")
+
+# ================= FIGURE 3 =================
 fig=plt.figure(figsize=(15.5,11.5)); gs=fig.add_gridspec(2,2,hspace=0.34,wspace=0.26)
 na=int(nm.loc["Hill q1","n"]); nb=int(nm.loc["LCBD turnover","n"]); ns=f.siteID.nunique()
-fig.suptitle(f"Figure 1. Plot-level framework: canopy state and structural dynamics carry complementary diversity information\n"
+fig.suptitle(f"Figure 3. Plot-level framework: canopy state and structural dynamics carry complementary diversity information\n"
              f"(n = {na} alpha / {nb} beta plots, {ns} sites, 12 domains)",fontsize=13.5,fontweight="bold",y=0.99)
 x=np.arange(4); w=0.6
 # (a) sequential R2 beyond domain
@@ -86,14 +152,14 @@ def forest(ax,resp_label,title):
             transform=ax.transAxes,ha="center",va="top",fontsize=7.6,style="italic",color="grey")
 forest(fig.add_subplot(gs[1,0]),"Hill q1","(c) Bayesian multilevel — Hill q1 (alpha)\nstructure dominates (LAI, VCI) + spectral (EVI)")
 forest(fig.add_subplot(gs[1,1]),"LCBD nestedness","(d) Bayesian multilevel — LCBD nestedness\nthree dynamics trends credible")
-fig.savefig(FIG+"/Figure_1.png",dpi=200,bbox_inches="tight"); plt.close(fig)
+fig.savefig(FIG+"/Figure_3.png",dpi=200,bbox_inches="tight"); plt.close(fig)
 seq=[round(d,3) for d in dyn]
-print(f"VERIFY Fig1: state15%={state[0]:.3f} turn2%={nm.loc['LCBD turnover','R2_M2_beyond']:.3f} nest9%={nm.loc['LCBD nestedness','R2_M2_beyond']:.3f} | seq dyn={seq} (text 0.042/0.039/0.013/0.056)")
-print(f"VERIFY Fig1: unique str q1={vp.loc['Hill q1','unique_structure']:.3f} (text 0.081), dyn nest={vp.loc['LCBD nestedness','unique_dynamics']:.3f} (text 0.056)")
+print(f"VERIFY Fig3: state15%={state[0]:.3f} turn2%={nm.loc['LCBD turnover','R2_M2_beyond']:.3f} nest9%={nm.loc['LCBD nestedness','R2_M2_beyond']:.3f} | seq dyn={seq} (text 0.042/0.039/0.013/0.056)")
+print(f"VERIFY Fig3: unique str q1={vp.loc['Hill q1','unique_structure']:.3f} (text 0.081), dyn nest={vp.loc['LCBD nestedness','unique_dynamics']:.3f} (text 0.056)")
 cred_n=bc[(bc.response=='LCBD_nestedness_rare')&(bc.credible)&(bc.block=='dynamics')]
-print(f"VERIFY Fig1: Bayes nest credible dyn = {[(r.predictor,r.beta) for r in cred_n.itertuples()]}")
+print(f"VERIFY Fig3: Bayes nest credible dyn = {[(r.predictor,r.beta) for r in cred_n.itertuples()]}")
 
-# ================= FIGURE 2 =================
+# ================= FIGURE 4 =================
 VS="E:/neon_lidar/vegetation_structure"
 mt=pd.read_csv(f"{VS}/vst_mappingandtagging.csv",usecols=['individualID','plotID','taxonID','siteID'],low_memory=False)
 ai=pd.read_csv(f"{VS}/vst_apparentindividual.csv",usecols=['individualID','plantStatus','stemDiameter'],low_memory=False)
@@ -124,12 +190,12 @@ for a,(xx,r,lab,col,tag) in zip(ax,[(xst,rst,"Structural distance (Euclidean, Li
     a.set_xlabel(lab,fontsize=11); a.set_ylabel("Compositional dissimilarity (Bray–Curtis)",fontsize=11)
     a.set_title(f"{tag} variation hypothesis\nwithin-site Mantel (Spearman) r = {r:+.2f}, p = 0.001",fontweight="bold",fontsize=11)
     a.legend(fontsize=9,loc="lower right")
-fig.suptitle("Figure 2. Plots that differ more structurally / spectrally also differ more in species composition\n"
+fig.suptitle("Figure 4. Plots that differ more structurally / spectrally also differ more in species composition\n"
              f"(within-site plot pairs, n = {len(y):,} across {nsite} sites; rank-based Mantel, biogeography held fixed)",fontweight="bold",fontsize=12.5)
-fig.tight_layout(rect=[0,0,1,0.90]); fig.savefig(FIG+"/Figure_2.png",dpi=200,bbox_inches="tight"); plt.close(fig)
-print(f"VERIFY Fig2: Spearman struct={rst:+.2f} (text +0.32), spectral={rse:+.2f} (text +0.30), pairs={len(y)} (text 8,813), sites={nsite} (text 23)")
+fig.tight_layout(rect=[0,0,1,0.90]); fig.savefig(FIG+"/Figure_4.png",dpi=200,bbox_inches="tight"); plt.close(fig)
+print(f"VERIFY Fig4: Spearman struct={rst:+.2f} (text +0.32), spectral={rse:+.2f} (text +0.30), pairs={len(y)} (text 8,813), sites={nsite} (text 23)")
 
-# ================= FIGURE 3 =================
+# ================= FIGURE 5 =================
 g3=pd.read_csv(D+"/plot_pml_gpp_ts_26.csv")[["plotID","pml_gpp"]]
 site=f.merge(g3,on="plotID").groupby("siteID").agg(Hill_q1=("Hill_q1","mean"),pml=("pml_gpp","mean")).reset_index()
 tw=pd.read_csv(D+"/site_tower_gpp_26.csv")[["siteID","tower_gpp"]]; site=site.merge(tw,on="siteID",how="left")
@@ -147,11 +213,11 @@ for a,(d3,xc,r,p,ttl,xl,col) in zip(ax,[
     b1,b0=np.polyfit(d3[xc],d3.Hill_q1,1); xr=np.linspace(d3[xc].min(),d3[xc].max(),50); a.plot(xr,b0+b1*xr,color="black",lw=2)
     a.set_xlabel(xl,fontsize=10.5); a.set_ylabel("Site-mean tree diversity (Hill q1)",fontsize=10.5)
     a.set_title(ttl,fontweight="bold",fontsize=10.5)
-fig.suptitle("Figure 3. Site-level species–energy relationship is monotonic (no hump) across the temperate-to-boreal gradient",fontweight="bold",fontsize=12.5)
-fig.tight_layout(rect=[0,0,1,0.92]); fig.savefig(FIG+"/Figure_3.png",dpi=200,bbox_inches="tight"); plt.close(fig)
-print(f"VERIFY Fig3: tower r={rt:+.2f} p={pt:.3f} (text +0.59, 0.004), quad p={qt:.2f} (text 0.87), PML-tower r={rvt:+.2f} (text +0.87), n_tower={len(tv)} (text 22)")
+fig.suptitle("Figure 5. Site-level species–energy relationship is monotonic (no hump) across the temperate-to-boreal gradient",fontweight="bold",fontsize=12.5)
+fig.tight_layout(rect=[0,0,1,0.92]); fig.savefig(FIG+"/Figure_5.png",dpi=200,bbox_inches="tight"); plt.close(fig)
+print(f"VERIFY Fig5: tower r={rt:+.2f} p={pt:.3f} (text +0.59, 0.004), quad p={qt:.2f} (text 0.87), PML-tower r={rvt:+.2f} (text +0.86), n_tower={len(tv)} (text 22)")
 
-# ================= FIGURE 4 =================
+# ================= FIGURE 6 =================
 ss=pd.read_csv(RES+"/simple_slopes.csv"); z=[-1,0,1]
 gA=ss[(ss.rp=="Hill q1")&(ss.rs=="modis_gpp")&(ss.ctx=="stand_age_gami")].sort_values("ctx_z")
 gB=ss[(ss.rp=="Hill q1")&(ss.rs=="VCI_mean")&(ss.ctx=="severity")].sort_values("ctx_z")
@@ -166,8 +232,8 @@ for a,(g4,col,ttl,xt) in zip(ax,[
     a.set_xticks(z); a.set_xticklabels(xt,fontsize=9.5); a.set_xlim(-1.6,1.6)
     a.set_ylabel("Simple slope on Hill q1 (per 1 SD)",fontsize=10.5); a.set_xlabel("Moderator (context)",fontsize=10.5)
     a.set_title(ttl,fontweight="bold",fontsize=10.5)
-fig.suptitle("Figure 4. Ecological context modifies remote sensing–diversity associations (simple slopes ± 95% CI)",fontweight="bold",fontsize=12.5)
-fig.tight_layout(rect=[0,0,1,0.92]); fig.savefig(FIG+"/Figure_4.png",dpi=200,bbox_inches="tight"); plt.close(fig)
-print(f"VERIFY Fig4: MODISxAge slopes={[round(v,2) for v in gA.slope]} p={[round(v,3) for v in gA.p]} (text +0.17/+0.27/+0.38, 0.13/0.01/0.007)")
-print(f"VERIFY Fig4: VCIxSev slopes={[round(v,2) for v in gB.slope]} (text +0.39 -> +0.21)")
+fig.suptitle("Figure 6. Ecological context modifies remote sensing–diversity associations (simple slopes ± 95% CI)",fontweight="bold",fontsize=12.5)
+fig.tight_layout(rect=[0,0,1,0.92]); fig.savefig(FIG+"/Figure_6.png",dpi=200,bbox_inches="tight"); plt.close(fig)
+print(f"VERIFY Fig6: MODISxAge slopes={[round(v,2) for v in gA.slope]} p={[round(v,3) for v in gA.p]} (text +0.17/+0.27/+0.38, 0.13/0.01/0.007)")
+print(f"VERIFY Fig6: VCIxSev slopes={[round(v,2) for v in gB.slope]} (text +0.39 -> +0.21)")
 print("ALL FIGURES SAVED ->",FIG)
