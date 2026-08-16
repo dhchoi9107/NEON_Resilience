@@ -127,6 +127,8 @@ The plot-level conclusions (§3.1–§3.3) rest on domain fixed effects with sit
 
 Structure dominates alpha (3/4 structural terms credible); **dynamics dominate nestedness (3/7 dynamics trends credible, the largest credible block for this component)** even though the joint dynamics block-increment did not clear the wild bootstrap (p = 0.14, Table S1b) — i.e. the block test is conservative, not the effect absent. Full posterior tables: `results/O0_framework/bayes_multilevel_coeffs.csv` (+ `_meta.csv`).
 
+*Prior sensitivity.* Because the coefficient-level inference is the primary support for the dynamics → nestedness result, we repeated the Hill q1 and nestedness models with the group-scale priors doubled (domain σ ~ HalfNormal(1.0), site σ ~ HalfNormal(0.6)). The credible set was identical for all 24 coefficients (12 predictors × 2 responses), the maximum change in any posterior mean was 0.007, the three nestedness dynamics trends were essentially unchanged (height-ratio −0.306 vs −0.31; vertical-CV +0.199 vs +0.20; leaf-area −0.191 vs −0.19), and both models again sampled with 0 divergent transitions (`bayes_prior_sensitivity.csv`). The headline result is therefore not prior-driven.
+
 **Method 2 — Formal variation partitioning (vegan-varpart style).** Domain-conditional partition of the remote-sensing R² into unique structure/spectral/dynamics blocks via set-complement R² differences, cross-checking the manual semi-partial R² of §3.1. The two recipes agree to three decimals:
 
 | Response | total | unique struct | unique spectral | unique dyn | shared |
