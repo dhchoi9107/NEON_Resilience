@@ -107,10 +107,16 @@ cl=pd.read_csv(D+"/site_climate_neon.csv"); hq=f.groupby("siteID").Hill_q1.mean(
 sm=ll.merge(cl,on="siteID").merge(hq,on="siteID")
 gsm=gpd.GeoDataFrame(sm,geometry=gpd.points_from_xy(sm.lon,sm.lat),crs=4326)
 p48=gsm[gsm.lat<50].to_crs("EPSG:5070"); pak=gsm[gsm.lat>=50].to_crs("EPSG:3338")
-def autolab(axh,xs,ys,names,fs=4.8):
-    txts=[axh.text(x_,y_,n_,fontsize=fs,color="#333333") for x_,y_,n_ in zip(xs,ys,names)]
+def autolab(axh,xs,ys,names,fs=4.8,colors=None):
+    if colors is None: colors=["#333333"]*len(names)
+    txts=[axh.text(x_,y_,n_,fontsize=fs,color=c_,fontweight="bold") for x_,y_,n_,c_ in zip(xs,ys,names,colors)]
     adjust_text(txts,x=list(xs),y=list(ys),ax=axh,expand=(1.25,1.6),force_text=(0.4,0.6),
                 arrowprops=dict(arrowstyle="-",color="#999999",lw=0.4))
+# site labels coloured by forest type (conifer stem fraction from vst; >=75% needleleaf, <=25% broadleaf)
+FTYPE=pd.read_csv(os.path.join(r"C:\Users\star1\Documents\GitHub\NEON_Resilience","scripts_pipeline","_pipeline_state","site_foresttype.csv"))
+FTC={"Needleleaf":"#1b6535","Mixed":"#5a5a5a","Broadleaf":"#a4551e"}
+sm=sm.merge(FTYPE[["siteID","forest_type"]],on="siteID",how="left")
+sm["labcol"]=sm.forest_type.map(FTC).fillna("#333333")
 # --- continuous bivariate colour: MAT x MAP, bilinear blend of four corner colours ---
 _c00,_c10=np.array(to_rgba("#e8e8e8")[:3]),np.array(to_rgba("#c0392b")[:3])   # dry: cool -> warm
 _c01,_c11=np.array(to_rgba("#4d9ec4")[:3]),np.array(to_rgba("#3f2a3d")[:3])   # wet: cool -> warm
@@ -119,7 +125,7 @@ def biv_color(mat,map_):
     x=(mat-tmin)/(tmax-tmin); y=(map_-pmin)/(pmax-pmin)
     return tuple((1-x)*(1-y)*_c00+x*(1-y)*_c10+(1-x)*y*_c01+x*y*_c11)
 sm["biv"]=[biv_color(r.MAT_C,r.MAP_mm) for r in sm.itertuples()]
-p48=p48.merge(sm[["siteID","biv"]],on="siteID"); pak=pak.merge(sm[["siteID","biv"]],on="siteID")
+p48=p48.merge(sm[["siteID","biv","labcol"]],on="siteID"); pak=pak.merge(sm[["siteID","biv","labcol"]],on="siteID")
 # displaced symbol positions for clustered sites (metres), with connectors to true locations
 DOTOFF={"ABBY":(-80e3,70e3),"WREF":(80e3,-70e3),"SOAP":(-80e3,-60e3),"TEAK":(80e3,60e3),
         "UNDE":(0,120e3),"STEI":(-120e3,-80e3),"TREE":(120e3,-80e3),
@@ -142,7 +148,7 @@ axk=fig.add_axes([0.010,0.55,0.205,0.42])   # Alaska, top-left
 ak_dom.plot(ax=axk,color="#f4f4f2",edgecolor="none")
 ak_dom.boundary.plot(ax=axk,color="#b3b3ad",lw=0.4)
 akx,aky=draw_sites(axk,pak,AKOFF,30)
-autolab(axk,akx,aky,pak.siteID.values,fs=4.8)
+autolab(axk,akx,aky,pak.siteID.values,fs=4.8,colors=pak.labcol.values)
 axk.set_xlim(-0.9e6,1.7e6); axk.set_ylim(0.35e6,2.45e6)
 axk.set_xticks([]); axk.set_yticks([])
 for sp in axk.spines.values(): sp.set_edgecolor("#bbbbbb"); sp.set_linewidth(0.6)
@@ -154,8 +160,12 @@ for _,r in conus_dom.iterrows():
     pt=r.geometry.representative_point()
     axu.text(pt.x,pt.y,f"D{int(r.DomainID):02d}",fontsize=4.3,color="#a8a8a2",ha="center",va="center",zorder=1)
 usx,usy=draw_sites(axu,p48,DOTOFF,34)
-autolab(axu,usx,usy,p48.siteID.values,fs=5.0)
+autolab(axu,usx,usy,p48.siteID.values,fs=5.0,colors=p48.labcol.values)
 axu.set_axis_off()
+# label-colour legend (forest type), bottom-right whitespace
+for i,(ft,c) in enumerate([("Needleleaf",FTC["Needleleaf"]),("Mixed",FTC["Mixed"]),("Broadleaf",FTC["Broadleaf"])]):
+    axu.text(0.99,0.115-0.045*i,ft,transform=axu.transAxes,ha="right",fontsize=6.4,fontweight="bold",color=c)
+axu.text(0.99,0.16,"Site label = forest type",transform=axu.transAxes,ha="right",fontsize=6.0,color="#666666")
 # --- continuous bivariate legend (MAT x MAP), bottom-left of the figure (below Alaska) ---
 _figw,_figh=fig.get_size_inches(); _lh=0.30; _lw=_lh*_figh/_figw   # square legend (in inches)
 lax=fig.add_axes([0.050,0.09,_lw,_lh])
