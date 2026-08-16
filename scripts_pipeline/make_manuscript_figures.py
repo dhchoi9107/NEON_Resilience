@@ -90,25 +90,45 @@ import geopandas as gpd
 NE=os.path.join(r"C:\Users\star1\Documents\GitHub\NEON_Resilience","scripts_pipeline","_pipeline_state","ne_states.gpkg")
 if not os.path.exists(NE):
     gpd.read_file("https://naturalearth.s3.amazonaws.com/110m_cultural/ne_110m_admin_1_states_provinces.zip").to_file(NE)
-ALB="ESRI:102008"   # North America Albers equal-area
-states=gpd.read_file(NE).to_crs(ALB)
+states_raw=gpd.read_file(NE)
+name_col=[c for c in states_raw.columns if c.lower() in ("name","name_en")][0]
+conus=states_raw[~states_raw[name_col].isin(["Alaska","Hawaii"])].to_crs("EPSG:5070")   # CONUS Albers
+ak=states_raw[states_raw[name_col]=="Alaska"].to_crs("EPSG:3338")                        # Alaska Albers
 ll=pd.read_csv(D+"/plot_lonlat_26.csv").groupby("siteID")[["lon","lat"]].mean().reset_index()
 cl=pd.read_csv(D+"/site_climate_neon.csv"); hq=f.groupby("siteID").Hill_q1.mean().reset_index()
 sm=ll.merge(cl,on="siteID").merge(hq,on="siteID")
-pts=gpd.GeoDataFrame(sm,geometry=gpd.points_from_xy(sm.lon,sm.lat),crs=4326).to_crs(ALB)
-fig,ax=plt.subplots(1,2,figsize=(W,3.15),gridspec_kw={"width_ratios":[1.5,1]})
-states.plot(ax=ax[0],color="#f1f1ef",edgecolor="#ffffff",lw=0.5)
-states.boundary.plot(ax=ax[0],color="#c9c9c4",lw=0.35)
-sc=ax[0].scatter(pts.geometry.x,pts.geometry.y,c=pts.MAT_C,cmap="RdYlBu_r",s=42,edgecolor="#222222",linewidth=0.6,zorder=3)
-for _,r in pts.iterrows():
-    ax[0].annotate(r.siteID,(r.geometry.x,r.geometry.y),fontsize=4.6,color="#333333",xytext=(2.6,2.2),textcoords="offset points")
-xb,yb=pts.total_bounds[[0,2]],pts.total_bounds[[1,3]]
-ax[0].set_xlim(xb[0]-4.0e5,xb[1]+4.5e5); ax[0].set_ylim(yb[0]-3.5e5,yb[1]+3.5e5)
+gsm=gpd.GeoDataFrame(sm,geometry=gpd.points_from_xy(sm.lon,sm.lat),crs=4326)
+p48=gsm[gsm.lat<50].to_crs("EPSG:5070"); pak=gsm[gsm.lat>=50].to_crs("EPSG:3338")
+OFF={"UNDE":(3,7),"STEI":(-17,-9),"TREE":(4,-9),"ABBY":(-21,5),"WREF":(4,-8),"SOAP":(-22,-3),"TEAK":(4,3),
+     "BLAN":(-19,6),"SCBI":(-20,-7),"SERC":(5,1),"TALL":(-17,7),"DELA":(-25,-4),"LENO":(4,-9),"ORNL":(-21,-7),
+     "GRSM":(4,-8),"MLBS":(-22,3),"BART":(3,5),"HARV":(5,-5),"JERC":(4,-7),"OSBS":(4,2),"BONA":(3,4),
+     "DEJU":(3,-9),"HEAL":(-22,-1),"UKFS":(3,4),"YELL":(3,4),"RMNP":(3,4)}
+def lab(axh,dd,fs=4.8):
+    for _,r in dd.iterrows():
+        dx,dy=OFF.get(r.siteID,(3,3))
+        axh.annotate(r.siteID,(r.geometry.x,r.geometry.y),fontsize=fs,color="#333333",xytext=(dx,dy),textcoords="offset points")
+vmin,vmax=sm.MAT_C.min(),sm.MAT_C.max()
+fig,ax=plt.subplots(1,2,figsize=(W,3.25),gridspec_kw={"width_ratios":[1.5,1]})
+conus.plot(ax=ax[0],color="#f1f1ef",edgecolor="#ffffff",lw=0.5)
+conus.boundary.plot(ax=ax[0],color="#c9c9c4",lw=0.35)
+sc=ax[0].scatter(p48.geometry.x,p48.geometry.y,c=p48.MAT_C,cmap="RdYlBu_r",vmin=vmin,vmax=vmax,s=40,edgecolor="#222222",linewidth=0.6,zorder=3)
+lab(ax[0],p48)
 ax[0].set_axis_off(); panel(ax[0],"(a)",0.01,0.97)
+# Alaska inset (its own Albers) at lower-left of panel a
+axi=ax[0].inset_axes([0.00,0.02,0.30,0.34])
+ak.plot(ax=axi,color="#f1f1ef",edgecolor="#c9c9c4",lw=0.35)
+axi.scatter(pak.geometry.x,pak.geometry.y,c=pak.MAT_C,cmap="RdYlBu_r",vmin=vmin,vmax=vmax,s=28,edgecolor="#222222",linewidth=0.5,zorder=3)
+lab(axi,pak,fs=4.4)
+axi.set_xlim(-0.8e6,1.65e6); axi.set_ylim(0.4e6,2.4e6)
+axi.set_xticks([]); axi.set_yticks([])
+for sp in axi.spines.values(): sp.set_edgecolor("#aaaaaa"); sp.set_linewidth(0.6)
+axi.set_title("Alaska",fontsize=6,color="#555555",pad=1.5)
 cb=fig.colorbar(sc,ax=ax[0],shrink=0.62,pad=0.01,aspect=22); cb.set_label("Mean annual temperature (°C)",fontsize=7.5); cb.ax.tick_params(labelsize=7)
 cb.outline.set_visible(False)
-s2=ax[1].scatter(sm.MAT_C,sm.MAP_mm,c=sm.Hill_q1,cmap="viridis",s=46,edgecolor="#222222",linewidth=0.6)
-for _,r in sm.iterrows(): ax[1].annotate(r.siteID,(r.MAT_C,r.MAP_mm),fontsize=4.6,color="#333333",xytext=(2.6,2.2),textcoords="offset points")
+s2=ax[1].scatter(sm.MAT_C,sm.MAP_mm,c=sm.Hill_q1,cmap="viridis",s=44,edgecolor="#222222",linewidth=0.6)
+for _,r in sm.iterrows():
+    dx,dy=OFF.get(r.siteID,(3,3))
+    ax[1].annotate(r.siteID,(r.MAT_C,r.MAP_mm),fontsize=4.8,color="#333333",xytext=(dx,dy),textcoords="offset points")
 ax[1].set_xlabel("Mean annual temperature (°C)"); ax[1].set_ylabel("Mean annual precipitation (mm)")
 panel(ax[1],"(b)",-0.22,1.00)
 cb2=fig.colorbar(s2,ax=ax[1],shrink=0.85,pad=0.03,aspect=22); cb2.set_label("Site-mean Hill q1",fontsize=7.5); cb2.ax.tick_params(labelsize=7)
@@ -117,7 +137,7 @@ fig.tight_layout(); fig.savefig(FIG+"/Figure_2.png",bbox_inches="tight"); plt.cl
 print(f"VERIFY Fig2: sites={len(sm)} (26), MAT {sm.MAT_C.min():.1f}~{sm.MAT_C.max():.1f}C, MAP {sm.MAP_mm.min():.0f}~{sm.MAP_mm.max():.0f}mm")
 
 # ================= FIGURE 3 : plot-level framework =================
-fig=plt.figure(figsize=(W,6.5)); gs=fig.add_gridspec(2,2,hspace=0.42,wspace=0.34)
+fig=plt.figure(figsize=(W,9.4)); gs=fig.add_gridspec(3,2,hspace=0.46,wspace=0.34,height_ratios=[1.05,1,1])
 x=np.arange(4); w=0.58
 # (a) sequential
 ax=fig.add_subplot(gs[0,0])
@@ -158,8 +178,13 @@ def forest(sub_ax,resp_label):
     sub_ax.set_xlabel("Standardized β (95% HDI)"); sub_ax.set_xlim(-0.55,0.66)
     m=bm.loc[rr]
     sub_ax.set_title(f"{resp_label}   (0 divergences, R̂ ≤ {m['max_rhat']:.3f}, n = {int(m['n'])})",fontsize=7.4,loc="left",color="#444444")
-axc=fig.add_subplot(gs[1,0]); forest(axc,"Hill q1"); panel(axc,"(c)",-0.30,1.02)
-axd=fig.add_subplot(gs[1,1]); forest(axd,"LCBD nestedness"); panel(axd,"(d)",-0.30,1.02)
+FOREST_ORDER=[("Hill q1","Hill_q1","(c)"),("Hill q2","Hill_q2","(d)"),
+              ("LCBD turnover","LCBD_turnover_rare","(e)"),("LCBD nestedness","LCBD_nestedness_rare","(f)")]
+BAYES_RESP={lbl:rr for lbl,rr,_ in FOREST_ORDER if rr in set(bc.response)}
+slots=[gs[1,0],gs[1,1],gs[2,0],gs[2,1]]
+for (lbl,rr,letter),slot in zip(FOREST_ORDER,slots):
+    if rr not in set(bc.response): continue
+    axf=fig.add_subplot(slot); forest(axf,lbl); panel(axf,letter,-0.30,1.02)
 fig.savefig(FIG+"/Figure_3.png",bbox_inches="tight"); plt.close(fig)
 seq=[round(d,3) for d in dyn]
 print(f"VERIFY Fig3: seq dyn={seq} (text 0.042/0.039/0.013/0.056) | unique str q1={vp.loc['Hill q1','unique_structure']:.3f} (0.081), dyn nest={vp.loc['LCBD nestedness','unique_dynamics']:.3f} (0.056)")
@@ -192,58 +217,92 @@ else:
     y=np.concatenate(Y); xst=np.concatenate(XSt); xse=np.concatenate(XSe)
     np.savez_compressed(DCACHE,y=y,xst=xst,xse=xse,nsite=nsite)
 rst=np.corrcoef(rankdata(xst),rankdata(y))[0,1]; rse=np.corrcoef(rankdata(xse),rankdata(y))[0,1]
-fig,ax=plt.subplots(1,2,figsize=(W,3.15),sharey=True)
+fig,ax=plt.subplots(1,2,figsize=(W,3.55),sharey=True)
+hbs=[]
 for a,(xx,r,xlab,letter) in zip(ax,[(xst,rst,"Structural distance (Euclidean)","(a)"),(xse,rse,"Spectral distance (Euclidean)","(b)")]):
-    hb=a.hexbin(xx,y,gridsize=55,cmap="Greys",bins="log",mincnt=1,linewidths=0)
+    xmax=float(np.quantile(xx,0.995))
+    hb=a.hexbin(xx,y,gridsize=(34,26),extent=(0,xmax,0,1.0),cmap="Greys",bins="log",mincnt=1,linewidths=0)
+    hbs.append(hb)
     bins=np.quantile(xx,np.linspace(0,1,11)); idx=np.digitize(xx,bins)
     bx=[xx[idx==k].mean() for k in range(1,11) if (idx==k).sum()>=50]; by=[y[idx==k].mean() for k in range(1,11) if (idx==k).sum()>=50]
-    a.plot(bx,by,'o-',color=C_ACC,ms=4.2,lw=1.6,zorder=4)
-    a.set_xlabel(xlab); a.set_xlim(0,np.quantile(xx,0.995))
-    a.text(0.03,0.06,f"Mantel r = {r:+.2f} (Spearman), p = 0.001",transform=a.transAxes,fontsize=7.2,color="#222222")
+    a.plot(bx,by,'o-',color=C_ACC,ms=4.2,lw=1.6,zorder=4,label="Decile-bin mean")
+    a.set_xlabel(xlab); a.set_xlim(0,xmax); a.set_ylim(-0.02,1.04)
+    a.text(0.03,0.045,f"Mantel r = {r:+.2f} (Spearman), p = 0.001",transform=a.transAxes,fontsize=7.2,color="#222222")
     panel(a,letter,-0.14 if letter=="(a)" else -0.06,1.00)
 ax[0].set_ylabel("Compositional dissimilarity (Bray–Curtis)")
-fig.tight_layout(); fig.savefig(FIG+"/Figure_4.png",bbox_inches="tight"); plt.close(fig)
+ax[0].legend(frameon=False,loc="lower right",fontsize=7)
+cb=fig.colorbar(hbs[1],ax=ax,shrink=0.85,pad=0.015,aspect=26)
+cb.set_label("Number of plot pairs (log scale)",fontsize=7.5); cb.ax.tick_params(labelsize=7); cb.outline.set_visible(False)
+fig.savefig(FIG+"/Figure_4.png",bbox_inches="tight"); plt.close(fig)
 print(f"VERIFY Fig4: Spearman struct={rst:+.2f} (+0.32), spectral={rse:+.2f} (+0.30), pairs={len(y)} (8,813), sites={nsite} (23)")
 
 # ================= FIGURE 5 : species-energy =================
 g3=pd.read_csv(D+"/plot_pml_gpp_ts_26.csv")[["plotID","pml_gpp"]]
-site=f.merge(g3,on="plotID").groupby("siteID").agg(Hill_q1=("Hill_q1","mean"),pml=("pml_gpp","mean")).reset_index()
+gm=pd.read_csv(D+"/plot_modis_gpp_26.csv")[["plotID","modis_gpp"]]
+site=(f.merge(g3,on="plotID").merge(gm,on="plotID",how="left")
+       .groupby("siteID").agg(Hill_q1=("Hill_q1","mean"),pml=("pml_gpp","mean"),modis=("modis_gpp","mean")).reset_index())
 tw=pd.read_csv(D+"/site_tower_gpp_26.csv")[["siteID","tower_gpp"]]; site=site.merge(tw,on="siteID",how="left")
 tv=site.dropna(subset=["tower_gpp"])
 rt,pt=st.pearsonr(tv.tower_gpp,tv.Hill_q1)
 t2=tv.assign(z=(tv.tower_gpp-tv.tower_gpp.mean())/tv.tower_gpp.std()); qt=smf.ols("Hill_q1 ~ z + I(z**2)",t2).fit().pvalues["I(z ** 2)"]
 rp_,pp_=st.pearsonr(site.pml,site.Hill_q1); rvt=st.pearsonr(tv.pml,tv.tower_gpp)[0]
-fig,ax=plt.subplots(1,2,figsize=(W,3.15),sharey=True)
-for a,(d3,xc,r,p,xl,note,col,letter) in zip(ax,[
-    (tv,"tower_gpp",rt,pt,"Tower GPP (gC m$^{-2}$ yr$^{-1}$)",f"r = {rt:+.2f}, p = {pt:.3f}\nquadratic ns (p = {qt:.2f})",C_PRO,"(a)"),
-    (site,"pml",rp_,pp_,"Site-mean PML-V2 GPP (2000–2024)",f"r = {rp_:+.2f}, p = {pp_:.3f}\nPML vs tower r = +{rvt:.2f}","#2a6f4e","(b)")]):
-    a.scatter(d3[xc],d3.Hill_q1,s=30,color=col,edgecolor="white",linewidth=0.5,zorder=3)
-    for _,row in d3.iterrows(): a.annotate(row.siteID,(row[xc],row.Hill_q1),fontsize=4.4,color="#555555",xytext=(2.6,2.0),textcoords="offset points")
-    b1,b0=np.polyfit(d3[xc],d3.Hill_q1,1); xr=np.linspace(d3[xc].min(),d3[xc].max(),50); a.plot(xr,b0+b1*xr,color="#222222",lw=1.4)
-    a.set_xlabel(xl)
-    a.text(0.03,0.87,note,transform=a.transAxes,fontsize=7.2,color="#222222")
-    panel(a,letter,-0.14 if letter=="(a)" else -0.06,1.00)
+sm_=site.dropna(subset=["modis"]); rm_,pm_=st.pearsonr(sm_.modis,sm_.Hill_q1); rmt=st.pearsonr(tv.modis,tv.tower_gpp)[0]
+fig,ax=plt.subplots(1,3,figsize=(W,2.75),sharey=True)
+for a,(d3,xc,xl,note,col,letter) in zip(ax,[
+    (tv,"tower_gpp","Tower GPP (gC m$^{-2}$ yr$^{-1}$)",f"r = {rt:+.2f}, p = {pt:.3f}\nquadratic ns (p = {qt:.2f})",C_PRO,"(a)"),
+    (site,"pml","Site-mean PML-V2 GPP",f"r = {rp_:+.2f}, p = {pp_:.3f}\nvs tower r = +{rvt:.2f}","#2a6f4e","(b)"),
+    (sm_,"modis","Site-mean MODIS GPP",f"r = {rm_:+.2f}, p = {pm_:.3f}\nvs tower r = +{rmt:.2f}","#556b2f","(c)")]):
+    a.scatter(d3[xc],d3.Hill_q1,s=24,color=col,edgecolor="white",linewidth=0.5,zorder=3)
+    for _,row in d3.iterrows(): a.annotate(row.siteID,(row[xc],row.Hill_q1),fontsize=4.0,color="#666666",xytext=(2.2,1.8),textcoords="offset points")
+    b1,b0=np.polyfit(d3[xc],d3.Hill_q1,1); xr=np.linspace(d3[xc].min(),d3[xc].max(),50); a.plot(xr,b0+b1*xr,color="#222222",lw=1.3)
+    a.set_xlabel(xl,fontsize=7.8)
+    a.text(0.03,0.86,note,transform=a.transAxes,fontsize=6.8,color="#222222")
+    panel(a,letter,-0.20 if letter=="(a)" else -0.08,1.00)
 ax[0].set_ylabel("Site-mean tree diversity (Hill q1)")
 fig.tight_layout(); fig.savefig(FIG+"/Figure_5.png",bbox_inches="tight"); plt.close(fig)
-print(f"VERIFY Fig5: tower r={rt:+.2f} p={pt:.3f} (+0.59, 0.004), quad p={qt:.2f} (0.87), PML-tower r={rvt:+.2f} (+0.86), n_tower={len(tv)} (22)")
+print(f"VERIFY Fig5: tower r={rt:+.2f} p={pt:.3f} (+0.59, 0.004), quad p={qt:.2f} (0.87), PML r={rp_:+.2f}, MODIS r={rm_:+.2f}, PML-tower +{rvt:.2f} (+0.86), MODIS-tower +{rmt:.2f}, n_tower={len(tv)} (22)")
 
 # ================= FIGURE 6 : context moderation =================
+# (a) all FDR-surviving interaction terms from the full screen (168 terms; incl. spectral x land use)
+o4=pd.read_csv(RES+"/o4_interactions_consistent.csv"); sig=o4[o4.q<0.05].copy()
+zcrit=st.norm.ppf(1-sig.p/2); sig["se_appx"]=np.abs(sig.beta_int)/zcrit    # Wald-reconstructed SE
+RSN={"LAI_mean":"LAI","VCI_mean":"VCI","EVI_mean":"EVI","modis_gpp":"MODIS GPP","pml_gpp":"PML GPP"}
+CTXN={"severity":"severity","recency":"recency","lc_shannon":"land-cover diversity","lc_edge":"edge density",
+      "forest_frac":"forest fraction","lc_forest_frac":"forest fraction","stand_age_gami":"stand age"}
+RESPN={"Hill q1":"Hill q1","Hill q2":"Hill q2","turnover":"Turnover","nestedness":"Nestedness","Turnover":"Turnover","Nestedness":"Nestedness"}
+FAMC={"disturbance":C_STR,"land use":"#7d5ba6","stand age":C_PRO}
+sig["label"]=[f"{RSN.get(r.rs,r.rs)} × {CTXN.get(r.context,r.context)} → {RESPN.get(r.response,r.response)}" for r in sig.itertuples()]
+sig=sig.sort_values(["family","beta_int"]).reset_index(drop=True)
 ss=pd.read_csv(RES+"/simple_slopes.csv"); z=[-1,0,1]
 gA=ss[(ss.rp=="Hill q1")&(ss.rs=="modis_gpp")&(ss.ctx=="stand_age_gami")].sort_values("ctx_z")
 gB=ss[(ss.rp=="Hill q1")&(ss.rs=="VCI_mean")&(ss.ctx=="severity")].sort_values("ctx_z")
-fig,ax=plt.subplots(1,2,figsize=(W,2.9),sharey=True)
-for a,(g4,col,xt,note,letter) in zip(ax,[
-    (gA,C_PRO,["−1 SD\n(younger)","Mean","+1 SD\n(older)"],"MODIS GPP → Hill q1 by stand age\ninteraction ns after FDR (q = 0.26)","(a)"),
-    (gB,C_STR,["−1 SD\n(least disturbed)","Mean","+1 SD\n(most disturbed)"],"VCI → Hill q1 by disturbance severity","(b)")]):
-    a.errorbar(z,g4.slope,yerr=1.96*g4.se,marker="o",capsize=3,color=col,lw=1.5,ms=5)
+fig,ax=plt.subplots(1,3,figsize=(W,3.0),gridspec_kw={"width_ratios":[1.5,1,1]})
+a=ax[0]; ysig=np.arange(len(sig))
+for yi,r in zip(ysig,sig.itertuples()):
+    c=FAMC.get(r.family,"#444444")
+    a.plot([r.beta_int-1.96*r.se_appx,r.beta_int+1.96*r.se_appx],[yi,yi],color=c,lw=1.6,solid_capstyle="round")
+    a.scatter([r.beta_int],[yi],s=22,color=c,edgecolor="black",linewidth=0.5,zorder=3)
+    qtxt="q < 0.001" if r.q<0.001 else f"q = {r.q:.3f}"
+    a.text(1.02,yi,qtxt,transform=a.get_yaxis_transform(),fontsize=5.8,color="#777777",va="center",ha="left")
+a.axvline(0,color="#999999",lw=0.7,ls="--")
+a.set_yticks(ysig); a.set_yticklabels(sig.label,fontsize=6.4)
+a.set_xlabel("Interaction β (±95% CI)")
+from matplotlib.lines import Line2D
+a.legend(handles=[Line2D([0],[0],color=FAMC["disturbance"],lw=2,label="Disturbance"),
+                  Line2D([0],[0],color=FAMC["land use"],lw=2,label="Land use")],
+         frameon=False,loc="lower right",fontsize=6.5)
+panel(a,"(a)",-0.52,1.02)
+for a,(g4,col,xt,note,letter) in zip(ax[1:],[
+    (gA,C_PRO,["−1 SD\n(younger)","Mean","+1 SD\n(older)"],"MODIS GPP → Hill q1\nby stand age (ns, q = 0.26)","(b)"),
+    (gB,C_STR,["−1 SD\n(least dist.)","Mean","+1 SD\n(most dist.)"],"VCI → Hill q1\nby disturbance severity","(c)")]):
+    a.errorbar(z,g4.slope,yerr=1.96*g4.se,marker="o",capsize=3,color=col,lw=1.4,ms=4.5)
     for zz,sl,pv in zip(z,g4.slope,g4.p):
-        a.annotate(f"{sl:+.2f}{'*' if pv<0.05 else ''}",(zz,sl),textcoords="offset points",xytext=(7,5),color=col,fontsize=7)
+        a.annotate(f"{sl:+.2f}{'*' if pv<0.05 else ''}",(zz,sl),textcoords="offset points",xytext=(6,4),color=col,fontsize=6.4)
     a.axhline(0,color="#999999",lw=0.7,ls="--")
-    a.set_xticks(z); a.set_xticklabels(xt,fontsize=7); a.set_xlim(-1.55,1.55)
-    a.set_xlabel("Moderator")
-    a.text(0.03,0.97,note,transform=a.transAxes,fontsize=7.0,color="#444444",va="top")
-    panel(a,letter,-0.14 if letter=="(a)" else -0.06,1.00)
-ax[0].set_ylabel("Simple slope on Hill q1 (per 1 SD)")
+    a.set_xticks(z); a.set_xticklabels(xt,fontsize=6.2); a.set_xlim(-1.55,1.55)
+    a.text(0.04,0.97,note,transform=a.transAxes,fontsize=6.4,color="#444444",va="top")
+    panel(a,letter,-0.16,1.02)
+ax[1].set_ylabel("Simple slope on Hill q1 (per 1 SD)",fontsize=7.5)
 fig.tight_layout(); fig.savefig(FIG+"/Figure_6.png",bbox_inches="tight"); plt.close(fig)
-print(f"VERIFY Fig6: MODISxAge slopes={[round(v,2) for v in gA.slope]} p={[round(v,3) for v in gA.p]} (+0.17/+0.27/+0.38) | VCIxSev={[round(v,2) for v in gB.slope]} (+0.39->+0.21)")
+print(f"VERIFY Fig6: FDR-sig interactions={len(sig)} (7: 4 disturbance + 3 land use) | MODISxAge slopes={[round(v,2) for v in gA.slope]} | VCIxSev={[round(v,2) for v in gB.slope]}")
 print("ALL FIGURES SAVED ->",FIG)

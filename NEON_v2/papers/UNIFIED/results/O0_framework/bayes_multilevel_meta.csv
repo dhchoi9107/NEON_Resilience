@@ -1,3 +1,5 @@
 response,n,divergences,max_rhat,sigma_domain,sigma_site
 Hill_q1,644,0,1.0015,0.3271,0.3242
+Hill_q2,644,0,1.001,0.3002,0.3432
+LCBD_turnover_rare,579,0,1.0008,0.6591,0.5202
 LCBD_nestedness_rare,579,0,1.0012,0.5642,0.3342

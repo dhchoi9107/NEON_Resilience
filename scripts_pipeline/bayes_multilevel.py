@@ -12,9 +12,11 @@ S=["Rugosity_mean","Vert_CV_mean","VCI_mean","LAI_mean"];P=["EVI_mean"]
 Dn=["Rumple_trend","Vert_SD_trend","Vert_CV_trend","VCI_trend","FHD_trend","LAI_trend","Ht_Ratio_trend"];keep=S+P+Dn
 def block(c): return "structure" if c in S else "spectral" if c in P else "dynamics"
 coef_rows=[]; meta_rows=[]
-for resp in ['Hill_q1','LCBD_nestedness_rare']:
+for resp in ['Hill_q1','Hill_q2','LCBD_turnover_rare','LCBD_nestedness_rare']:
     d=f[[resp,'domain','siteID']+keep].dropna().copy()
-    y=np.log(d[resp]) if 'Hill' in resp else d[resp].astype(float); d['y']=(y-y.mean())/y.std()
+    if 'Hill' in resp: y=np.log(d[resp])
+    else: y=d[resp].astype(float)
+    d['y']=(y-y.mean())/y.std()
     for c in keep: d[c]=(d[c]-d[c].mean())/d[c].std()
     priors={"1|domain":bmb.Prior("Normal",mu=0,sigma=bmb.Prior("HalfNormal",sigma=0.5)),
             "1|domain:siteID":bmb.Prior("Normal",mu=0,sigma=bmb.Prior("HalfNormal",sigma=0.3))}
