@@ -165,10 +165,10 @@ for _,r in conus_dom.iterrows():
 usx,usy=draw_sites(axu,p48,DOTOFF,34)
 autolab(axu,usx,usy,p48.siteID.values,fs=5.0,colors=p48.labcol.values)
 axu.set_axis_off()
-# label-colour legend (forest type), Atlantic whitespace clear of Florida/OSBS
+# label-colour legend (forest type): left column, between the Alaska panel and the climate gradient
+fig.text(0.055,0.525,"Site label = forest type",fontsize=6.2,color="#666666")
 for i,(ft,c) in enumerate([("Needleleaf",FTC["Needleleaf"]),("Mixed",FTC["Mixed"]),("Broadleaf",FTC["Broadleaf"])]):
-    axu.text(0.995,0.375-0.048*i,ft,transform=axu.transAxes,ha="right",fontsize=6.4,fontweight="bold",color=c,path_effects=HALO)
-axu.text(0.995,0.425,"Site label = forest type",transform=axu.transAxes,ha="right",fontsize=6.0,color="#666666",path_effects=HALO)
+    fig.text(0.062,0.487-0.038*i,ft,fontsize=6.2,fontweight="bold",color=c)
 # --- continuous bivariate legend (MAT x MAP), bottom-left of the figure (below Alaska) ---
 _figw,_figh=fig.get_size_inches(); _lh=0.30; _lw=_lh*_figh/_figw   # square legend (in inches)
 lax=fig.add_axes([0.050,0.09,_lw,_lh])
