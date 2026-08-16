@@ -111,17 +111,13 @@ def autolab(axh,xs,ys,names,fs=4.8):
     txts=[axh.text(x_,y_,n_,fontsize=fs,color="#333333") for x_,y_,n_ in zip(xs,ys,names)]
     adjust_text(txts,x=list(xs),y=list(ys),ax=axh,expand=(1.25,1.6),force_text=(0.4,0.6),
                 arrowprops=dict(arrowstyle="-",color="#999999",lw=0.4))
-# --- bivariate 5x5 classification: MAT quintiles x MAP quintiles ---
-# 25 colours by bilinear interpolation between four corner colours (Stevens blue-red family)
+# --- continuous bivariate colour: MAT x MAP, bilinear blend of four corner colours ---
 _c00,_c10=np.array(to_rgba("#e8e8e8")[:3]),np.array(to_rgba("#c0392b")[:3])   # dry: cool -> warm
 _c01,_c11=np.array(to_rgba("#4d9ec4")[:3]),np.array(to_rgba("#3f2a3d")[:3])   # wet: cool -> warm
-NBIV=5
-BIV=[[tuple((1-x)*(1-y)*_c00+x*(1-y)*_c10+(1-x)*y*_c01+x*y*_c11)
-      for x in np.linspace(0,1,NBIV)] for y in np.linspace(0,1,NBIV)]
-t_cut=np.quantile(sm.MAT_C,[0.2,0.4,0.6,0.8]); p_cut=np.quantile(sm.MAP_mm,[0.2,0.4,0.6,0.8])
+tmin,tmax=sm.MAT_C.min(),sm.MAT_C.max(); pmin,pmax=sm.MAP_mm.min(),sm.MAP_mm.max()
 def biv_color(mat,map_):
-    ix=int(np.digitize(mat,t_cut)); iy=int(np.digitize(map_,p_cut))
-    return BIV[iy][ix]
+    x=(mat-tmin)/(tmax-tmin); y=(map_-pmin)/(pmax-pmin)
+    return tuple((1-x)*(1-y)*_c00+x*(1-y)*_c10+(1-x)*y*_c01+x*y*_c11)
 sm["biv"]=[biv_color(r.MAT_C,r.MAP_mm) for r in sm.itertuples()]
 p48=p48.merge(sm[["siteID","biv"]],on="siteID"); pak=pak.merge(sm[["siteID","biv"]],on="siteID")
 # displaced symbol positions for clustered sites (metres), with connectors to true locations
@@ -139,9 +135,9 @@ def draw_sites(axh,dd,offmap,ssize):
         xs.append(x_); ys.append(y_)
     axh.scatter(xs,ys,c=list(dd.biv),s=ssize,edgecolor="#222222",linewidth=0.6,zorder=3)
     return xs,ys
-fig=plt.figure(figsize=(W*0.82,3.3))
-gsm2=fig.add_gridspec(1,2,width_ratios=[0.40,1.50],wspace=0.06)
-axk=fig.add_subplot(gsm2[0,0]); axu=fig.add_subplot(gsm2[0,1])
+fig=plt.figure(figsize=(W*0.82,3.35))
+axu=fig.add_axes([0.235,0.01,0.755,0.97])   # CONUS main
+axk=fig.add_axes([0.010,0.55,0.205,0.42])   # Alaska, top-left
 # --- Alaska panel (own Albers) ---
 ak_dom.plot(ax=axk,color="#f4f4f2",edgecolor="none")
 ak_dom.boundary.plot(ax=axk,color="#b3b3ad",lw=0.4)
@@ -160,13 +156,17 @@ for _,r in conus_dom.iterrows():
 usx,usy=draw_sites(axu,p48,DOTOFF,34)
 autolab(axu,usx,usy,p48.siteID.values,fs=5.0)
 axu.set_axis_off()
-# --- bivariate 3x3 legend (MAT x MAP) at lower-left of the CONUS axes ---
-lax=axu.inset_axes([0.02,0.03,0.165,0.28])
-lax.imshow([[BIV[iy][ix] for ix in range(NBIV)] for iy in range(NBIV)],origin="lower",aspect="auto")
-lax.set_xticks([0.5,1.5,2.5,3.5]); lax.set_xticklabels([f"{v:.0f}" for v in t_cut],fontsize=4.4)
-lax.set_yticks([0.5,1.5,2.5,3.5]); lax.set_yticklabels([f"{v:.0f}" for v in p_cut],fontsize=4.4)
-lax.set_xlabel("MAT (°C) →",fontsize=5.8,labelpad=1); lax.set_ylabel("MAP (mm) →",fontsize=5.8,labelpad=1)
-lax.tick_params(length=1.5,pad=1)
+# --- continuous bivariate legend (MAT x MAP), bottom-left of the figure (below Alaska) ---
+lax=fig.add_axes([0.055,0.10,0.125,0.33])
+NG=200
+grid=np.zeros((NG,NG,3))
+for j,y in enumerate(np.linspace(0,1,NG)):
+    for i,x in enumerate(np.linspace(0,1,NG)):
+        grid[j,i]=(1-x)*(1-y)*_c00+x*(1-y)*_c10+(1-x)*y*_c01+x*y*_c11
+lax.imshow(grid,origin="lower",aspect="auto",extent=[tmin,tmax,pmin,pmax])
+lax.set_xticks([0,10,20]); lax.set_yticks([500,1500,2500])
+lax.tick_params(labelsize=5,length=1.5,pad=1)
+lax.set_xlabel("MAT (°C)",fontsize=6,labelpad=1); lax.set_ylabel("MAP (mm)",fontsize=6,labelpad=1)
 for sp in lax.spines.values(): sp.set_visible(False)
 fig.savefig(FIG+"/Figure_2.png",bbox_inches="tight"); plt.close(fig)
 print(f"VERIFY Fig2: sites={len(sm)} (26), MAT {sm.MAT_C.min():.1f}~{sm.MAT_C.max():.1f}C, MAP {sm.MAP_mm.min():.0f}~{sm.MAP_mm.max():.0f}mm")
