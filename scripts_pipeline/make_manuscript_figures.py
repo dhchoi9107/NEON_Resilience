@@ -47,7 +47,7 @@ RL=["Hill q1","Hill q2","LCBD turnover","LCBD nestedness"]; LAB=["Hill q1","Hill
 NICE={"Rugosity_mean":"Rugosity","Vert_CV_mean":"Vertical CV","VCI_mean":"VCI","LAI_mean":"LAI","EVI_mean":"EVI",
       "Rumple_trend":"Rumple trend","Vert_SD_trend":"Vertical-SD trend","Vert_CV_trend":"Vertical-CV trend","VCI_trend":"VCI trend",
       "FHD_trend":"FHD trend","LAI_trend":"LAI trend","Ht_Ratio_trend":"Height-ratio trend"}
-C_STR="#1f4e79"; C_SPE="#8ecae6"; C_DYN="#2a9d8f"; C_SHA="#c9c9c9"; C_PRO="#bc6c25"; C_ACC="#c1121f"
+C_STR="#0072B2"; C_SPE="#56B4E9"; C_DYN="#009E73"; C_SHA="#c9c9c9"; C_PRO="#D55E00"; C_ACC="#c1121f"   # Okabe-Ito (colourblind-safe)
 CBLK={"structure":C_STR,"spectral":C_SPE,"dynamics":C_DYN}
 def blk(c): return "structure" if c in S else "spectral" if c in P else "dynamics"
 def star(p): return "***" if p<1e-3 else "**" if p<1e-2 else "*" if p<5e-2 else "ns"
@@ -55,10 +55,12 @@ BAYES_RESP={"Hill q1":"Hill_q1","LCBD nestedness":"LCBD_nestedness_rare"}
 
 # ================= FIGURE 1 : conceptual framework =================
 fig,ax=plt.subplots(figsize=(W,4.1)); ax.set_xlim(0,10); ax.set_ylim(0,10); ax.axis("off")
-from matplotlib.patches import Rectangle
+from matplotlib.colors import to_rgba
 def cbox(x,y,w,h,lines,accent=None,fs=7.6):
-    ax.add_patch(FancyBboxPatch((x,y),w,h,boxstyle="round,pad=0.10",fc="white",ec="#7a7a7a",lw=0.9))
-    if accent: ax.add_patch(Rectangle((x-0.06,y-0.06),0.14,h+0.12,fc=accent,ec="none",zorder=3))
+    if accent:
+        ax.add_patch(FancyBboxPatch((x,y),w,h,boxstyle="round,pad=0.10",fc=to_rgba(accent,0.10),ec=accent,lw=1.3))
+    else:
+        ax.add_patch(FancyBboxPatch((x,y),w,h,boxstyle="round,pad=0.10",fc="#f7f7f7",ec="#666666",lw=1.0))
     t0=lines[0]; rest="\n".join(lines[1:])
     ax.text(x+w/2,y+h-0.34,t0,ha="center",va="center",fontsize=fs+0.6,fontweight="bold",color="#111111")
     if rest: ax.text(x+w/2,y+(h-0.62)/2,rest,ha="center",va="center",fontsize=fs,color="#444444")
@@ -109,35 +111,56 @@ def autolab(axh,xs,ys,names,fs=4.8):
     txts=[axh.text(x_,y_,n_,fontsize=fs,color="#333333") for x_,y_,n_ in zip(xs,ys,names)]
     adjust_text(txts,x=list(xs),y=list(ys),ax=axh,expand=(1.25,1.6),force_text=(0.4,0.6),
                 arrowprops=dict(arrowstyle="-",color="#999999",lw=0.4))
+# displaced symbol positions for clustered sites (metres, in each panel's CRS), with connectors to true locations
+DOTOFF={"ABBY":(-80e3,70e3),"WREF":(80e3,-70e3),"SOAP":(-80e3,-60e3),"TEAK":(80e3,60e3),
+        "UNDE":(0,120e3),"STEI":(-120e3,-80e3),"TREE":(120e3,-80e3),
+        "BLAN":(-90e3,80e3),"SCBI":(-90e3,-80e3),"SERC":(100e3,0),
+        "TALL":(70e3,90e3),"DELA":(-100e3,10e3),"LENO":(40e3,-100e3),
+        "ORNL":(-80e3,70e3),"GRSM":(90e3,-60e3)}
+AKOFF={"HEAL":(-150e3,0),"BONA":(110e3,100e3),"DEJU":(110e3,-130e3)}
+def draw_sites(axh,dd,offmap,ssize):
+    xs=[];ys=[]
+    for _,r in dd.iterrows():
+        dx,dy=offmap.get(r.siteID,(0,0)); x_,y_=r.geometry.x+dx,r.geometry.y+dy
+        if dx or dy: axh.plot([r.geometry.x,x_],[r.geometry.y,y_],color="#9a9a9a",lw=0.5,zorder=2)
+        xs.append(x_); ys.append(y_)
+    sch=axh.scatter(xs,ys,c=dd.MAT_C,cmap="RdYlBu_r",vmin=vmin,vmax=vmax,s=ssize,edgecolor="#222222",linewidth=0.6,zorder=3)
+    return sch,xs,ys
 vmin,vmax=sm.MAT_C.min(),sm.MAT_C.max()
-fig,ax=plt.subplots(1,2,figsize=(W,3.25),gridspec_kw={"width_ratios":[1.5,1]})
-conus_dom.plot(ax=ax[0],color="#f1f1ef",edgecolor="none")
-conus_dom.boundary.plot(ax=ax[0],color="#b3b3ad",lw=0.5)
+fig=plt.figure(figsize=(W,3.25))
+gsm2=fig.add_gridspec(1,3,width_ratios=[0.40,1.42,1.00],wspace=0.30)
+axk=fig.add_subplot(gsm2[0,0]); axu=fig.add_subplot(gsm2[0,1]); axb=fig.add_subplot(gsm2[0,2])
+# --- Alaska panel (own Albers, no overlap with CONUS) ---
+ak_dom.plot(ax=axk,color="#f1f1ef",edgecolor="none")
+ak_dom.boundary.plot(ax=axk,color="#b3b3ad",lw=0.4)
+_,akx,aky=draw_sites(axk,pak,AKOFF,26)
+autolab(axk,akx,aky,pak.siteID.values,fs=4.5)
+axk.set_xlim(-0.9e6,1.7e6); axk.set_ylim(0.35e6,2.45e6)
+axk.set_xticks([]); axk.set_yticks([])
+for sp in axk.spines.values(): sp.set_edgecolor("#bbbbbb"); sp.set_linewidth(0.6)
+axk.text(0.5,-0.075,"Alaska (D18–D19)",transform=axk.transAxes,ha="center",fontsize=6.5,color="#555555")
+panel(axk,"(a)",-0.10,1.02)
+# --- CONUS panel ---
+conus_dom.plot(ax=axu,color="#f1f1ef",edgecolor="none")
+conus_dom.boundary.plot(ax=axu,color="#b3b3ad",lw=0.5)
 for _,r in conus_dom.iterrows():
     pt=r.geometry.representative_point()
-    ax[0].text(pt.x,pt.y,f"D{int(r.DomainID):02d}",fontsize=4.3,color="#a8a8a2",ha="center",va="center",zorder=1)
-sc=ax[0].scatter(p48.geometry.x,p48.geometry.y,c=p48.MAT_C,cmap="RdYlBu_r",vmin=vmin,vmax=vmax,s=38,edgecolor="#222222",linewidth=0.6,zorder=3)
-autolab(ax[0],p48.geometry.x.values,p48.geometry.y.values,p48.siteID.values)
-ax[0].set_axis_off(); panel(ax[0],"(a)",0.01,0.97)
-# Alaska inset (Alaska Albers, NEON domains D18/D19)
-axi=ax[0].inset_axes([0.00,0.02,0.30,0.34])
-ak_dom.plot(ax=axi,color="#f1f1ef",edgecolor="none")
-ak_dom.boundary.plot(ax=axi,color="#b3b3ad",lw=0.4)
-axi.scatter(pak.geometry.x,pak.geometry.y,c=pak.MAT_C,cmap="RdYlBu_r",vmin=vmin,vmax=vmax,s=26,edgecolor="#222222",linewidth=0.5,zorder=3)
-autolab(axi,pak.geometry.x.values,pak.geometry.y.values,pak.siteID.values,fs=4.3)
-axi.set_xlim(-0.8e6,1.65e6); axi.set_ylim(0.4e6,2.4e6)
-axi.set_xticks([]); axi.set_yticks([])
-for sp in axi.spines.values(): sp.set_edgecolor("#aaaaaa"); sp.set_linewidth(0.6)
-axi.set_title("Alaska",fontsize=6,color="#555555",pad=1.5)
-cb=fig.colorbar(sc,ax=ax[0],shrink=0.62,pad=0.01,aspect=22); cb.set_label("Mean annual temperature (°C)",fontsize=7.5); cb.ax.tick_params(labelsize=7)
+    axu.text(pt.x,pt.y,f"D{int(r.DomainID):02d}",fontsize=4.3,color="#a8a8a2",ha="center",va="center",zorder=1)
+sc,usx,usy=draw_sites(axu,p48,DOTOFF,30)
+autolab(axu,usx,usy,p48.siteID.values)
+axu.set_axis_off()
+cax=axu.inset_axes([0.28,-0.04,0.46,0.045])
+cb=fig.colorbar(sc,cax=cax,orientation="horizontal"); cb.set_label("Mean annual temperature (°C)",fontsize=6.8); cb.ax.tick_params(labelsize=6.2)
 cb.outline.set_visible(False)
-s2=ax[1].scatter(sm.MAT_C,sm.MAP_mm,c=sm.Hill_q1,cmap="viridis",s=42,edgecolor="#222222",linewidth=0.6,zorder=3)
-autolab(ax[1],sm.MAT_C.values,sm.MAP_mm.values,sm.siteID.values)
-ax[1].set_xlabel("Mean annual temperature (°C)"); ax[1].set_ylabel("Mean annual precipitation (mm)")
-panel(ax[1],"(b)",-0.22,1.00)
-cb2=fig.colorbar(s2,ax=ax[1],shrink=0.85,pad=0.03,aspect=22); cb2.set_label("Site-mean Hill q1",fontsize=7.5); cb2.ax.tick_params(labelsize=7)
+# --- climate space ---
+s2=axb.scatter(sm.MAT_C,sm.MAP_mm,c=sm.Hill_q1,cmap="viridis",s=40,edgecolor="#222222",linewidth=0.6,zorder=3)
+autolab(axb,sm.MAT_C.values,sm.MAP_mm.values,sm.siteID.values)
+axb.set_xlabel("Mean annual temperature (°C)"); axb.set_ylabel("Mean annual precipitation (mm)")
+panel(axb,"(b)",-0.26,1.02)
+cax2=axb.inset_axes([1.04,0.06,0.035,0.86])
+cb2=fig.colorbar(s2,cax=cax2); cb2.set_label("Site-mean Hill q1",fontsize=7); cb2.ax.tick_params(labelsize=6.5)
 cb2.outline.set_visible(False)
-fig.tight_layout(); fig.savefig(FIG+"/Figure_2.png",bbox_inches="tight"); plt.close(fig)
+fig.savefig(FIG+"/Figure_2.png",bbox_inches="tight"); plt.close(fig)
 print(f"VERIFY Fig2: sites={len(sm)} (26), MAT {sm.MAT_C.min():.1f}~{sm.MAT_C.max():.1f}C, MAP {sm.MAP_mm.min():.0f}~{sm.MAP_mm.max():.0f}mm")
 
 # ================= FIGURE 3 : plot-level framework =================
@@ -280,7 +303,7 @@ sig=sig.sort_values(["family","beta_int"]).reset_index(drop=True)
 ss=pd.read_csv(RES+"/simple_slopes.csv"); z=[-1,0,1]
 gA=ss[(ss.rp=="Hill q1")&(ss.rs=="modis_gpp")&(ss.ctx=="stand_age_gami")].sort_values("ctx_z")
 gB=ss[(ss.rp=="Hill q1")&(ss.rs=="VCI_mean")&(ss.ctx=="severity")].sort_values("ctx_z")
-fig,ax=plt.subplots(1,3,figsize=(W,3.0),gridspec_kw={"width_ratios":[1.5,1,1]})
+fig,ax=plt.subplots(1,2,figsize=(W,3.0),gridspec_kw={"width_ratios":[1.35,1]})
 a=ax[0]; ysig=np.arange(len(sig))
 for yi,r in zip(ysig,sig.itertuples()):
     c=FAMC.get(r.family,"#444444")
@@ -296,20 +319,23 @@ a.legend(handles=[Line2D([0],[0],color=FAMC["disturbance"],lw=2,label="Disturban
                   Line2D([0],[0],color=FAMC["land use"],lw=2,label="Land use")],
          frameon=False,loc="upper left",fontsize=6.5,handlelength=1.4,borderaxespad=0.1)
 panel(a,"(a)",-0.52,1.02)
-for a,(g4,col,xt,note,letter) in zip(ax[1:],[
-    (gA,C_PRO,["−1 SD\n(younger)","Mean","+1 SD\n(older)"],"MODIS GPP → Hill q1\nby stand age (ns, q = 0.26)","(b)"),
-    (gB,C_STR,["−1 SD\n(least dist.)","Mean","+1 SD\n(most dist.)"],"VCI → Hill q1\nby disturbance severity","(c)")]):
-    a.errorbar(z,g4.slope,yerr=1.96*g4.se,marker="o",capsize=3,color=col,lw=1.4,ms=4.5)
+# (b) combined simple slopes: two moderation patterns, dodged on a common moderator axis
+a=ax[1]; dodge=0.09
+for g4,col,dx,lab4,va_lab in [(gA,C_PRO,-dodge,"MODIS GPP → Hill q1 by stand age (ns, q = 0.26)",1),
+                              (gB,C_STR,+dodge,"VCI → Hill q1 by disturbance severity",-1)]:
+    zx=[zz+dx for zz in z]
+    a.errorbar(zx,g4.slope,yerr=1.96*g4.se,marker="o",capsize=3,color=col,lw=1.4,ms=4.5,label=lab4)
     tops=(g4.slope+1.96*g4.se).values; bots=(g4.slope-1.96*g4.se).values
-    for zz,sl,tp,pv in zip(z,g4.slope,tops,g4.p):
-        a.annotate(f"{sl:+.2f}{'*' if pv<0.05 else ''}",(zz,tp),textcoords="offset points",xytext=(0,3),
-                   color=col,fontsize=6.4,ha="center")
-    a.axhline(0,color="#999999",lw=0.7,ls="--")
-    a.set_xticks(z); a.set_xticklabels(xt,fontsize=6.2); a.set_xlim(-1.55,1.55)
-    a.set_ylim(min(-0.02,bots.min()-0.04),tops.max()+0.15)
-    a.text(0.04,0.975,note,transform=a.transAxes,fontsize=6.4,color="#444444",va="top")
-    panel(a,letter,-0.16,1.02)
-ax[1].set_ylabel("Simple slope on Hill q1 (per 1 SD)",fontsize=7.5)
+    for zz,sl,tp,bt,pv in zip(zx,g4.slope,tops,bots,g4.p):
+        if va_lab>0: a.annotate(f"{sl:+.2f}{'*' if pv<0.05 else ''}",(zz,tp),textcoords="offset points",xytext=(0,3),color=col,fontsize=6.2,ha="center")
+        else: a.annotate(f"{sl:+.2f}{'*' if pv<0.05 else ''}",(zz,bt),textcoords="offset points",xytext=(0,-9),color=col,fontsize=6.2,ha="center")
+a.axhline(0,color="#999999",lw=0.7,ls="--")
+a.set_xticks(z); a.set_xticklabels(["−1 SD","Mean","+1 SD"],fontsize=7); a.set_xlim(-1.55,1.55)
+a.set_ylim(-0.14,0.83)
+a.set_xlabel("Moderator level (stand age / disturbance severity)")
+a.set_ylabel("Simple slope on Hill q1 (per 1 SD)",fontsize=7.5)
+a.legend(frameon=False,loc="upper left",fontsize=6.2,handlelength=1.6)
+panel(a,"(b)",-0.18,1.02)
 fig.tight_layout(); fig.savefig(FIG+"/Figure_6.png",bbox_inches="tight"); plt.close(fig)
 print(f"VERIFY Fig6: FDR-sig interactions={len(sig)} (7: 4 disturbance + 3 land use) | MODISxAge slopes={[round(v,2) for v in gA.slope]} | VCIxSev={[round(v,2) for v in gB.slope]}")
 print("ALL FIGURES SAVED ->",FIG)
