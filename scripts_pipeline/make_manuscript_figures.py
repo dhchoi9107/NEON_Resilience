@@ -90,45 +90,47 @@ import geopandas as gpd
 NE=os.path.join(r"C:\Users\star1\Documents\GitHub\NEON_Resilience","scripts_pipeline","_pipeline_state","ne_states.gpkg")
 if not os.path.exists(NE):
     gpd.read_file("https://naturalearth.s3.amazonaws.com/110m_cultural/ne_110m_admin_1_states_provinces.zip").to_file(NE)
-states_raw=gpd.read_file(NE)
-name_col=[c for c in states_raw.columns if c.lower() in ("name","name_en")][0]
-conus=states_raw[~states_raw[name_col].isin(["Alaska","Hawaii"])].to_crs("EPSG:5070")   # CONUS Albers
-ak=states_raw[states_raw[name_col]=="Alaska"].to_crs("EPSG:3338")                        # Alaska Albers
+from adjustText import adjust_text
+from shapely.geometry import box as _box
+DOM=os.path.join(r"C:\Users\star1\Documents\GitHub\NEON_Resilience","scripts_pipeline","_pipeline_state","neon_domains.gpkg")
+if not os.path.exists(DOM):
+    gpd.read_file("https://www.neonscience.org/sites/default/files/NEONDomains_0.zip").to_file(DOM)
+dom=gpd.read_file(DOM).to_crs(4326)
+conus_dom=gpd.clip(dom,_box(-125.5,24.0,-66.5,49.7)).to_crs("EPSG:5070")   # NEON eco-climatic domains, CONUS
+ak_dom=gpd.clip(dom,_box(-169.5,52.0,-129.5,71.8)).to_crs("EPSG:3338")      # Alaska domains
 ll=pd.read_csv(D+"/plot_lonlat_26.csv").groupby("siteID")[["lon","lat"]].mean().reset_index()
 cl=pd.read_csv(D+"/site_climate_neon.csv"); hq=f.groupby("siteID").Hill_q1.mean().reset_index()
 sm=ll.merge(cl,on="siteID").merge(hq,on="siteID")
 gsm=gpd.GeoDataFrame(sm,geometry=gpd.points_from_xy(sm.lon,sm.lat),crs=4326)
 p48=gsm[gsm.lat<50].to_crs("EPSG:5070"); pak=gsm[gsm.lat>=50].to_crs("EPSG:3338")
-OFF={"UNDE":(3,7),"STEI":(-17,-9),"TREE":(4,-9),"ABBY":(-21,5),"WREF":(4,-8),"SOAP":(-22,-3),"TEAK":(4,3),
-     "BLAN":(-19,6),"SCBI":(-20,-7),"SERC":(5,1),"TALL":(-17,7),"DELA":(-25,-4),"LENO":(4,-9),"ORNL":(-21,-7),
-     "GRSM":(4,-8),"MLBS":(-22,3),"BART":(3,5),"HARV":(5,-5),"JERC":(4,-7),"OSBS":(4,2),"BONA":(3,4),
-     "DEJU":(3,-9),"HEAL":(-22,-1),"UKFS":(3,4),"YELL":(3,4),"RMNP":(3,4)}
-def lab(axh,dd,fs=4.8):
-    for _,r in dd.iterrows():
-        dx,dy=OFF.get(r.siteID,(3,3))
-        axh.annotate(r.siteID,(r.geometry.x,r.geometry.y),fontsize=fs,color="#333333",xytext=(dx,dy),textcoords="offset points")
+def autolab(axh,xs,ys,names,fs=4.8):
+    txts=[axh.text(x_,y_,n_,fontsize=fs,color="#333333") for x_,y_,n_ in zip(xs,ys,names)]
+    adjust_text(txts,x=list(xs),y=list(ys),ax=axh,expand=(1.25,1.6),force_text=(0.4,0.6),
+                arrowprops=dict(arrowstyle="-",color="#999999",lw=0.4))
 vmin,vmax=sm.MAT_C.min(),sm.MAT_C.max()
 fig,ax=plt.subplots(1,2,figsize=(W,3.25),gridspec_kw={"width_ratios":[1.5,1]})
-conus.plot(ax=ax[0],color="#f1f1ef",edgecolor="#ffffff",lw=0.5)
-conus.boundary.plot(ax=ax[0],color="#c9c9c4",lw=0.35)
-sc=ax[0].scatter(p48.geometry.x,p48.geometry.y,c=p48.MAT_C,cmap="RdYlBu_r",vmin=vmin,vmax=vmax,s=40,edgecolor="#222222",linewidth=0.6,zorder=3)
-lab(ax[0],p48)
+conus_dom.plot(ax=ax[0],color="#f1f1ef",edgecolor="none")
+conus_dom.boundary.plot(ax=ax[0],color="#b3b3ad",lw=0.5)
+for _,r in conus_dom.iterrows():
+    pt=r.geometry.representative_point()
+    ax[0].text(pt.x,pt.y,f"D{int(r.DomainID):02d}",fontsize=4.3,color="#a8a8a2",ha="center",va="center",zorder=1)
+sc=ax[0].scatter(p48.geometry.x,p48.geometry.y,c=p48.MAT_C,cmap="RdYlBu_r",vmin=vmin,vmax=vmax,s=38,edgecolor="#222222",linewidth=0.6,zorder=3)
+autolab(ax[0],p48.geometry.x.values,p48.geometry.y.values,p48.siteID.values)
 ax[0].set_axis_off(); panel(ax[0],"(a)",0.01,0.97)
-# Alaska inset (its own Albers) at lower-left of panel a
+# Alaska inset (Alaska Albers, NEON domains D18/D19)
 axi=ax[0].inset_axes([0.00,0.02,0.30,0.34])
-ak.plot(ax=axi,color="#f1f1ef",edgecolor="#c9c9c4",lw=0.35)
-axi.scatter(pak.geometry.x,pak.geometry.y,c=pak.MAT_C,cmap="RdYlBu_r",vmin=vmin,vmax=vmax,s=28,edgecolor="#222222",linewidth=0.5,zorder=3)
-lab(axi,pak,fs=4.4)
+ak_dom.plot(ax=axi,color="#f1f1ef",edgecolor="none")
+ak_dom.boundary.plot(ax=axi,color="#b3b3ad",lw=0.4)
+axi.scatter(pak.geometry.x,pak.geometry.y,c=pak.MAT_C,cmap="RdYlBu_r",vmin=vmin,vmax=vmax,s=26,edgecolor="#222222",linewidth=0.5,zorder=3)
+autolab(axi,pak.geometry.x.values,pak.geometry.y.values,pak.siteID.values,fs=4.3)
 axi.set_xlim(-0.8e6,1.65e6); axi.set_ylim(0.4e6,2.4e6)
 axi.set_xticks([]); axi.set_yticks([])
 for sp in axi.spines.values(): sp.set_edgecolor("#aaaaaa"); sp.set_linewidth(0.6)
 axi.set_title("Alaska",fontsize=6,color="#555555",pad=1.5)
 cb=fig.colorbar(sc,ax=ax[0],shrink=0.62,pad=0.01,aspect=22); cb.set_label("Mean annual temperature (°C)",fontsize=7.5); cb.ax.tick_params(labelsize=7)
 cb.outline.set_visible(False)
-s2=ax[1].scatter(sm.MAT_C,sm.MAP_mm,c=sm.Hill_q1,cmap="viridis",s=44,edgecolor="#222222",linewidth=0.6)
-for _,r in sm.iterrows():
-    dx,dy=OFF.get(r.siteID,(3,3))
-    ax[1].annotate(r.siteID,(r.MAT_C,r.MAP_mm),fontsize=4.8,color="#333333",xytext=(dx,dy),textcoords="offset points")
+s2=ax[1].scatter(sm.MAT_C,sm.MAP_mm,c=sm.Hill_q1,cmap="viridis",s=42,edgecolor="#222222",linewidth=0.6,zorder=3)
+autolab(ax[1],sm.MAT_C.values,sm.MAP_mm.values,sm.siteID.values)
 ax[1].set_xlabel("Mean annual temperature (°C)"); ax[1].set_ylabel("Mean annual precipitation (mm)")
 panel(ax[1],"(b)",-0.22,1.00)
 cb2=fig.colorbar(s2,ax=ax[1],shrink=0.85,pad=0.03,aspect=22); cb2.set_label("Site-mean Hill q1",fontsize=7.5); cb2.ax.tick_params(labelsize=7)
