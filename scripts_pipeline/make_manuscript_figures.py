@@ -146,7 +146,7 @@ autolab(axk,akx,aky,pak.siteID.values,fs=4.8)
 axk.set_xlim(-0.9e6,1.7e6); axk.set_ylim(0.35e6,2.45e6)
 axk.set_xticks([]); axk.set_yticks([])
 for sp in axk.spines.values(): sp.set_edgecolor("#bbbbbb"); sp.set_linewidth(0.6)
-axk.text(0.5,-0.06,"Alaska (D18–D19)",transform=axk.transAxes,ha="center",fontsize=6.5,color="#555555")
+axk.text(0.5,1.03,"Alaska (D18–D19)",transform=axk.transAxes,ha="center",va="bottom",fontsize=6.5,color="#555555")
 # --- CONUS panel ---
 conus_dom.plot(ax=axu,color="#f4f4f2",edgecolor="none")
 conus_dom.boundary.plot(ax=axu,color="#b3b3ad",lw=0.5)
@@ -157,7 +157,8 @@ usx,usy=draw_sites(axu,p48,DOTOFF,34)
 autolab(axu,usx,usy,p48.siteID.values,fs=5.0)
 axu.set_axis_off()
 # --- continuous bivariate legend (MAT x MAP), bottom-left of the figure (below Alaska) ---
-lax=fig.add_axes([0.055,0.10,0.125,0.33])
+_figw,_figh=fig.get_size_inches(); _lh=0.30; _lw=_lh*_figh/_figw   # square legend (in inches)
+lax=fig.add_axes([0.050,0.09,_lw,_lh])
 NG=200
 grid=np.zeros((NG,NG,3))
 for j,y in enumerate(np.linspace(0,1,NG)):
