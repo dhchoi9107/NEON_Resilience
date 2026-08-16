@@ -55,25 +55,27 @@ BAYES_RESP={"Hill q1":"Hill_q1","LCBD nestedness":"LCBD_nestedness_rare"}
 
 # ================= FIGURE 1 : conceptual framework =================
 fig,ax=plt.subplots(figsize=(W,4.1)); ax.set_xlim(0,10); ax.set_ylim(0,10); ax.axis("off")
-def cbox(x,y,w,h,lines,fc,ec,title_c=None,fs=7.6):
-    ax.add_patch(FancyBboxPatch((x,y),w,h,boxstyle="round,pad=0.10",fc=fc,ec=ec,lw=1.1))
+from matplotlib.patches import Rectangle
+def cbox(x,y,w,h,lines,accent=None,fs=7.6):
+    ax.add_patch(FancyBboxPatch((x,y),w,h,boxstyle="round,pad=0.10",fc="white",ec="#7a7a7a",lw=0.9))
+    if accent: ax.add_patch(Rectangle((x-0.06,y-0.06),0.14,h+0.12,fc=accent,ec="none",zorder=3))
     t0=lines[0]; rest="\n".join(lines[1:])
-    ax.text(x+w/2,y+h-0.34,t0,ha="center",va="center",fontsize=fs+0.6,fontweight="bold",color=title_c or ec)
-    if rest: ax.text(x+w/2,y+(h-0.62)/2,rest,ha="center",va="center",fontsize=fs,color="#333333")
+    ax.text(x+w/2,y+h-0.34,t0,ha="center",va="center",fontsize=fs+0.6,fontweight="bold",color="#111111")
+    if rest: ax.text(x+w/2,y+(h-0.62)/2,rest,ha="center",va="center",fontsize=fs,color="#444444")
 def carrow(x1,y1,x2,y2,color,lw,label,lab_t=0.5,lab_dy=0.22,curve=0.0):
     ax.add_patch(FancyArrowPatch((x1,y1),(x2,y2),arrowstyle="-|>",mutation_scale=11,color=color,lw=lw,
                                  shrinkA=3,shrinkB=3,connectionstyle=f"arc3,rad={curve}"))
     lx,ly=x1+lab_t*(x2-x1),y1+lab_t*(y2-y1)
     ax.text(lx,ly+lab_dy,label,ha="center",fontsize=6.8,color=color,fontstyle="italic")
 LH=1.62; ys=[8.20,6.15,3.90,1.65]
-cbox(0.25,ys[0],3.15,LH,["Static canopy structure","airborne LiDAR","(VCI, LAI, rugosity, vertical CV)"],"#e8eef5",C_STR)
-cbox(0.25,ys[1],3.15,LH,["Spectral greenness","BRDF-corrected VIs (EVI)","weakest dimension"],"#f2f8fc","#5da9c9")
-cbox(0.25,ys[2],3.15,LH,["Structural dynamics","repeat-LiDAR interannual trends","state → trajectory"],"#e7f4f2",C_DYN)
-cbox(0.25,ys[3],3.15,LH,["Ecosystem productivity","independent GPP","(MODIS, PML-V2, flux towers)"],"#f8efe6",C_PRO)
-cbox(6.60,ys[0],3.15,LH,["Alpha diversity","Hill q1 / q2","local richness"],"#f5f5f5","#444444","#111111")
-cbox(6.60,ys[1],3.15,LH,["Beta: turnover","species replacement","lateral, spatial contrast"],"#f5f5f5","#444444","#111111")
-cbox(6.60,ys[2],3.15,LH,["Beta: nestedness","richness difference","directional loss / gain"],"#f5f5f5","#444444","#111111")
-cbox(6.60,ys[3],3.15,LH,["Species–energy","site-mean diversity vs GPP","monotonic, no hump"],"#f5f5f5","#444444","#111111")
+cbox(0.25,ys[0],3.15,LH,["Static canopy structure","airborne LiDAR","(VCI, LAI, rugosity, vertical CV)"],accent=C_STR)
+cbox(0.25,ys[1],3.15,LH,["Spectral greenness","BRDF-corrected VIs (EVI)","weakest dimension"],accent=C_SPE)
+cbox(0.25,ys[2],3.15,LH,["Structural dynamics","repeat-LiDAR interannual trends","state → trajectory"],accent=C_DYN)
+cbox(0.25,ys[3],3.15,LH,["Ecosystem productivity","independent GPP","(MODIS, PML-V2, flux towers)"],accent=C_PRO)
+cbox(6.60,ys[0],3.15,LH,["Alpha diversity","Hill q1 / q2","local richness"])
+cbox(6.60,ys[1],3.15,LH,["Beta: turnover","species replacement","lateral, spatial contrast"])
+cbox(6.60,ys[2],3.15,LH,["Beta: nestedness","richness difference","directional loss / gain"])
+cbox(6.60,ys[3],3.15,LH,["Species–energy","site-mean diversity vs GPP","monotonic, no hump"])
 yc=[y+LH/2 for y in ys]
 carrow(3.45,yc[0]+0.25,6.55,yc[0]+0.25,C_STR,2.6,"predictor levels (strongest)",0.5,0.24)
 carrow(3.45,yc[1]+0.30,6.55,yc[0]-0.30,"#5da9c9",1.1,"alpha only",0.80,-0.34)
@@ -179,7 +181,7 @@ def forest(sub_ax,resp_label):
     for tl,p in zip(sub_ax.get_yticklabels(),order): tl.set_color(CBLK[blk(p)])
     sub_ax.set_xlabel("Standardized β (95% HDI)"); sub_ax.set_xlim(-0.55,0.66)
     m=bm.loc[rr]
-    sub_ax.set_title(f"{resp_label}   (0 divergences, R̂ ≤ {m['max_rhat']:.3f}, n = {int(m['n'])})",fontsize=7.4,loc="left",color="#444444")
+    sub_ax.set_title(f"{resp_label}   (n = {int(m['n'])})",fontsize=7.6,loc="left",color="#444444")
 FOREST_ORDER=[("Hill q1","Hill_q1","(c)"),("Hill q2","Hill_q2","(d)"),
               ("LCBD turnover","LCBD_turnover_rare","(e)"),("LCBD nestedness","LCBD_nestedness_rare","(f)")]
 BAYES_RESP={lbl:rr for lbl,rr,_ in FOREST_ORDER if rr in set(bc.response)}
@@ -232,7 +234,7 @@ for a,(xx,r,xlab,letter) in zip(ax,[(xst,rst,"Structural distance (Euclidean)","
     a.text(0.03,0.045,f"Mantel r = {r:+.2f} (Spearman), p = 0.001",transform=a.transAxes,fontsize=7.2,color="#222222")
     panel(a,letter,-0.14 if letter=="(a)" else -0.06,1.00)
 ax[0].set_ylabel("Compositional dissimilarity (Bray–Curtis)")
-ax[0].legend(frameon=False,loc="lower right",fontsize=7)
+ax[0].legend(frameon=False,loc="upper right",fontsize=7,bbox_to_anchor=(1.0,0.93))
 cb=fig.colorbar(hbs[1],ax=ax,shrink=0.85,pad=0.015,aspect=26)
 cb.set_label("Number of plot pairs (log scale)",fontsize=7.5); cb.ax.tick_params(labelsize=7); cb.outline.set_visible(False)
 fig.savefig(FIG+"/Figure_4.png",bbox_inches="tight"); plt.close(fig)
@@ -288,21 +290,24 @@ for yi,r in zip(ysig,sig.itertuples()):
     a.text(1.02,yi,qtxt,transform=a.get_yaxis_transform(),fontsize=5.8,color="#777777",va="center",ha="left")
 a.axvline(0,color="#999999",lw=0.7,ls="--")
 a.set_yticks(ysig); a.set_yticklabels(sig.label,fontsize=6.4)
-a.set_xlabel("Interaction β (±95% CI)")
+a.set_xlabel("Interaction β (±95% CI); q = FDR-adjusted p")
 from matplotlib.lines import Line2D
 a.legend(handles=[Line2D([0],[0],color=FAMC["disturbance"],lw=2,label="Disturbance"),
                   Line2D([0],[0],color=FAMC["land use"],lw=2,label="Land use")],
-         frameon=False,loc="lower right",fontsize=6.5)
+         frameon=False,loc="upper left",fontsize=6.5,handlelength=1.4,borderaxespad=0.1)
 panel(a,"(a)",-0.52,1.02)
 for a,(g4,col,xt,note,letter) in zip(ax[1:],[
     (gA,C_PRO,["−1 SD\n(younger)","Mean","+1 SD\n(older)"],"MODIS GPP → Hill q1\nby stand age (ns, q = 0.26)","(b)"),
     (gB,C_STR,["−1 SD\n(least dist.)","Mean","+1 SD\n(most dist.)"],"VCI → Hill q1\nby disturbance severity","(c)")]):
     a.errorbar(z,g4.slope,yerr=1.96*g4.se,marker="o",capsize=3,color=col,lw=1.4,ms=4.5)
-    for zz,sl,pv in zip(z,g4.slope,g4.p):
-        a.annotate(f"{sl:+.2f}{'*' if pv<0.05 else ''}",(zz,sl),textcoords="offset points",xytext=(6,4),color=col,fontsize=6.4)
+    tops=(g4.slope+1.96*g4.se).values; bots=(g4.slope-1.96*g4.se).values
+    for zz,sl,tp,pv in zip(z,g4.slope,tops,g4.p):
+        a.annotate(f"{sl:+.2f}{'*' if pv<0.05 else ''}",(zz,tp),textcoords="offset points",xytext=(0,3),
+                   color=col,fontsize=6.4,ha="center")
     a.axhline(0,color="#999999",lw=0.7,ls="--")
     a.set_xticks(z); a.set_xticklabels(xt,fontsize=6.2); a.set_xlim(-1.55,1.55)
-    a.text(0.04,0.97,note,transform=a.transAxes,fontsize=6.4,color="#444444",va="top")
+    a.set_ylim(min(-0.02,bots.min()-0.04),tops.max()+0.15)
+    a.text(0.04,0.975,note,transform=a.transAxes,fontsize=6.4,color="#444444",va="top")
     panel(a,letter,-0.16,1.02)
 ax[1].set_ylabel("Simple slope on Hill q1 (per 1 SD)",fontsize=7.5)
 fig.tight_layout(); fig.savefig(FIG+"/Figure_6.png",bbox_inches="tight"); plt.close(fig)
