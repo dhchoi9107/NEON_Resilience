@@ -51,12 +51,12 @@ Climate = NEON site-level mean annual temperature and precipitation (`data/site_
 
 **(a) Does GPP add beyond climate alone? (the species–energy signal is not a climate artifact)**
 
-| response | R² climate only | ΔR² GPP beyond climate | p | MODIS β (clustered) | p |
-|---|---|---|---|---|---|
-| Hill q1 | 0.052 | **0.209** | 1.4e-35 | **+0.240** | 0.033 |
-| Hill q2 | 0.053 | 0.185 | 3.4e-31 | +0.205 | 0.049 |
-| Turnover | 0.153 | 0.200 | 1.3e-34 | +0.056 | 0.128 |
-| Nestedness | 0.094 | 0.056 | 9.0e-09 | −0.019 | 0.053 |
+| response | R² climate only | ΔR² GPP beyond climate | p | PML-V2 β (clustered) |
+|---|---|---|---|---|
+| Hill q1 | 0.052 | 0.209 | 1.4e-35 | +0.284 |
+| Hill q2 | 0.053 | 0.185 | 3.4e-31 | +0.243 |
+| Turnover | 0.153 | 0.200 | 1.3e-34 | +0.124 |
+| Nestedness | 0.094 | 0.056 | 9.0e-09 | -0.005 |
 
 **(b) Structural-dynamics increment under the domain versus climate baseline (LRT p)**
 
@@ -70,35 +70,27 @@ Climate = NEON site-level mean annual temperature and precipitation (`data/site_
 The domain baseline is much stronger than the climate baseline (Hill q1 R² = 0.490 versus 0.052) because domain fixed effects absorb climatic **and** non-climatic biogeography (species pools, soils). Domain is therefore retained as the primary control, and climate serves as the explicit "beyond-climate" check. The dynamics increment is significant under both baselines for every response.
 
 ## Supplementary Table S6 — Context interactions surviving FDR (framework predictors, cluster-robust, BH within family)
-The same retained predictors as the plot-level models (4 structural + EVI + 2 GPP products) crossed with each context variable: 168 terms, of which 7 survive Benjamini–Hochberg correction within family. Source: `o4_interactions_consistent.csv`.
+The same retained predictors as the plot-level models (4 structural + EVI + PML-V2 GPP) crossed with each context variable: 144 terms, of which 5 survive Benjamini–Hochberg correction within family. Source: `o4_interactions_pml.csv`.
 
 | family | context | response | predictor | β interaction | q |
 |---|---|---|---|---|---|
 | disturbance | severity | Hill q1 | LAI | −0.112 | 0.004 |
 | disturbance | severity | Hill q2 | LAI | −0.106 | 0.004 |
-| disturbance | recency | Hill q1 | MODIS GPP | −0.147 | 0.006 |
-| disturbance | recency | Hill q2 | MODIS GPP | −0.143 | 0.005 |
 | land use | forest fraction | turnover | EVI | −0.056 | <0.001 |
 | land use | edge density | turnover | EVI | +0.060 | 0.001 |
 | land use | land-cover diversity | turnover | EVI | +0.049 | 0.009 |
 
-Interpretation: the structure–diversity coupling weakens with disturbance severity, and the productivity–diversity coupling weakens with disturbance recency (both negative). The three surviving land-use terms all involve the spectral index and compositional turnover, and are reported as exploratory. No stand-age interaction survives correction (the GPP × stand-age term has q = 0.26), so the age moderation is reported as suggestive only.
+Interpretation: the structure–diversity coupling weakens with disturbance severity (negative LAI × severity for both alpha metrics). The three surviving land-use terms all involve the spectral index and compositional turnover, and are reported as exploratory. No stand-age interaction survives correction, so the age moderation is reported as directionally consistent but unsupported.
 
-## Supplementary Table S7 — Plot-level productivity diagnostic: product-specificity and suppression
-Why productivity is analysed at the site scale (Section 3.5). Turnover response, plot level, domain fixed effects + site-clustered SE, all predictors and the response standardized (single consistent scale). n = 579; r(MODIS, PML) = 0.87. Source: `gpp_suppression_26.csv` (script `recompute_suppression_26.py`).
+## Supplementary Table S7 — Plot-level productivity diagnostic
+Why productivity is analysed at the site scale (Section 3.5). Plot level, domain fixed effects + site-clustered SE, all predictors and the response standardized. Source: `gpp_suppression_26.csv` (script `recompute_suppression_26.py`).
 
-| model | product | β (fully standardized) | p (clustered) |
+| response | PML-V2 β (fully standardized) | p (clustered) | ΔR² beyond state + dynamics |
 |---|---|---|---|
-| MODIS only | MODIS GPP | −0.030 | 0.850 |
-| PML only | PML GPP | +0.273 | 0.151 |
-| joint | MODIS GPP | −0.233 | 0.054 |
-| joint | PML GPP | +0.367 | 0.040 |
+| Hill q1 | +0.151 | 0.056 | 0.003 |
+| Turnover | +0.273 | 0.151 | 0.011 |
 
-Neither product is associated with turnover on its own; entered jointly they take opposing signs with inflated magnitudes — a suppression signature between two highly correlated products. We therefore decline any directional plot-level reading and analyse productivity at the site scale.
-
-Simple slopes (`simple_slopes.csv`), Hill q1, at −1 SD / mean / +1 SD of the moderator:
-- MODIS GPP × stand age: +0.17 (p = 0.135), +0.27 (p = 0.014), +0.38 (p = 0.007) — the interaction itself does not survive FDR (q = 0.26).
-- VCI × disturbance severity: +0.39, +0.30, +0.21 (all p < 0.001).
+Neither increment reaches significance, so productivity adds little at the plot grain. For completeness we note the collinearity artifact that motivated carrying a single satellite product: with r = 0.87 between MOD17 and PML-V2, entering both in the turnover model made their coefficients oppose and inflate (MODIS −0.233, p = 0.054; PML +0.367, p = 0.040) although neither was associated with turnover alone (MODIS −0.030, p = 0.850; PML +0.273, p = 0.151) — a textbook suppression pattern rather than added information.
 
 ## Supplementary Methods S8 — Four-method triangulation of the plot-level framework (statistical robustness)
 
@@ -140,3 +132,12 @@ Structure is the largest unique alpha block; dynamics the largest unique nestedn
 **Method 4 — Restricted-permutation Mantel (beta, §3.1b).** Within-site (plots permuted only within sites; biogeography held fixed), 999 permutations, 23 sites. Structural distance vs Bray–Curtis: Mantel r = +0.264 (Pearson) / +0.32 (Spearman); spectral distance r = +0.293 / +0.30; both p = 0.001. Rank-based estimates are reported in the main text as robust to the Bray–Curtis = 1 ceiling.
 
 **Bottom line.** The framework conclusions are not artifacts of one inferential recipe: structure→alpha and dynamics→nestedness hold under partial-pooling Bayesian estimation and formal variation partitioning, and the beta/heterogeneity signal holds under both a saturation (GDM) model and restricted-permutation Mantel tests. The only substantive change relative to the conservative wild-bootstrap joint test is that the Bayesian coefficient-level analysis elevates dynamics→nestedness from "descriptive" to "credibly supported" (adopted in §3.1, §3.3, §4.2).
+
+## Supplementary Table S9 — MODIS MOD17 cross-check (site level)
+MOD17 is not carried into the models (Section 2.3) but reproduces the site-level species–energy result, confirming that the conclusion is not specific to the chosen satellite product.
+
+| comparison | PML-V2 (used) | MODIS MOD17 (cross-check) |
+|---|---|---|
+| r with site-mean Hill q1 | +0.50 (p = 0.009) | +0.60 (p = 0.001) |
+| r with eddy-covariance tower GPP | +0.86 | +0.85 |
+| quadratic (hump) term | not supported | not supported |

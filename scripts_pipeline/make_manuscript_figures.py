@@ -73,7 +73,7 @@ LH=1.62; ys=[8.20,6.15,3.90,1.65]
 cbox(0.25,ys[0],3.15,LH,["Static canopy structure","airborne LiDAR","(VCI, LAI, rugosity, vertical CV)"],accent=C_STR)
 cbox(0.25,ys[1],3.15,LH,["Spectral greenness","BRDF-corrected VIs (EVI)","weakest dimension"],accent=C_SPE)
 cbox(0.25,ys[2],3.15,LH,["Structural dynamics","repeat-LiDAR interannual trends","state → trajectory"],accent=C_DYN)
-cbox(0.25,ys[3],3.15,LH,["Ecosystem productivity","independent GPP","(MODIS, PML-V2, flux towers)"],accent=C_PRO)
+cbox(0.25,ys[3],3.15,LH,["Ecosystem productivity","independent GPP","(PML-V2 satellite, flux towers)"],accent=C_PRO)
 cbox(6.60,ys[0],3.15,LH,["Alpha diversity","Hill q1 / q2","local richness"])
 cbox(6.60,ys[1],3.15,LH,["Beta: turnover","species replacement","lateral, spatial contrast"])
 cbox(6.60,ys[2],3.15,LH,["Beta: nestedness","richness difference","directional loss / gain"])
@@ -296,11 +296,11 @@ rt,pt=st.pearsonr(tv.tower_gpp,tv.Hill_q1)
 t2=tv.assign(z=(tv.tower_gpp-tv.tower_gpp.mean())/tv.tower_gpp.std()); qt=smf.ols("Hill_q1 ~ z + I(z**2)",t2).fit().pvalues["I(z ** 2)"]
 rp_,pp_=st.pearsonr(site.pml,site.Hill_q1); rvt=st.pearsonr(tv.pml,tv.tower_gpp)[0]
 sm_=site.dropna(subset=["modis"]); rm_,pm_=st.pearsonr(sm_.modis,sm_.Hill_q1); rmt=st.pearsonr(tv.modis,tv.tower_gpp)[0]
-fig,ax=plt.subplots(1,3,figsize=(W,2.75),sharey=True)
+fig,ax=plt.subplots(1,2,figsize=(W*0.72,2.9),sharey=True)
 for a,(d3,xc,xl,note,col,letter) in zip(ax,[
     (tv,"tower_gpp","Tower GPP (gC m$^{-2}$ yr$^{-1}$)",f"r = {rt:+.2f}, p = {pt:.3f}\nquadratic ns (p = {qt:.2f})",C_PRO,"(a)"),
-    (site,"pml","Site-mean PML-V2 GPP",f"r = {rp_:+.2f}, p = {pp_:.3f}\nvs tower r = +{rvt:.2f}","#2a6f4e","(b)"),
-    (sm_,"modis","Site-mean MODIS GPP",f"r = {rm_:+.2f}, p = {pm_:.3f}\nvs tower r = +{rmt:.2f}","#556b2f","(c)")]):
+    (site,"pml","Site-mean PML-V2 GPP",f"r = {rp_:+.2f}, p = {pp_:.3f}\nvs tower r = +{rvt:.2f}","#2a6f4e","(b)")
+    ]):
     a.scatter(d3[xc],d3.Hill_q1,s=24,color=col,edgecolor="white",linewidth=0.5,zorder=3)
     for _,row in d3.iterrows(): a.annotate(row.siteID,(row[xc],row.Hill_q1),fontsize=4.0,color="#666666",xytext=(2.2,1.8),textcoords="offset points")
     b1,b0=np.polyfit(d3[xc],d3.Hill_q1,1); xr=np.linspace(d3[xc].min(),d3[xc].max(),50); a.plot(xr,b0+b1*xr,color="#222222",lw=1.3)
@@ -309,21 +309,21 @@ for a,(d3,xc,xl,note,col,letter) in zip(ax,[
     panel(a,letter,-0.20 if letter=="(a)" else -0.08,1.00)
 ax[0].set_ylabel("Site-mean tree diversity (Hill q1)")
 fig.tight_layout(); fig.savefig(FIG+"/Figure_5.png",bbox_inches="tight"); plt.close(fig)
-print(f"VERIFY Fig5: tower r={rt:+.2f} p={pt:.3f} (+0.59, 0.004), quad p={qt:.2f} (0.87), PML r={rp_:+.2f}, MODIS r={rm_:+.2f}, PML-tower +{rvt:.2f} (+0.86), MODIS-tower +{rmt:.2f}, n_tower={len(tv)} (22)")
+print(f"VERIFY Fig5: tower r={rt:+.2f} p={pt:.3f} (+0.59,0.004), quad p={qt:.2f} (0.87), PML r={rp_:+.2f} (+0.50), PML-tower +{rvt:.2f} (+0.86), n_tower={len(tv)} (22) | MODIS supplement-only r={rm_:+.2f}, vs tower +{rmt:.2f}")
 
 # ================= FIGURE 6 : context moderation =================
 # (a) all FDR-surviving interaction terms from the full screen (168 terms; incl. spectral x land use)
-o4=pd.read_csv(RES+"/o4_interactions_consistent.csv"); sig=o4[o4.q<0.05].copy()
+o4=pd.read_csv(RES+"/o4_interactions_pml.csv"); sig=o4[o4.q<0.05].copy()
 zcrit=st.norm.ppf(1-sig.p/2); sig["se_appx"]=np.abs(sig.beta_int)/zcrit    # Wald-reconstructed SE
-RSN={"LAI_mean":"LAI","VCI_mean":"VCI","EVI_mean":"EVI","modis_gpp":"MODIS GPP","pml_gpp":"PML GPP"}
+RSN={"LAI_mean":"LAI","VCI_mean":"VCI","EVI_mean":"EVI","pml_gpp":"PML GPP"}
 CTXN={"severity":"severity","recency":"recency","lc_shannon":"land-cover diversity","lc_edge":"edge density",
       "forest_frac":"forest fraction","lc_forest_frac":"forest fraction","stand_age_gami":"stand age"}
 RESPN={"Hill q1":"Hill q1","Hill q2":"Hill q2","turnover":"Turnover","nestedness":"Nestedness","Turnover":"Turnover","Nestedness":"Nestedness"}
 FAMC={"disturbance":C_STR,"land use":"#7d5ba6","stand age":C_PRO}
 sig["label"]=[f"{RSN.get(r.rs,r.rs)} × {CTXN.get(r.context,r.context)} → {RESPN.get(r.response,r.response)}" for r in sig.itertuples()]
 sig=sig.sort_values(["family","beta_int"]).reset_index(drop=True)
-ss=pd.read_csv(RES+"/simple_slopes.csv"); z=[-1,0,1]
-gA=ss[(ss.rp=="Hill q1")&(ss.rs=="modis_gpp")&(ss.ctx=="stand_age_gami")].sort_values("ctx_z")
+ss=pd.read_csv(RES+"/simple_slopes_pml.csv"); z=[-1,0,1]
+gA=ss[(ss.rp=="Hill q1")&(ss.rs=="pml_gpp")&(ss.ctx=="stand_age_gami")].sort_values("ctx_z")
 gB=ss[(ss.rp=="Hill q1")&(ss.rs=="VCI_mean")&(ss.ctx=="severity")].sort_values("ctx_z")
 fig,ax=plt.subplots(1,3,figsize=(W*1.15,3.0),gridspec_kw={"width_ratios":[1.35,1,1],"wspace":0.32})
 a=ax[0]; ysig=np.arange(len(sig))
@@ -357,5 +357,5 @@ for a,(g4,col,xt,note,letter) in zip(ax[1:],[
     panel(a,letter,-0.20,1.02)
 ax[1].set_ylabel("Simple slope on Hill q1 (per 1 SD)",fontsize=8)
 fig.tight_layout(); fig.savefig(FIG+"/Figure_6.png",bbox_inches="tight"); plt.close(fig)
-print(f"VERIFY Fig6: FDR-sig interactions={len(sig)} (7: 4 disturbance + 3 land use) | MODISxAge slopes={[round(v,2) for v in gA.slope]} | VCIxSev={[round(v,2) for v in gB.slope]}")
+print(f"VERIFY Fig6: FDR-sig interactions={len(sig)} (5: 2 disturbance + 3 land use) | MODISxAge slopes={[round(v,2) for v in gA.slope]} | VCIxSev={[round(v,2) for v in gB.slope]}")
 print("ALL FIGURES SAVED ->",FIG)
