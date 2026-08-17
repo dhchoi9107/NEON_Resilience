@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Recompute the plot-level GPP suppression diagnostic (Results 3.5) on the current
-26-site sample with a SINGLE consistent scale (fully standardized: both predictors
-and response z-scored), because the previous table mixed raw-scale "alone" models
-with standardized "joint" models. Domain FE + site-clustered SE, same retained
+Plot-level GPP diagnostic (Results 3.5): does satellite GPP add anything beyond
+canopy state and dynamics at the plot grain? Fully standardized (predictors and
+response z-scored), domain FE + site-clustered SE, same retained predictors as the
+plot-level framework. Domain FE + site-clustered SE, same retained
 predictors as the plot-level framework.
-Out: results/O0_framework/gpp_suppression_26.csv
+Out: results/O0_framework/gpp_plot_diagnostic_26.csv
 """
 import os, warnings, numpy as np, pandas as pd; warnings.filterwarnings("ignore")
 import statsmodels.formula.api as smf
@@ -36,6 +36,6 @@ for resp in ["LCBD_turnover_rare","Hill_q1"]:
                          "p_clustered":round(float(m.pvalues[g]),4),
                          "r_modis_pml":round(float(r_gpp),4)})
 out = pd.DataFrame(rows)
-out.to_csv(os.path.join(RES,"gpp_suppression_26.csv"), index=False)
+out.to_csv(os.path.join(RES,"gpp_plot_diagnostic_26.csv"), index=False)
 print(out.to_string(index=False))
-print("\nsaved -> gpp_suppression_26.csv")
+print("\nsaved -> gpp_plot_diagnostic_26.csv")

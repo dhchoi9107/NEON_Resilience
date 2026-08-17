@@ -1,6 +1,6 @@
 # Supplementary Information (stub)
 
-Reproducibility: the plot-level framework and its block tests are produced by `scripts_pipeline/framework_state_dynamics.py`; the Bayesian models by `bayes_multilevel.py` (prior check: `bayes_prior_sens.py`); the dissimilarity analyses by `rs_beta_mantel.py` and `rs_beta_gdm_full.py`; the productivity diagnostic by `recompute_suppression_26.py`. All numbers in the main text are re-derived from the source data by `verify_manuscript_numbers.py`.
+Reproducibility: the plot-level framework and its block tests are produced by `scripts_pipeline/framework_state_dynamics.py`; the Bayesian models by `bayes_multilevel.py` (prior check: `bayes_prior_sens.py`); the dissimilarity analyses by `rs_beta_mantel.py` and `rs_beta_gdm_full.py`; the productivity diagnostic by `plot_level_gpp_diagnostic.py`. All numbers in the main text are re-derived from the source data by `verify_manuscript_numbers.py`.
 
 ## Supplementary Methods S1 — Regression-to-the-mean (RTM) null model
 Apparent buffering or amplification between initial canopy structure and subsequent structural change was tested against a regression-to-the-mean null. The null assumes no biological feedback between initial state and subsequent change while preserving the observed variance and measurement error of the repeated LiDAR observations; expected initial–change relationships under pure RTM were simulated and compared with the observed slopes. Only observed relationships exceeding the RTM envelope were interpreted as biological regulation.
@@ -83,14 +83,14 @@ The same retained predictors as the plot-level models (4 structural + EVI + PML-
 Interpretation: the structure–diversity coupling weakens with disturbance severity (negative LAI × severity for both alpha metrics). The three surviving land-use terms all involve the spectral index and compositional turnover, and are reported as exploratory. No stand-age interaction survives correction, so the age moderation is reported as directionally consistent but unsupported.
 
 ## Supplementary Table S7 — Plot-level productivity diagnostic
-Why productivity is analysed at the site scale (Section 3.5). Plot level, domain fixed effects + site-clustered SE, all predictors and the response standardized. Source: `gpp_suppression_26.csv` (script `recompute_suppression_26.py`).
+Why productivity is analysed at the site scale (Section 3.5). Plot level, domain fixed effects + site-clustered SE, all predictors and the response standardized. Source: `gpp_plot_diagnostic_26.csv` (script `plot_level_gpp_diagnostic.py`).
 
 | response | PML-V2 β (fully standardized) | p (clustered) | ΔR² beyond state + dynamics |
 |---|---|---|---|
 | Hill q1 | +0.151 | 0.056 | 0.003 |
 | Turnover | +0.273 | 0.151 | 0.011 |
 
-Neither increment reaches significance, so productivity adds little at the plot grain. For completeness we note the collinearity artifact that motivated carrying a single satellite product: with r = 0.87 between MOD17 and PML-V2, entering both in the turnover model made their coefficients oppose and inflate (MODIS −0.233, p = 0.054; PML +0.367, p = 0.040) although neither was associated with turnover alone (MODIS −0.030, p = 0.850; PML +0.273, p = 0.151) — a textbook suppression pattern rather than added information.
+Neither increment reaches significance, so productivity adds little at the plot grain; it is analysed at the site scale instead (Section 3.5).
 
 ## Supplementary Methods S8 — Four-method triangulation of the plot-level framework (statistical robustness)
 
@@ -134,7 +134,7 @@ Structure is the largest unique alpha block; dynamics the largest unique nestedn
 **Bottom line.** The framework conclusions are not artifacts of one inferential recipe: structure→alpha and dynamics→nestedness hold under partial-pooling Bayesian estimation and formal variation partitioning, and the beta/heterogeneity signal holds under both a saturation (GDM) model and restricted-permutation Mantel tests. The only substantive change relative to the conservative wild-bootstrap joint test is that the Bayesian coefficient-level analysis elevates dynamics→nestedness from "descriptive" to "credibly supported" (adopted in §3.1, §3.3, §4.2).
 
 ## Supplementary Table S9 — MODIS MOD17 cross-check (site level)
-MOD17 is not carried into the models (Section 2.3) but reproduces the site-level species–energy result, confirming that the conclusion is not specific to the chosen satellite product.
+The site-level species–energy result is reproduced by the alternative MOD17 product, confirming that it is not specific to the satellite product used.
 
 | comparison | PML-V2 (used) | MODIS MOD17 (cross-check) |
 |---|---|---|
