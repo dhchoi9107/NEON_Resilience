@@ -228,7 +228,7 @@ def forest(sub_ax,resp_label):
     m=bm.loc[rr]
     sub_ax.set_title(f"{resp_label}   (n = {int(m['n'])})",fontsize=7.6,loc="left",color="#444444")
 FOREST_ORDER=[("Hill q1","Hill_q1","(c)"),("Hill q2","Hill_q2","(d)"),
-              ("LCBD turnover","LCBD_turnover_rare","(e)"),("LCBD nestedness","LCBD_nestedness_rare","(f)")]
+              ("Turnover","LCBD_turnover_rare","(e)"),("Nestedness","LCBD_nestedness_rare","(f)")]
 BAYES_RESP={lbl:rr for lbl,rr,_ in FOREST_ORDER if rr in set(bc.response)}
 slots=[gs[1,0],gs[1,1],gs[2,0],gs[2,1]]
 for (lbl,rr,letter),slot in zip(FOREST_ORDER,slots):

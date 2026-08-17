@@ -12,13 +12,13 @@ Restricted wild cluster bootstrap (Rademacher, 999 reps), the primary block test
 |---|---|---|---|---|
 | Hill q1 | 2e-4 | **0.058** | 0.059 | **0.128** |
 | Hill q2 | 1e-4 | **0.062** | 0.074 | **0.114** |
-| LCBD turnover | 0.61 | **0.764** | 4e-4 | **0.003** |
-| LCBD nestedness | 0.012 | **0.241** | 0.071 | **0.167** |
+| Turnover | 0.61 | **0.764** | 4e-4 | **0.003** |
+| Nestedness | 0.012 | **0.241** | 0.071 | **0.167** |
 
 Only the productivity→turnover increment survives the wild bootstrap; dynamics increments are marginal (alpha) to non-significant (beta). The variance partition (Table S3) is descriptive and unaffected.
 
 ## Supplementary Table S7 — Productivity–turnover: product-specificity & suppression; simple slopes
-GPP suppression for LCBD turnover (`gpp_suppression.csv`): r(MODIS, PML) = 0.75; VIF between products = 2.25.
+GPP suppression for Turnover (`gpp_suppression.csv`): r(MODIS, PML) = 0.75; VIF between products = 2.25.
 
 | model | MODIS b | MODIS p | PML b | PML p |
 |---|---|---|---|---|
@@ -40,8 +40,8 @@ Hill numbers log-transformed (satisfies homoscedasticity/normality: Breusch–Pa
 | Hill q1 | 3.5e-11 | 2.2e-13 | 0.019 | 0.009 |
 | Hill q2 | 4.9e-09 | 3.4e-12 | 0.032 | 0.018 |
 
-## Supplementary Table S2 — LCBD: Gaussian OLS vs beta regression (nested LRT p)
-LCBD are bounded proportions; beta regression as robustness. Conclusions identical except the nestedness productivity increment (bold), reported conservatively from the Gaussian model in the main text.
+## Supplementary Table S2 — Beta components: Gaussian OLS vs beta regression (nested LRT p)
+The beta components are bounded proportions; beta regression as robustness. Conclusions identical except the nestedness productivity increment (bold), reported conservatively from the Gaussian model in the main text.
 
 | response | model | dynamics (M1→M2) | function (M2→M3) |
 |---|---|---|---|
@@ -57,8 +57,8 @@ Main text reports unique (semi-partial R²); shared fractions here. Source: `res
 |---|---|---|---|---|---|
 | Hill q1 | 0.106 | 0.010 | 0.069 | 0.008 | 0.016 |
 | Hill q2 | 0.105 | 0.013 | 0.070 | 0.008 | 0.013 |
-| LCBD turnover | 0.020 | 0.005 | 0.017 | 0.029 | 0.011 |
-| LCBD nestedness | 0.049 | 0.001 | 0.071 | 0.008 | 0.021 |
+| Turnover | 0.020 | 0.005 | 0.017 | 0.029 | 0.011 |
+| Nestedness | 0.049 | 0.001 | 0.071 | 0.008 | 0.021 |
 
 ## Supplementary Table S6 — Context interactions (framework predictors, cluster-robust, BH per family)
 Same retained predictors as the nested models (4 structure + EVI + 2 GPP) × context. 168 terms; 11 survive BH. Script `158_o4_consistent.py`; full table `results/O0_framework/o4_interactions_consistent.csv`.
@@ -88,8 +88,8 @@ Climate = NEON site-level mean annual temperature and precipitation (`data/site_
 |---|---|---|---|---|---|
 | Hill q1 | 0.071 | **0.180** | <0.001 | **+0.197** | 0.019 |
 | Hill q2 | 0.055 | 0.159 | <0.001 | +0.165 | 0.039 |
-| LCBD turnover | 0.339 | 0.140 | <0.001 | +0.026 | 0.141 |
-| LCBD nestedness | 0.022 | 0.027 | 0.003 | −0.014 | 0.061 |
+| Turnover | 0.339 | 0.140 | <0.001 | +0.026 | 0.141 |
+| Nestedness | 0.022 | 0.027 | 0.003 | −0.014 | 0.061 |
 
 **(b) RS increments under domain vs climate baseline (LRT p)**
 
@@ -97,10 +97,10 @@ Climate = NEON site-level mean annual temperature and precipitation (`data/site_
 |---|---|---|---|---|
 | Hill q1 | <1e-4 | <1e-4 | 0.009 | 1e-4 |
 | Hill q2 | <1e-4 | <1e-4 | 0.018 | 4e-4 |
-| LCBD turnover | 0.001 | **0.149 (n.s.)** | <1e-4 | <1e-4 |
-| LCBD nestedness | <1e-4 | <1e-4 | 0.094 (n.s.) | 0.596 (n.s.) |
+| Turnover | 0.001 | **0.149 (n.s.)** | <1e-4 | <1e-4 |
+| Nestedness | <1e-4 | <1e-4 | 0.094 (n.s.) | 0.596 (n.s.) |
 
-Domain baseline R² (e.g., Hill q1 = 0.40) ≫ climate baseline R² (0.07): domain fixed effects absorb climatic **and** non-climatic biogeography (species pools, soils), so domain is retained as the primary, stronger control and climate serves as the explicit "beyond-climate" check. Note: the LCBD-turnover dynamics increment is baseline-dependent (significant under domain, n.s. under climate); its productivity increment is robust to both.
+Domain baseline R² (e.g., Hill q1 = 0.40) ≫ climate baseline R² (0.07): domain fixed effects absorb climatic **and** non-climatic biogeography (species pools, soils), so domain is retained as the primary, stronger control and climate serves as the explicit "beyond-climate" check. Note: the turnover dynamics increment is baseline-dependent (significant under domain, n.s. under climate); its productivity increment is robust to both.
 
 ## Supplementary Table S4 — Mixed vs clustered-OLS fixed effects
 Site random-intercept variance estimated at 0 (singular); standardized fixed-effect coefficients closely similar (mean |Δ| = 0.03, max |Δ| = 0.05, r = 0.93 across 14 RS predictors).
@@ -119,11 +119,11 @@ The plot-level conclusions (§3.1–§3.3) rest on domain fixed effects with sit
 | Hill q1 | Rugosity_mean (struct) | −0.098 | [−0.172, −0.024] | 0.995 |
 | Hill q1 | Rumple_trend (dyn) | +0.091 | [+0.016, +0.167] | 0.991 |
 | Hill q1 | Ht_Ratio_trend (dyn) | +0.114 | [+0.036, +0.192] | 0.998 |
-| LCBD nestedness | **Ht_Ratio_trend (dyn)** | **−0.307** | **[−0.419, −0.198]** | **1.000** |
-| LCBD nestedness | **Vert_CV_trend (dyn)** | **+0.200** | **[+0.081, +0.320]** | **0.999** |
-| LCBD nestedness | **LAI_trend (dyn)** | **−0.191** | **[−0.308, −0.071]** | **0.999** |
-| LCBD nestedness | Rugosity_mean (struct) | +0.137 | [+0.035, +0.240] | 0.994 |
-| LCBD nestedness | Vert_CV_mean (struct) | −0.121 | [−0.237, −0.004] | 0.976 |
+| Nestedness | **Ht_Ratio_trend (dyn)** | **−0.307** | **[−0.419, −0.198]** | **1.000** |
+| Nestedness | **Vert_CV_trend (dyn)** | **+0.200** | **[+0.081, +0.320]** | **0.999** |
+| Nestedness | **LAI_trend (dyn)** | **−0.191** | **[−0.308, −0.071]** | **0.999** |
+| Nestedness | Rugosity_mean (struct) | +0.137 | [+0.035, +0.240] | 0.994 |
+| Nestedness | Vert_CV_mean (struct) | −0.121 | [−0.237, −0.004] | 0.976 |
 
 Structure dominates alpha (3/4 structural terms credible); **dynamics dominate nestedness (3/7 dynamics trends credible, more than any other block for this component)** even though the joint dynamics block-increment did not clear the wild bootstrap (p = 0.14, Table S1b) — i.e. the block test is conservative, not the effect absent. Full posterior tables: `results/O0_framework/bayes_multilevel_coeffs.csv` (+ `_meta.csv`).
 
@@ -135,8 +135,8 @@ Structure dominates alpha (3/4 structural terms credible); **dynamics dominate n
 |---|---|---|---|---|---|
 | Hill q1 | 0.153 | **0.081** | 0.011 | 0.042 | 0.019 |
 | Hill q2 | 0.141 | **0.073** | 0.013 | 0.039 | 0.015 |
-| LCBD turnover | 0.024 | 0.006 | 0.001 | 0.013 | 0.004 |
-| LCBD nestedness | 0.092 | 0.025 | 0.000 | **0.056** | 0.011 |
+| Turnover | 0.024 | 0.006 | 0.001 | 0.013 | 0.004 |
+| Nestedness | 0.092 | 0.025 | 0.000 | **0.056** | 0.011 |
 
 Structure is the largest unique alpha block; dynamics the largest unique nestedness block — identical to the main analysis. Output: `results/O0_framework/varpart_robust.csv`.
 
