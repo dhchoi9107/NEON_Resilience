@@ -1,109 +1,104 @@
 # Supplementary Information (stub)
 
-Reproducibility: robustness checks = `scripts/obj23/155_methods_robustness.py`; framework = `153_nested_framework.py`.
+Reproducibility: the plot-level framework and its block tests are produced by `scripts_pipeline/framework_state_dynamics.py`; the Bayesian models by `bayes_multilevel.py` (prior check: `bayes_prior_sens.py`); the dissimilarity analyses by `rs_beta_mantel.py` and `rs_beta_gdm_full.py`; the productivity diagnostic by `recompute_suppression_26.py`. All numbers in the main text are re-derived from the source data by `verify_manuscript_numbers.py`.
 
 ## Supplementary Methods S1 — Regression-to-the-mean (RTM) null model
-Apparent buffering/amplification between initial canopy structure and subsequent structural change was tested against an RTM null. The null assumes no biological feedback between initial state and subsequent change while preserving the observed variance and measurement error of the repeated LiDAR observations; expected initial–change relationships under pure RTM were simulated and compared with the observed slopes. Only observed relationships exceeding the RTM envelope were interpreted as biological regulation. [Full simulation code: `scripts/obj23/90–92`; expand narrative for submission.]
+Apparent buffering or amplification between initial canopy structure and subsequent structural change was tested against a regression-to-the-mean null. The null assumes no biological feedback between initial state and subsequent change while preserving the observed variance and measurement error of the repeated LiDAR observations; expected initial–change relationships under pure RTM were simulated and compared with the observed slopes. Only observed relationships exceeding the RTM envelope were interpreted as biological regulation.
 
-## Supplementary Table S1b — Few-cluster-valid block tests (wild cluster bootstrap, 19 sites)
-Restricted wild cluster bootstrap (Rademacher, 999 reps), the primary block test; asymptotic cluster-robust Wald shown for contrast (anticonservative with 19 clusters). Script `159_fewcluster_robust.py`, `wildboot_blocks.csv`.
+## Supplementary Table S1 — Response transformation check (structural-dynamics increment, LRT p)
+Hill numbers are log-transformed in the main analysis (log restores homoscedasticity and approximate normality: Breusch–Pagan p > 0.4, Shapiro–Wilk p > 0.2). The dynamics increment is significant on either scale, so the conclusion does not depend on the transformation.
 
-| response | dynamics: Wald p | **dynamics: wild-boot p** | function: Wald p | **function: wild-boot p** |
-|---|---|---|---|---|
-| Hill q1 | 2e-4 | **0.058** | 0.059 | **0.128** |
-| Hill q2 | 1e-4 | **0.062** | 0.074 | **0.114** |
-| Turnover | 0.61 | **0.764** | 4e-4 | **0.003** |
-| Nestedness | 0.012 | **0.241** | 0.071 | **0.167** |
+| response | dynamics increment, raw scale | dynamics increment, log scale |
+|---|---|---|
+| Hill q1 | 6.2e-08 | 9.2e-13 |
+| Hill q2 | 8.0e-06 | 2.6e-10 |
 
-Only the productivity→turnover increment survives the wild bootstrap; dynamics increments are marginal (alpha) to non-significant (beta). The variance partition (Table S3) is descriptive and unaffected.
+## Supplementary Table S1b — Few-cluster-valid block test for structural dynamics (26 sites)
+Restricted wild cluster bootstrap (Rademacher weights, 999 replicates) is the primary block test; the asymptotic cluster-robust Wald p is shown for contrast (anticonservative at this cluster count). Productivity is not a plot-level block (Section 2.5), so only the dynamics increment is tested here. Source: `wildboot_sd.csv`, `cluster_wald_sd.csv`.
 
-## Supplementary Table S7 — Productivity–turnover: product-specificity & suppression; simple slopes
-GPP suppression for Turnover (`gpp_suppression.csv`): r(MODIS, PML) = 0.75; VIF between products = 2.25.
-
-| model | MODIS b | MODIS p | PML b | PML p |
-|---|---|---|---|---|
-| MODIS only | −0.011 | 0.70 | — | — |
-| PML only | — | — | +0.067 | 0.036 |
-| joint | −0.051 | — | +0.083 | — |
-
-→ turnover signal is PML-specific; MODIS shows none; joint coefficients oppose (suppression). No directional interpretation.
-
-Simple slopes (`simple_slopes.csv`), Hill q1, ±1 SD moderator:
-- GPP × stand age: slope = +0.06 (young, p = 0.64), +0.23 (median, p = 0.08), +0.39 (old, p = 0.004).
-- VCI × severity: slope = +0.48 (low, p < 0.001), +0.35 (median, p < 0.001), +0.22 (high, p = 0.003).
-
-## Supplementary Table S1 — Raw vs log-transformed responses (nested LRT p)
-Hill numbers log-transformed (satisfies homoscedasticity/normality: Breusch–Pagan p > 0.4, Shapiro p > 0.2); conclusions identical to raw scale.
-
-| response | dynamics (M1→M2) raw | log | function (M2→M3) raw | log |
-|---|---|---|---|---|
-| Hill q1 | 3.5e-11 | 2.2e-13 | 0.019 | 0.009 |
-| Hill q2 | 4.9e-09 | 3.4e-12 | 0.032 | 0.018 |
-
-## Supplementary Table S2 — Beta components: Gaussian OLS vs beta regression (nested LRT p)
-The beta components are bounded proportions; beta regression as robustness. Conclusions identical except the nestedness productivity increment (bold), reported conservatively from the Gaussian model in the main text.
-
-| response | model | dynamics (M1→M2) | function (M2→M3) |
+| response | dynamics ΔR² | dynamics: Wald p | **dynamics: wild-boot p** |
 |---|---|---|---|
-| turnover | OLS | 0.0011 | 8.3e-07 |
-| turnover | beta-reg | 2.6e-07 | 3.3e-05 |
-| nestedness | OLS | 9.3e-07 | **0.094 (n.s.)** |
-| nestedness | beta-reg | 6.2e-12 | **0.028 (sig.)** |
+| Hill q1 | 0.042 | 2.3e-5 | **0.014** |
+| Hill q2 | 0.039 | 1.8e-5 | **0.007** |
+| Turnover | 0.013 | 0.33 | **0.767** |
+| Nestedness | 0.056 | 0.0044 | **0.143** |
 
-## Supplementary Table S3 — Commonality analysis (shared variance beyond domain)
-Main text reports unique (semi-partial R²); shared fractions here. Source: `results/O0_framework/variance_partition.csv`.
+The dynamics increment is significant for both alpha metrics and does not reject the joint null for either beta component; the nestedness association is supported at the coefficient level instead (Table S8).
 
-| response | unique structure | unique spectral | unique dynamics | unique productivity | shared |
+## Supplementary Table S2 — Beta components: Gaussian OLS vs beta regression (structural-dynamics increment, LRT p)
+The beta components are bounded proportions, so the nested comparison was repeated with beta regression. Both models support the dynamics increment for both components; beta regression is the more liberal of the two, and the Gaussian result is reported in the main text as the conservative choice.
+
+| response | Gaussian OLS | beta regression |
+|---|---|---|
+| Turnover | 0.007 | 1.8e-12 |
+| Nestedness | 3.1e-09 | 4.5e-19 |
+
+## Supplementary Table S3 — Variance partition beyond domain (unique and shared fractions)
+The main text reports the unique (semi-partial) fractions; the shared fraction is given here for completeness. Plot-level blocks only — productivity is analysed at the site scale (Section 3.5). Source: `variance_partition_sd.csv`.
+
+| response | total R² beyond domain | unique structure | unique spectral | unique dynamics | shared |
 |---|---|---|---|---|---|
-| Hill q1 | 0.106 | 0.010 | 0.069 | 0.008 | 0.016 |
-| Hill q2 | 0.105 | 0.013 | 0.070 | 0.008 | 0.013 |
-| Turnover | 0.020 | 0.005 | 0.017 | 0.029 | 0.011 |
-| Nestedness | 0.049 | 0.001 | 0.071 | 0.008 | 0.021 |
-
-## Supplementary Table S6 — Context interactions (framework predictors, cluster-robust, BH per family)
-Same retained predictors as the nested models (4 structure + EVI + 2 GPP) × context. 168 terms; 11 survive BH. Script `158_o4_consistent.py`; full table `results/O0_framework/o4_interactions_consistent.csv`.
-
-| family | context | response | predictor | β interaction | q |
-|---|---|---|---|---|---|
-| stand age | stand_age | Hill q1 | MODIS GPP | +0.093 | 0.008 |
-| stand age | stand_age | Hill q1 | PML GPP | +0.063 | 0.013 |
-| stand age | stand_age | Hill q2 | MODIS GPP | +0.084 | 0.008 |
-| stand age | stand_age | Hill q2 | PML GPP | +0.056 | 0.017 |
-| disturbance | severity | Hill q1 | VCI | −0.078 | 0.021 |
-| disturbance | severity | Hill q1 | LAI | −0.112 | 0.028 |
-| disturbance | severity | Hill q2 | VCI | −0.067 | 0.022 |
-| disturbance | severity | Hill q2 | LAI | −0.109 | 0.022 |
-| disturbance | recency | Hill q1 | VCI | −0.175 | 0.021 |
-| disturbance | recency | Hill q2 | VCI | −0.165 | 0.021 |
-| land use | forest fraction | turnover | EVI | −0.064 | <0.01 |
-
-Interpretation: productivity–diversity coupling strengthens with stand age (positive GPP×age); structure–diversity coupling weakens with disturbance severity/recency (negative); EVI–turnover association modified by forest cover. (Supersedes the earlier SAVI-inclusive `interaction_fdr.csv`, which was not predictor-consistent with the nested models.)
-
-## Supplementary Table S5 — Climate control (NEON site MAT/MAP)
-Climate = NEON site-level mean annual temperature and precipitation (`data/site_climate_neon.csv`; script `156_climate_baseline.py`). Domain and continuous climate are collinear, so climate is used as an alternative baseline. All climate VIF < 1.3.
-
-**(a) Does GPP add beyond climate alone? (species–energy is not a climate artifact)**
-
-| response | R² climate only | ΔR² GPP beyond climate | p | MODIS β (clustered) | p |
-|---|---|---|---|---|---|
-| Hill q1 | 0.071 | **0.180** | <0.001 | **+0.197** | 0.019 |
-| Hill q2 | 0.055 | 0.159 | <0.001 | +0.165 | 0.039 |
-| Turnover | 0.339 | 0.140 | <0.001 | +0.026 | 0.141 |
-| Nestedness | 0.022 | 0.027 | 0.003 | −0.014 | 0.061 |
-
-**(b) RS increments under domain vs climate baseline (LRT p)**
-
-| response | dynamics (domain) | dynamics (climate) | function (domain) | function (climate) |
-|---|---|---|---|---|
-| Hill q1 | <1e-4 | <1e-4 | 0.009 | 1e-4 |
-| Hill q2 | <1e-4 | <1e-4 | 0.018 | 4e-4 |
-| Turnover | 0.001 | **0.149 (n.s.)** | <1e-4 | <1e-4 |
-| Nestedness | <1e-4 | <1e-4 | 0.094 (n.s.) | 0.596 (n.s.) |
-
-Domain baseline R² (e.g., Hill q1 = 0.40) ≫ climate baseline R² (0.07): domain fixed effects absorb climatic **and** non-climatic biogeography (species pools, soils), so domain is retained as the primary, stronger control and climate serves as the explicit "beyond-climate" check. Note: the turnover dynamics increment is baseline-dependent (significant under domain, n.s. under climate); its productivity increment is robust to both.
+| Hill q1 | 0.153 | 0.081 | 0.011 | 0.042 | 0.019 |
+| Hill q2 | 0.141 | 0.073 | 0.013 | 0.039 | 0.015 |
+| Turnover | 0.024 | 0.006 | 0.001 | 0.013 | 0.004 |
+| Nestedness | 0.092 | 0.025 | 0.000 | 0.056 | 0.011 |
 
 ## Supplementary Table S4 — Mixed vs clustered-OLS fixed effects
 Site random-intercept variance estimated at 0 (singular); standardized fixed-effect coefficients closely similar (mean |Δ| = 0.03, max |Δ| = 0.05, r = 0.93 across 14 RS predictors).
+
+## Supplementary Table S5 — Climate control (NEON site MAT/MAP)
+Climate = NEON site-level mean annual temperature and precipitation (`data/site_climate_neon.csv`). Domain and continuous climate are collinear, so climate is used as an alternative baseline rather than an additional covariate. Source: `climate_species_energy.csv`, `climate_nested_compare.csv`.
+
+**(a) Does GPP add beyond climate alone? (the species–energy signal is not a climate artifact)**
+
+| response | R² climate only | ΔR² GPP beyond climate | p | MODIS β (clustered) | p |
+|---|---|---|---|---|---|
+| Hill q1 | 0.052 | **0.209** | 1.4e-35 | **+0.240** | 0.033 |
+| Hill q2 | 0.053 | 0.185 | 3.4e-31 | +0.205 | 0.049 |
+| Turnover | 0.153 | 0.200 | 1.3e-34 | +0.056 | 0.128 |
+| Nestedness | 0.094 | 0.056 | 9.0e-09 | −0.019 | 0.053 |
+
+**(b) Structural-dynamics increment under the domain versus climate baseline (LRT p)**
+
+| response | ΔR² dynamics (domain) | p (domain) | ΔR² dynamics (climate) | p (climate) |
+|---|---|---|---|---|
+| Hill q1 | 0.042 | 9.2e-13 | 0.083 | 2.4e-22 |
+| Hill q2 | 0.039 | 2.6e-10 | 0.081 | 2.4e-19 |
+| Turnover | 0.013 | 0.007 | 0.035 | 8.2e-06 |
+| Nestedness | 0.056 | 3.1e-09 | 0.086 | 2.1e-12 |
+
+The domain baseline is much stronger than the climate baseline (Hill q1 R² = 0.490 versus 0.052) because domain fixed effects absorb climatic **and** non-climatic biogeography (species pools, soils). Domain is therefore retained as the primary control, and climate serves as the explicit "beyond-climate" check. The dynamics increment is significant under both baselines for every response.
+
+## Supplementary Table S6 — Context interactions surviving FDR (framework predictors, cluster-robust, BH within family)
+The same retained predictors as the plot-level models (4 structural + EVI + 2 GPP products) crossed with each context variable: 168 terms, of which 7 survive Benjamini–Hochberg correction within family. Source: `o4_interactions_consistent.csv`.
+
+| family | context | response | predictor | β interaction | q |
+|---|---|---|---|---|---|
+| disturbance | severity | Hill q1 | LAI | −0.112 | 0.004 |
+| disturbance | severity | Hill q2 | LAI | −0.106 | 0.004 |
+| disturbance | recency | Hill q1 | MODIS GPP | −0.147 | 0.006 |
+| disturbance | recency | Hill q2 | MODIS GPP | −0.143 | 0.005 |
+| land use | forest fraction | turnover | EVI | −0.056 | <0.001 |
+| land use | edge density | turnover | EVI | +0.060 | 0.001 |
+| land use | land-cover diversity | turnover | EVI | +0.049 | 0.009 |
+
+Interpretation: the structure–diversity coupling weakens with disturbance severity, and the productivity–diversity coupling weakens with disturbance recency (both negative). The three surviving land-use terms all involve the spectral index and compositional turnover, and are reported as exploratory. No stand-age interaction survives correction (the GPP × stand-age term has q = 0.26), so the age moderation is reported as suggestive only.
+
+## Supplementary Table S7 — Plot-level productivity diagnostic: product-specificity and suppression
+Why productivity is analysed at the site scale (Section 3.5). Turnover response, plot level, domain fixed effects + site-clustered SE, all predictors and the response standardized (single consistent scale). n = 579; r(MODIS, PML) = 0.87. Source: `gpp_suppression_26.csv` (script `recompute_suppression_26.py`).
+
+| model | product | β (fully standardized) | p (clustered) |
+|---|---|---|---|
+| MODIS only | MODIS GPP | −0.030 | 0.850 |
+| PML only | PML GPP | +0.273 | 0.151 |
+| joint | MODIS GPP | −0.233 | 0.054 |
+| joint | PML GPP | +0.367 | 0.040 |
+
+Neither product is associated with turnover on its own; entered jointly they take opposing signs with inflated magnitudes — a suppression signature between two highly correlated products. We therefore decline any directional plot-level reading and analyse productivity at the site scale.
+
+Simple slopes (`simple_slopes.csv`), Hill q1, at −1 SD / mean / +1 SD of the moderator:
+- MODIS GPP × stand age: +0.17 (p = 0.135), +0.27 (p = 0.014), +0.38 (p = 0.007) — the interaction itself does not survive FDR (q = 0.26).
+- VCI × disturbance severity: +0.39, +0.30, +0.21 (all p < 0.001).
 
 ## Supplementary Methods S8 — Four-method triangulation of the plot-level framework (statistical robustness)
 

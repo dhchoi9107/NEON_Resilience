@@ -1,0 +1,9 @@
+response,model,product,n,beta_fullstd,p_clustered,r_modis_pml
+LCBD_turnover_rare,modis_only,modis_gpp,579,-0.0298,0.8495,0.8675
+LCBD_turnover_rare,pml_only,pml_gpp,579,0.2732,0.1509,0.8675
+LCBD_turnover_rare,joint,modis_gpp,579,-0.2334,0.0537,0.8675
+LCBD_turnover_rare,joint,pml_gpp,579,0.3674,0.0398,0.8675
+Hill_q1,modis_only,modis_gpp,644,0.3168,0.0013,0.8792
+Hill_q1,pml_only,pml_gpp,644,0.151,0.0562,0.8792
+Hill_q1,joint,modis_gpp,644,0.2969,0.0051,0.8792
+Hill_q1,joint,pml_gpp,644,0.0346,0.6602,0.8792
