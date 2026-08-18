@@ -141,3 +141,17 @@ The site-level species–energy result is reproduced by the alternative MOD17 pr
 | r with site-mean Hill q1 | +0.50 (p = 0.009) | +0.60 (p = 0.001) |
 | r with eddy-covariance tower GPP | +0.86 | +0.85 |
 | quadratic (hump) term | not supported | not supported |
+
+## Supplementary Table S10 — Model diagnostics (full plot-level model)
+Full model = domain fixed effects + structure + spectral + dynamics. Breusch–Pagan tests residual heteroscedasticity, Shapiro–Wilk residual normality, Moran's I residual spatial autocorrelation (k = 8 nearest neighbours, 999 permutations). Maximum VIF across the retained predictors = 4.14. Source: `model_diagnostics.csv` (script `model_diagnostics.py`).
+
+| response | scale | n | Breusch–Pagan p | Shapiro–Wilk p | residual skew | Moran's I | p |
+|---|---|---|---|---|---|---|---|
+| Hill q1 | raw | 644 | 0.000 | 0.000 | +0.90 | +0.154 | 0.001 |
+| Hill q1 | log | 644 | 0.011 | 0.220 | -0.12 | +0.133 | 0.001 |
+| Hill q2 | raw | 644 | 0.000 | 0.000 | +1.05 | +0.131 | 0.001 |
+| Hill q2 | log | 644 | 0.000 | 0.096 | +0.03 | +0.123 | 0.001 |
+| Turnover | raw | 579 | 0.000 | 0.000 | +1.15 | +0.261 | 0.001 |
+| Nestedness | raw | 579 | 0.000 | 0.000 | +1.38 | +0.101 | 0.001 |
+
+Log-transforming the Hill numbers removes the right skew and restores approximate normality, but residuals remain heteroscedastic on either scale and for the bounded beta components; all reported inference therefore uses heteroscedasticity-consistent, site-clustered standard errors, which do not require homoscedastic or normal residuals. Spatial autocorrelation is present but modest, and block-level estimates were stable when a smooth spatial trend was added.
